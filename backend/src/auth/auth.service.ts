@@ -1,4 +1,3 @@
-import ms from 'ms';
 import { ConfigService } from '@nestjs/config';
 import {
   BadRequestException,
@@ -13,7 +12,6 @@ import { Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { User } from 'src/users/entities/user.entity';
-import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -61,6 +59,12 @@ export class AuthService {
 
     return {
       access_token: this.jwtService.sign(payload),
+      user: {
+        id,
+        username,
+        email,
+        role,
+      },
     };
   }
 
@@ -113,7 +117,7 @@ export class AuthService {
         // Trả cookies về cho client
         response.cookie('refresh_token', refresh_token, {
           httpOnly: true,
-          maxAge: ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')),
+          maxAge: +this.configService.get<string>('JWT_REFRESH_EXPIRE'),
         });
 
         return {
@@ -135,7 +139,7 @@ export class AuthService {
 
   logout = async (response: Response, user: IUser) => {
     await this.usersService.updateUserToken('', user.id);
-    response.clearCookie('refreshToken');
+    response.clearCookie('refresh_token');
     return 'OK';
   };
 }

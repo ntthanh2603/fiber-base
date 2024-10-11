@@ -49,17 +49,14 @@ export class User {
   @Column({ type: 'enum', enum: UserType, default: UserType.USER })
   role: UserType;
 
-  @Column({ default: false })
-  isDeleted: boolean;
+  @DeleteDateColumn()
+  isDeleted: Date;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @Column({ default: null })
   refreshToken: string;

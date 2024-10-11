@@ -46,7 +46,7 @@ export class AuthController {
 
   // Get account
   // Input: access token in cookies
-  // Output: IUser{ _id, name, email, role}
+  // Output: IUser{ id, username, email, role}
   @Get('/account')
   @ResponseMessage('Get user information')
   handleGetAccount(@User() user: IUser) {

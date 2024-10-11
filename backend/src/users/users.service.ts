@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { RegisterUserDto } from './dto/create-user.dto';
+import { IUser } from './users.interface';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,16 +21,8 @@ export class UsersService {
   };
 
   isValidPassword(password: string, hash: string) {
-    console.log(password, hash);
     return compareSync(password, hash);
   }
-  // async findUserByEmail(email: string) {
-  //   return await this.usersRepository
-  //     .createQueryBuilder('user')
-  //     .select(['-user.password'])
-  //     .where('user.email = :email', { email })
-  //     .getOne();
-  // }
 
   updateUserToken = (refreshToken: string, id: string) => {
     return this.usersRepository
@@ -75,5 +69,62 @@ export class UsersService {
     let newRegister = await this.usersRepository.save(newUser);
 
     return newRegister;
+  }
+
+  // Find one user by email
+  async findUserById(id: string) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.username',
+        'user.email',
+        'user.avartar',
+        'user.age',
+        'user.gender',
+        'user.address',
+        'user.role',
+        'user.description',
+        'user.status',
+        'user.isDeleted',
+        'user.createdAt',
+        'user.updatedAt',
+      ])
+      .where('user.id = :id', { id: id })
+      .getOne();
+
+    if (user) {
+      return user;
+    }
+    return 'User not found';
+  }
+
+  // Delete user by id
+  async deleteUserById(id: string, user: IUser) {
+    console.log(user, id);
+
+    if (id != user.id)
+      return 'You do not have permission to delete this account';
+
+    const userDel = await this.usersRepository.findOneBy({ id: id });
+
+    if (!userDel) {
+      return 'User not found';
+    }
+    if (userDel && !userDel.isDeleted) {
+      return this.usersRepository.softDelete(id);
+    }
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
+    const empty = await this.usersRepository.findOne({
+      where: { email: updateUserDto.email },
+    });
+
+    if (!empty) {
+      return this.usersRepository.update({ id: user.id }, { ...updateUserDto });
+    }
+
+    return 'Someone has used this email';
   }
 }

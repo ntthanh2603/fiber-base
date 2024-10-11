@@ -4,13 +4,15 @@ import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './core/transform.interceptor';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
   const reflector = app.get(Reflector);
-  // app.useGlobalGuards(new JwtAuthGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   // app.useStaticAssets(join(__dirname, "..", "public"));
   // app.setBaseViewsDir(join(__dirname, "..", "views"));
@@ -21,7 +23,7 @@ async function bootstrap() {
   // Interceptor
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
 
-  // app.use(cookieParser());
+  app.use(cookieParser());
 
   // Config CORS
   app.enableCors({
