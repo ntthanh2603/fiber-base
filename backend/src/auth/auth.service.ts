@@ -61,19 +61,12 @@ export class AuthService {
 
     return {
       access_token: this.jwtService.sign(payload),
-      user: {
-        id,
-        username,
-        email,
-        role,
-      },
     };
   }
 
   // Register user
   async register(user: RegisterUserDto) {
     let newUser = await this.usersService.register(user);
-    console.log('>>> newuser', newUser);
 
     return {
       id: newUser?.id,

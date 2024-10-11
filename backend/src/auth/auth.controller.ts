@@ -10,9 +10,15 @@ import { LoginUserDto } from 'src/users/dto/login-user.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // Login user
-  // Input: LoginDto {email, password}
-  // Output: cookies for client
+  /*
+    - Login user
+    - Input: email, password
+    - Output: access tokken
+    - Description: server nhận email, password từ client rồi kiểm tra 
+    xem email có trong database không, nếu có thì có trùng password không
+    nếu trùng thì trả về user. Dùng user vừa lấy ra tạo refresh token 
+    cho lên database, còn access token trả về response cho người.
+  */
   @Public()
   @ResponseMessage('User login')
   @Post('/login')
@@ -23,7 +29,14 @@ export class AuthController {
     return this.authService.login(dto, response);
   }
 
-  // Register user
+  /*
+    - Register user
+    - Input: username, email, password, age, gender, address, description
+    - Output: tạo tài khoản mới có trong database
+    - Description: sau khi lấy được input từ Body server xem email đã 
+    có trong 1 tài khoản nào trong database chưa, nếu chưa thì tạo 
+    hash password rồi đẩy lên database.
+  */
   @Public()
   @ResponseMessage('Register a new user')
   @Post('/register')
@@ -41,6 +54,9 @@ export class AuthController {
   }
 
   /*
+    - Refresh 
+    - Input: refresh token
+    - Output: access token
     Description: 
       1. Server lấy refresh_token từ cookies
       2. Server check (verify) để biết refresh_token có hợp lệ hay không
@@ -59,10 +75,13 @@ export class AuthController {
   }
 
   /*
-    Description: 
-      - Update refresh_token="null" trong database
-      - Xóa refresh_token ở cookies
-      - Trả về phản hồi cho client
+    - Log out
+    - Input: 
+    - Output: 
+    - Description: 
+        + Update refresh_token="null" trong database
+        + Xóa refresh_token ở cookies
+        + Trả về phản hồi cho client
   */
   @Post('/logout')
   @ResponseMessage('Logout user')

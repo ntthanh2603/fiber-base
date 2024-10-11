@@ -74,7 +74,6 @@ export class UsersService {
 
     let newRegister = await this.usersRepository.save(newUser);
 
-    console.log('>> newRegister', newRegister);
     return newRegister;
   }
 }
