@@ -17,7 +17,7 @@ export class RelationshipsController {
   constructor(private readonly relationshipsService: RelationshipsService) {}
 
   // Relationship 2 user
-  @Post('/relationship-user')
+  @Post('/update')
   @ResponseMessage('Updated relationship')
   relationshipUser(@Body() createRelationshipDto: CreateRelationshipDto) {
     return this.relationshipsService.relationshipUser(createRelationshipDto);

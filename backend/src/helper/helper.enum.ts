@@ -18,7 +18,6 @@ export enum RelationshipType {
 export enum ScopeType {
   PUBLIC = 'public',
   PRIVATE = 'private',
-  PROTECTED = 'protected',
 }
 
 export enum UserType {

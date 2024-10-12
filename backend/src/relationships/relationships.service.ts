@@ -1,3 +1,4 @@
+import { User } from './../users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import { Injectable } from '@nestjs/common';
 import { CreateRelationshipDto } from './dto/create-relationship.dto';
@@ -18,8 +19,8 @@ export class RelationshipsService {
   async relationshipUser(createRelationshipDto: CreateRelationshipDto) {
     const { user1_id, user2_id, relationship } = createRelationshipDto;
 
-    const user1 = this.usersService.findUserById(user1_id);
-    const user2 = this.usersService.findUserById(user2_id);
+    const user1 = await this.usersService.findUserById(user1_id);
+    const user2 = await this.usersService.findUserById(user2_id);
 
     const existingRelationship = await this.relationshipsRepository.findOne({
       where: {
@@ -31,7 +32,20 @@ export class RelationshipsService {
     if (existingRelationship && user1 && user2) {
       existingRelationship.relationship = relationship;
       await this.relationshipsRepository.save(existingRelationship);
-      return 'Relationship updated successfully';
+      return {
+        result: {
+          message: 'Update relationship 2 user',
+          user1: {
+            id: user1['id'],
+            username: user1['email'],
+          },
+          user2: {
+            id: user2['id'],
+            username: user2['email'],
+          },
+          relationshipUpdate: relationship,
+        },
+      };
     }
     // Create relationship
     else {
@@ -40,7 +54,20 @@ export class RelationshipsService {
       newRelationship.user2_id = user2_id;
       newRelationship.relationship = relationship;
       await this.relationshipsRepository.save(newRelationship);
-      return 'New relationship created successfully';
+      return {
+        result: {
+          message: 'New relationship created successfully',
+          user1: {
+            id: user1['id'],
+            username: user1['email'],
+          },
+          user2: {
+            id: user2['id'],
+            username: user2['email'],
+          },
+          relationshipUpdate: relationship,
+        },
+      };
     }
   }
 }
