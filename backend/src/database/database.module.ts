@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], // Nhập ConfigModule nếu bạn cần ConfigService
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
@@ -20,7 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
   ],
-  providers: [...DatabaseProviders], // Chỉ cung cấp các provider ở đây
-  exports: [...DatabaseProviders, 'DATA_SOURCE'], // Xuất các provider cần thiết
+  providers: [...DatabaseProviders],
+  exports: [...DatabaseProviders, 'DATA_SOURCE'],
 })
 export class DatabaseModule {}

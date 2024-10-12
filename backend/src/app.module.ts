@@ -11,6 +11,7 @@ import { ReactionsModule } from './reactions/reactions.module';
 import { CommentsModule } from './comments/comments.module';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { RelationshipsModule } from './relationships/relationships.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
     ReactionsModule,
     CommentsModule,
     AuthModule,
+    RelationshipsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

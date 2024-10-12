@@ -9,6 +9,12 @@ export enum StatusType {
   OFF = 'off',
 }
 
+export enum RelationshipType {
+  FRIEND = 'friend',
+  FOLLOW = 'follow',
+  NULL = 'null',
+}
+
 export enum ScopeType {
   PUBLIC = 'public',
   PRIVATE = 'private',

@@ -2,7 +2,6 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Provider } from '@nestjs/common';
 
-// Đây là các provider mà bạn định nghĩa
 export const DatabaseProviders: Provider[] = [
   {
     provide: 'DATA_SOURCE',
