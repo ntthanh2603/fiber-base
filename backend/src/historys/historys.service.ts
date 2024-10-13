@@ -12,17 +12,6 @@ export class HistorysService {
     private historysRepository: Repository<History>,
   ) {}
   async createHistoty(history: CreateHistoryDto) {
-    // const { target_id, createdBy, createdAt, role } = history;
-
-    console.log('>>>history', history);
-
-    // const newHistory = {
-    //   target_id,
-    //   createdBy,
-    //   createdAt,
-    //   role,
-    // };
-
     return await this.historysRepository.save(history);
   }
 }
