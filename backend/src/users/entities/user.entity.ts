@@ -1,21 +1,11 @@
 import { MaxLength, MinLength } from 'class-validator';
-import { GenderType, StatusType, UserType } from 'src/helper/helper.enum';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn,
-} from 'typeorm';
-import { UpsertType } from 'typeorm/driver/types/UpsertType';
+import { GenderType, StatusType } from 'src/helper/helper.enum';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  user_id: string;
 
   @Column()
   username: string;
@@ -45,18 +35,6 @@ export class User {
 
   @Column({ type: 'enum', enum: StatusType, default: StatusType.OFF })
   status: StatusType;
-
-  @Column({ type: 'enum', enum: UserType, default: UserType.USER })
-  role: UserType;
-
-  @DeleteDateColumn()
-  isDeleted: Date;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @Column({ default: null })
   refreshToken: string;

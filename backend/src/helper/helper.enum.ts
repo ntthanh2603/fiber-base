@@ -1,3 +1,8 @@
+export enum RelationshipType {
+  FRIEND = 'friend',
+  FOLLOW = 'follow',
+  NULL = 'null',
+}
 export enum GenderType {
   MALE = 'male',
   FEMALE = 'female',
@@ -9,20 +14,9 @@ export enum StatusType {
   OFF = 'off',
 }
 
-export enum RelationshipType {
-  FRIEND = 'friend',
-  FOLLOW = 'follow',
-  NULL = 'null',
-}
-
 export enum ScopeType {
   PUBLIC = 'public',
   PRIVATE = 'private',
-}
-
-export enum UserType {
-  ADMIN = 'admin',
-  USER = 'user',
 }
 
 export enum MediaType {
@@ -37,4 +31,10 @@ export enum ReactionType {
   WOW = 'wow',
   SAD = 'sad',
   ANGRY = 'angry',
+}
+
+export enum RoleType {
+  ADMIN = 'admin',
+  USER = 'user',
+  GROUP = 'group',
 }

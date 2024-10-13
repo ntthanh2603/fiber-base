@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Relationship {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  relationship_id: string;
 
   @Column()
   user1_id: string;

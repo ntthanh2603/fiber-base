@@ -17,22 +17,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Public()
-  @Get(':id')
-  @ResponseMessage('User by id')
-  findUserById(@Param('id') id: string) {
-    return this.usersService.findUserById(id);
+  @Get(':user_id')
+  @ResponseMessage('User by user_id')
+  findUserById(@Param('user_id') user_id: string) {
+    return this.usersService.findUserById(user_id);
   }
 
-  @Post(':id')
-  @ResponseMessage('Delete user')
-  deleteUserById(@Param() id: string, @User() user: IUser) {
-    id = id['id'];
-    return this.usersService.deleteUserById(id, user);
-  }
+  // @Post(':user_id')
+  // @ResponseMessage('Delete user')
+  // deleteUserById(@Param() user_id: string, @User() user: IUser) {
+  //   user_id = user_id['user_id'];
+  //   return this.usersService.deleteUserById(user_id, user);
+  // }
 
-  @Patch('update')
-  @ResponseMessage('Update User')
-  updateUser(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
-    return this.usersService.updateUser(updateUserDto, user);
-  }
+  // @Patch('update')
+  // @ResponseMessage('Update User')
+  // updateUser(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
+  //   return this.usersService.updateUser(updateUserDto, user);
+  // }
 }

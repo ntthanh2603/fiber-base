@@ -6,12 +6,16 @@ import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { HistorysService } from 'src/historys/historys.service';
+import { RoleType } from 'src/helper/helper.enum';
+import { CreateHistoryDto } from 'src/historys/dto/create-history.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private historysService: HistorysService,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -46,7 +50,8 @@ export class UsersService {
   }
 
   async register(user: RegisterUserDto) {
-    const { username, email, password, age, gender, address } = user;
+    const { username, email, password, age, gender, address, description } =
+      user;
 
     const isExist = await this.usersRepository.findOne({
       where: { email: email },
@@ -64,19 +69,35 @@ export class UsersService {
       age,
       gender,
       address,
+      description,
     };
 
-    let newRegister = await this.usersRepository.save(newUser);
+    await this.usersRepository.save(newUser);
+
+    const newRegister = await this.findUserByEmail(email);
+
+    // const createHistoryDto = CreateHistoryDto(
+    //   target_id =  newRegister.user_id,
+    //   createdBy: newRegister.email,
+    //   role: RoleType.USER,
+    // )
+
+    await this.historysService.createHistoty({
+      target_id: newRegister.user_id,
+      createdBy: email,
+      createdAt: new Date(),
+      role: RoleType.USER,
+    });
 
     return newRegister;
   }
 
   // Find one user by email
-  async findUserById(id: string) {
+  async findUserById(user_id: string) {
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .select([
-        'user.id',
+        'user.user_id',
         'user.username',
         'user.email',
         'user.avartar',
@@ -86,11 +107,9 @@ export class UsersService {
         'user.role',
         'user.description',
         'user.status',
-        'user.isDeleted',
-        'user.createdAt',
-        'user.updatedAt',
+        ,
       ])
-      .where('user.id = :id', { id: id })
+      .where('user.id = :id', { user_id: user_id })
       .getOne();
 
     if (user) {
@@ -100,31 +119,30 @@ export class UsersService {
   }
 
   // Delete user by id
-  async deleteUserById(id: string, user: IUser) {
-    console.log(user, id);
+  // async deleteUserById(user_id: string, user: IUser) {
 
-    if (id != user.id)
-      return 'You do not have permission to delete this account';
+  //   if (user_id != user.user_id)
+  //     return 'You do not have permission to delete this account';
 
-    const userDel = await this.usersRepository.findOneBy({ id: id });
+  //   const userDel = await this.usersRepository.findOneBy({ user_id: user_id });
 
-    if (!userDel) {
-      return 'User not found';
-    }
-    if (userDel && !userDel.isDeleted) {
-      return this.usersRepository.softDelete(id);
-    }
-  }
+  //   if (!userDel) {
+  //     return 'User not found';
+  //   }
+  //   if (userDel && !userDel.) {
+  //     return this.usersRepository.softDelete(user_id);
+  //   }
+  // }
 
-  async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
-    const empty = await this.usersRepository.findOne({
-      where: { email: updateUserDto.email },
-    });
+  //   async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
+  //     const empty = await this.usersRepository.findOne({
+  //       where: { email: updateUserDto.email },
+  //     });
 
-    if (!empty) {
-      return this.usersRepository.update({ id: user.id }, { ...updateUserDto });
-    }
+  //     if (!empty) {
+  //       return this.usersRepository.update({ id: user.id }, { ...updateUserDto });
+  //     }
 
-    return 'Someone has used this email';
-  }
+  //     return 'Someone has used this email';
+  //   }
 }

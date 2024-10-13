@@ -37,19 +37,18 @@ export class AuthService {
   async login(loginUserDto: LoginUserDto, response: Response) {
     const { email, password } = loginUserDto;
     const user = await this.validateUser(email, password);
-    const { username, role, id } = user;
+    const { user_id, username } = user;
     const payload = {
-      id,
+      user_id,
       username,
       email,
-      role,
     };
 
     // Tạo token
     const refresh_token = this.createRefreshToken(payload);
 
     // Đẩy token lên database
-    await this.usersService.updateUserToken(refresh_token, id);
+    await this.usersService.updateUserToken(refresh_token, user_id);
 
     // Trả cookies về cho client
     response.cookie('refresh_token', refresh_token, {
@@ -60,10 +59,9 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        id,
+        user_id,
         username,
         email,
-        role,
       },
     };
   }
@@ -73,8 +71,9 @@ export class AuthService {
     let newUser = await this.usersService.register(user);
 
     return {
-      id: newUser?.id,
-      createdAt: newUser?.createdAt,
+      user_id: newUser.user_id,
+      username: newUser.username,
+      email: newUser.email,
     };
   }
 
@@ -97,19 +96,18 @@ export class AuthService {
       let user = await this.usersService.findUserByToken(refreshToken);
 
       if (user) {
-        const { username, role, id, email } = user;
+        const { username, user_id, email } = user;
         const payload = {
-          id,
+          user_id,
           username,
           email,
-          role,
         };
 
         // Tạo token
         const refresh_token = this.createRefreshToken(payload);
 
         // Đẩy token lên database
-        await this.usersService.updateUserToken(refresh_token, id);
+        await this.usersService.updateUserToken(refresh_token, user_id);
 
         // Xóa token cũ
         response.clearCookie('refresh_token');
@@ -123,10 +121,10 @@ export class AuthService {
         return {
           access_token: this.jwtService.sign(payload),
           user: {
-            id,
-            username,
-            email,
-            role,
+            // id,
+            // username,
+            // email,
+            // role,
           },
         };
       } else {
@@ -138,7 +136,7 @@ export class AuthService {
   };
 
   logout = async (response: Response, user: IUser) => {
-    await this.usersService.updateUserToken('', user.id);
+    await this.usersService.updateUserToken('', user.user_id);
     response.clearCookie('refresh_token');
     return 'OK';
   };

@@ -12,6 +12,7 @@ import { CommentsModule } from './comments/comments.module';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { RelationshipsModule } from './relationships/relationships.module';
+import { HistorysModule } from './historys/historys.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +32,7 @@ import { RelationshipsModule } from './relationships/relationships.module';
     CommentsModule,
     AuthModule,
     RelationshipsModule,
+    HistorysModule,
   ],
   controllers: [AppController],
   providers: [AppService],
