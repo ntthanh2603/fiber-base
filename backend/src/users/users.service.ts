@@ -28,12 +28,12 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
-  updateUserToken = (refreshToken: string, id: string) => {
+  updateUserToken = (refreshToken: string, user_id: string) => {
     return this.usersRepository
       .createQueryBuilder()
       .update(User)
       .set({ refreshToken: refreshToken })
-      .where('id = :id', { id })
+      .where('user_id = :user_id', { user_id })
       .execute();
   };
 
@@ -94,23 +94,17 @@ export class UsersService {
 
   // Find one user by email
   async findUserById(user_id: string) {
-    const user = await this.usersRepository
-      .createQueryBuilder('user')
-      .select([
-        'user.user_id',
-        'user.username',
-        'user.email',
-        'user.avartar',
-        'user.age',
-        'user.gender',
-        'user.address',
-        'user.role',
-        'user.description',
-        'user.status',
-        ,
-      ])
-      .where('user.id = :id', { user_id: user_id })
-      .getOne();
+    const user = await this.usersRepository.findOne({
+      where: { user_id },
+      select: [
+        'user_id',
+        'username',
+        'age',
+        'gender',
+        'address',
+        'description',
+      ],
+    });
 
     if (user) {
       return user;
@@ -119,30 +113,39 @@ export class UsersService {
   }
 
   // Delete user by id
-  // async deleteUserById(user_id: string, user: IUser) {
+  async deleteUserById(user_id: string, user: IUser) {
+    if (user_id != user.user_id)
+      return 'You do not have permission to delete this account';
 
-  //   if (user_id != user.user_id)
-  //     return 'You do not have permission to delete this account';
+    const userDel = await this.findUserByEmail(user_id);
 
-  //   const userDel = await this.usersRepository.findOneBy({ user_id: user_id });
+    const isDelete = await this.historysService.isDeleted({
+      target_id: user_id,
+      role: RoleType.USER,
+    });
 
-  //   if (!userDel) {
-  //     return 'User not found';
-  //   }
-  //   if (userDel && !userDel.) {
-  //     return this.usersRepository.softDelete(user_id);
-  //   }
-  // }
+    if (!userDel) {
+      return 'User not found';
+    }
+    if (userDel && !isDelete) {
+      return this.historysService.deleteHistory({
+        target_id: user_id,
+        deletedAt: new Date(),
+        deletedBy: user.email,
+        role: RoleType.USER,
+      });
+    }
+  }
 
-  //   async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
-  //     const empty = await this.usersRepository.findOne({
-  //       where: { email: updateUserDto.email },
-  //     });
+  async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
+    const empty = await this.usersRepository.findOne({
+      where: { email: updateUserDto.email },
+    });
 
-  //     if (!empty) {
-  //       return this.usersRepository.update({ id: user.id }, { ...updateUserDto });
-  //     }
+    if (!empty) {
+      return this.usersRepository.update({ id: user.id }, { ...updateUserDto });
+    }
 
-  //     return 'Someone has used this email';
-  //   }
+    return 'Someone has used this email';
+  }
 }

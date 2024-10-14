@@ -9,7 +9,7 @@ import {
 @Entity()
 export class History {
   @PrimaryGeneratedColumn()
-  History_id: string;
+  history_id: string;
 
   @Column()
   target_id: string;
