@@ -20,7 +20,12 @@ export class ConversationMembersService {
     const conversation = await this.conversationsService.findConversionById(
       cmDto.conversation_id,
     );
-    if (!conversation) return this.cmRepository.save(cmDto);
+
+    if (conversation)
+      return await this.cmRepository.save({
+        conversation_id: cmDto.conversation_id,
+        user_id: cmDto.user_id,
+      });
 
     return 'Conversation has existed';
   }

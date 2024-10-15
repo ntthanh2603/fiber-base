@@ -10,6 +10,7 @@ import {
 import { ConversationsService } from './conversations.service';
 import { IUser } from 'src/users/users.interface';
 import { User } from 'src/decorator/customize';
+import { CreateConversationDto } from './dto/create-conversation.dto';
 
 @Controller('conversations')
 export class ConversationsController {
@@ -20,7 +21,7 @@ export class ConversationsController {
     - Input: User by token and name conversation
   */
   @Post('/create')
-  creare(@User() user: IUser, @Body() conversation_name: string) {
-    return this.conversationsService.create(user, conversation_name);
+  creare(@User() user: IUser, @Body() dto: CreateConversationDto) {
+    return this.conversationsService.create(user, dto);
   }
 }

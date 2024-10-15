@@ -23,11 +23,11 @@ export class ConversationsService {
     });
   }
 
-  async create(user: IUser, conversation_name: string) {
+  async create(user: IUser, dto: CreateConversationDto) {
     const createdBy = user.user_id;
     const conversation = await this.conversationsRepository.save({
       createdBy: createdBy,
-      conversation_name: conversation_name,
+      conversation_name: dto.conversation_name,
     });
 
     await this.cmService.createConversation({
