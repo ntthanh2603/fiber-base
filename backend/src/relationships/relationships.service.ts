@@ -28,6 +28,7 @@ export class RelationshipsService {
         user2_id,
       },
     });
+
     // Update relationship
     if (existingRelationship && user1 && user2) {
       existingRelationship.relationship = relationship;
@@ -36,11 +37,11 @@ export class RelationshipsService {
         result: {
           message: 'Update relationship 2 user',
           user1: {
-            id: user1['id'],
+            user_id: user1['user_id'],
             username: user1['email'],
           },
           user2: {
-            id: user2['id'],
+            user_id: user2['user_id'],
             username: user2['email'],
           },
           relationshipUpdate: relationship,
@@ -58,11 +59,11 @@ export class RelationshipsService {
         result: {
           message: 'New relationship created successfully',
           user1: {
-            id: user1['id'],
+            user_id: user1['user_id'],
             username: user1['email'],
           },
           user2: {
-            id: user2['id'],
+            user_id: user2['user_id'],
             username: user2['email'],
           },
           relationshipUpdate: relationship,

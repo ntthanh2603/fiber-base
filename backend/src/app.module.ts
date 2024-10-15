@@ -13,6 +13,9 @@ import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { RelationshipsModule } from './relationships/relationships.module';
 import { HistorysModule } from './historys/historys.module';
+
+import { ConversationMembersModule } from './conversation-members/conversation-members.module';
+import { ConversationsModule } from './conversations/conversations.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,6 +36,8 @@ import { HistorysModule } from './historys/historys.module';
     AuthModule,
     RelationshipsModule,
     HistorysModule,
+    ConversationMembersModule,
+    ConversationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

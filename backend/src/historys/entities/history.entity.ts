@@ -8,7 +8,7 @@ import {
 
 @Entity()
 export class History {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   history_id: string;
 
   @Column()
@@ -29,7 +29,7 @@ export class History {
   @Column({ default: null })
   updatedBy: string;
 
-  @DeleteDateColumn({ default: null })
+  @Column({ default: null })
   deletedBy: string;
 
   @Column()

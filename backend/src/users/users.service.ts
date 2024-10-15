@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -8,7 +12,6 @@ import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HistorysService } from 'src/historys/historys.service';
 import { RoleType } from 'src/helper/helper.enum';
-import { CreateHistoryDto } from 'src/historys/dto/create-history.dto';
 
 @Injectable()
 export class UsersService {
@@ -44,18 +47,18 @@ export class UsersService {
   };
 
   async findUserByEmail(userEmail: string) {
-    return await this.usersRepository.findOne({
+    const user = await this.usersRepository.findOne({
       where: { email: userEmail },
     });
+
+    return user;
   }
 
   async register(user: RegisterUserDto) {
     const { username, email, password, age, gender, address, description } =
       user;
 
-    const isExist = await this.usersRepository.findOne({
-      where: { email: email },
-    });
+    const isExist = await this.findUserByEmail(email);
     if (isExist) {
       throw new BadRequestException(`Email: ${email} already exists`);
     }
@@ -76,12 +79,6 @@ export class UsersService {
 
     const newRegister = await this.findUserByEmail(email);
 
-    // const createHistoryDto = CreateHistoryDto(
-    //   target_id =  newRegister.user_id,
-    //   createdBy: newRegister.email,
-    //   role: RoleType.USER,
-    // )
-
     await this.historysService.createHistoty({
       target_id: newRegister.user_id,
       createdBy: email,
@@ -94,10 +91,15 @@ export class UsersService {
 
   // Find one user by email
   async findUserById(user_id: string) {
+    const isDelete = this.historysService.isDeleted({
+      target_id: user_id,
+      role: RoleType.USER,
+    });
     const user = await this.usersRepository.findOne({
       where: { user_id },
       select: [
         'user_id',
+        'email',
         'username',
         'age',
         'gender',
@@ -106,46 +108,57 @@ export class UsersService {
       ],
     });
 
-    if (user) {
+    if (user && isDelete) {
       return user;
     }
-    return 'User not found';
+    throw new NotFoundException('Not found user');
   }
 
   // Delete user by id
-  async deleteUserById(user_id: string, user: IUser) {
-    if (user_id != user.user_id)
-      return 'You do not have permission to delete this account';
-
-    const userDel = await this.findUserByEmail(user_id);
+  async deleteUser(user: IUser) {
+    const userDel = await this.findUserById(user.user_id);
 
     const isDelete = await this.historysService.isDeleted({
-      target_id: user_id,
+      target_id: user.user_id,
       role: RoleType.USER,
     });
 
     if (!userDel) {
-      return 'User not found';
+      throw new NotFoundException('User not found');
     }
     if (userDel && !isDelete) {
       return this.historysService.deleteHistory({
-        target_id: user_id,
+        target_id: user.user_id,
         deletedAt: new Date(),
         deletedBy: user.email,
         role: RoleType.USER,
       });
     }
+    return {
+      message: 'User has been deleted',
+    };
   }
 
   async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
-    const empty = await this.usersRepository.findOne({
-      where: { email: updateUserDto.email },
+    const empty = await this.findUserById(user.user_id);
+
+    const isDelete = await this.historysService.isDeleted({
+      target_id: user.user_id,
+      role: RoleType.USER,
     });
 
-    if (!empty) {
-      return this.usersRepository.update({ id: user.id }, { ...updateUserDto });
+    if (empty && !isDelete) {
+      await this.historysService.updateHistory({
+        target_id: user.user_id,
+        updatedAt: new Date(),
+        updatedBy: user.email,
+        role: RoleType.USER,
+      });
+      return this.usersRepository.update(
+        { user_id: user.user_id },
+        { ...updateUserDto },
+      );
     }
-
-    return 'Someone has used this email';
+    throw new NotFoundException('Not found user');
   }
 }

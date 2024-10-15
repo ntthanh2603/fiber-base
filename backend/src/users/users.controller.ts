@@ -30,11 +30,10 @@ export class UsersController {
     nếu chưa thì cập nhật bảng history là đã xóa.
 
   */
-  @Post(':user_id')
+  @Post('/delete')
   @ResponseMessage('Delete user')
-  deleteUserById(@Param() user_id: string, @User() user: IUser) {
-    user_id = user_id['user_id'];
-    return this.usersService.deleteUserById(user_id, user);
+  deleteUser(@User() user: IUser) {
+    return this.usersService.deleteUser(user);
   }
 
   @Patch('update')

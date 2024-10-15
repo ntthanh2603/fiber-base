@@ -17,12 +17,12 @@ export class HistorysService {
     return await this.historysRepository.save(history);
   }
 
-  async isDeleted(history: IHistory) {
-    const user = await this.historysRepository.findOneBy({
-      target_id: history.target_id,
-      role: history.role,
+  async isDeleted(ihistory: IHistory) {
+    const history = await this.historysRepository.findOneBy({
+      target_id: ihistory.target_id,
+      role: ihistory.role,
     });
-    return user.deletedAt ? true : false;
+    return history;
   }
 
   async updateHistory(updateDto: UpdateHistoryDto) {
@@ -32,20 +32,23 @@ export class HistorysService {
       role: role,
     });
 
-    history.deletedAt = updatedAt;
-    history.deletedBy = updatedBy;
+    history.updatedAt = updatedAt;
+    history.updatedBy = updatedBy;
     return await this.historysRepository.save(history);
   }
 
-  async deleteHistory(deleteDdto: DeleteHistoryDto) {
-    const { target_id, deletedAt, deletedBy, role } = deleteDdto;
-    const history = await this.historysRepository.findOneBy({
-      target_id: target_id,
-      role: role,
-    });
+  async deleteHistory(deleteDto: DeleteHistoryDto) {
+    const { target_id, deletedAt, deletedBy, role } = deleteDto;
 
-    history.deletedAt = deletedAt;
-    history.deletedBy = deletedBy;
-    return await this.historysRepository.save(history);
+    return await this.historysRepository.update(
+      {
+        target_id,
+        role: role,
+      },
+      {
+        deletedAt,
+        deletedBy,
+      },
+    );
   }
 }

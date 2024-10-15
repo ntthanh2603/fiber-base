@@ -103,21 +103,6 @@ export class AuthService {
           email,
         };
 
-        // Tạo token
-        const refresh_token = this.createRefreshToken(payload);
-
-        // Đẩy token lên database
-        await this.usersService.updateUserToken(refresh_token, user_id);
-
-        // Xóa token cũ
-        response.clearCookie('refresh_token');
-
-        // Trả cookies về cho client
-        response.cookie('refresh_token', refresh_token, {
-          httpOnly: true,
-          maxAge: +this.configService.get<string>('JWT_REFRESH_EXPIRE'),
-        });
-
         return {
           access_token: this.jwtService.sign(payload),
           user: {
