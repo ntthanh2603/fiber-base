@@ -20,7 +20,7 @@ export class ConversationMembersController {
 
   // Add user in conversation
   @Post('/add')
-  addUser(@User() user: IUser, cmDto: CreateConversationMemberDto) {
-    return this.conversationMembersService.addUser(user, cmDto);
+  addUser(@Body() cmDto: CreateConversationMemberDto) {
+    return this.conversationMembersService.addUser(cmDto);
   }
 }

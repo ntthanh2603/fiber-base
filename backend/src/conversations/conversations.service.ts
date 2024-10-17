@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,9 +23,11 @@ export class ConversationsService {
 
   // find conversation by id
   async findConversionById(conversation_id: string) {
-    return await this.conversationsRepository.findOneBy({
-      conversation_id: conversation_id,
+    const conversation = await this.conversationsRepository.findOneBy({
+      conversation_id,
     });
+    if (conversation) return conversation;
+    throw new NotFoundException('Conversation not found');
   }
 
   async create(user: IUser, dto: CreateConversationDto) {
