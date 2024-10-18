@@ -7,6 +7,9 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/decorator/customize';
 
+/*
+  - Bảo vệ các route yêu cầu xác thực JWT, cho phép bỏ qua các route được đánh dấu là public.
+*/
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
