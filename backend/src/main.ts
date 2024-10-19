@@ -28,12 +28,6 @@ async function bootstrap() {
     preflightContinue: false,
   });
 
-  // Config version
-  // app.setGlobalPrefix('api');
-  // app.enableVersioning({
-  //   type: VersioningType.URI,
-  //   defaultVersion: ['1', '2'],
-  // });
   await app.listen(configService.get<string>('PORT'));
 }
 bootstrap();
