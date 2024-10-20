@@ -1,1 +1,0 @@
-{"version":3,"file":"reactions.module.js","sourceRoot":"","sources":["../../src/reactions/reactions.module.ts"],"names":[],"mappings":";;;;;;;;;AAAA,2CAAwC;AACxC,2DAAuD;AACvD,iEAA6D;AAMtD,IAAM,eAAe,GAArB,MAAM,eAAe;CAAG,CAAA;AAAlB,0CAAe;0BAAf,eAAe;IAJ3B,IAAA,eAAM,EAAC;QACN,WAAW,EAAE,CAAC,0CAAmB,CAAC;QAClC,SAAS,EAAE,CAAC,oCAAgB,CAAC;KAC9B,CAAC;GACW,eAAe,CAAG"}

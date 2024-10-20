@@ -1,1 +1,0 @@
-{"version":3,"file":"create-conversation-member.dto.js","sourceRoot":"","sources":["../../../src/conversation-members/dto/create-conversation-member.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAA6C;AAE7C,MAAa,2BAA2B;CAMvC;AAND,kEAMC;AAJC;IADC,IAAA,4BAAU,EAAC,EAAE,OAAO,EAAE,uBAAuB,EAAE,CAAC;;oEACzB;AAGxB;IADC,IAAA,4BAAU,EAAC,EAAE,OAAO,EAAE,qBAAqB,EAAE,CAAC;;4DAC/B"}
