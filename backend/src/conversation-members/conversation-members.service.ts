@@ -44,4 +44,11 @@ export class ConversationMembersService {
 
     throw new NotFoundException('Conversation does not exist');
   }
+
+  async checkUserInConversation(user_id: string, conversation_id: string) {
+    const cm = await this.cmRepository.findOne({
+      where: { user_id, conversation_id },
+    });
+    return cm ? true : false;
+  }
 }
