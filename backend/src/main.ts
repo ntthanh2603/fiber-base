@@ -47,7 +47,7 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory, {
-    // Dùng option thứ 4 này để khi load lại trang swagger thì không mất token
+    // Dùng option thứ 4 này để khi reload lại trang swagger thì không mất token
     swaggerOptions: {
       persistAuthorization: true,
     },
