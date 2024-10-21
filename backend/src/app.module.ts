@@ -17,29 +17,29 @@ import { HistorysModule } from './historys/historys.module';
 import { ConversationMembersModule } from './conversation-members/conversation-members.module';
 import { ConversationsModule } from './conversations/conversations.module';
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true, // Để module config có thể sử dụng ở mọi nơi mà không cần import lại
-      envFilePath: '.env', // Đường dẫn tới file .env
-    }),
-    DatabaseModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    UsersModule,
-    GroupsModule,
-    PostsModule,
-    MessagesModule,
-    MediasModule,
-    ReactionsModule,
-    CommentsModule,
-    AuthModule,
-    RelationshipsModule,
-    HistorysModule,
-    ConversationMembersModule,
-    ConversationsModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		ConfigModule.forRoot({
+			isGlobal: true, // Để module config có thể sử dụng ở mọi nơi mà không cần import lại
+			envFilePath: '.env', // Đường dẫn tới file .env
+		}),
+		DatabaseModule,
+		ConfigModule.forRoot({
+			isGlobal: true,
+		}),
+		UsersModule,
+		GroupsModule,
+		PostsModule,
+		MessagesModule,
+		MediasModule,
+		ReactionsModule,
+		CommentsModule,
+		AuthModule,
+		RelationshipsModule,
+		HistorysModule,
+		ConversationMembersModule,
+		ConversationsModule,
+	],
+	controllers: [AppController],
+	providers: [AppService],
 })
 export class AppModule {}

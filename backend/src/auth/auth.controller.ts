@@ -5,7 +5,9 @@ import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Request, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -22,6 +24,7 @@ export class AuthController {
   @Public()
   @ResponseMessage('User login')
   @Post('/login')
+  @ApiBody({ type: LoginUserDto })
   handleLogin(
     @Body() dto: LoginUserDto,
     @Res({ passthrough: true }) response: Response,
