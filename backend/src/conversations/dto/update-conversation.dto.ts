@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateConversationDto } from './create-conversation.dto';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class UpdateConversationDto extends PartialType(CreateConversationDto) {}
+export class UpdateConversationDto {
+  @IsString()
+  @IsNotEmpty()
+  conversation_id: string;
+
+  @IsString()
+  @IsOptional()
+  conversation_name: string;
+
+  @IsString()
+  @IsOptional()
+  avartar: string;
+}

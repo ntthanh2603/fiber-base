@@ -59,4 +59,27 @@ export class ConversationsService {
     }
     throw new BadRequestException();
   }
+
+  async update(user: IUser, updateDto: UpdateConversationDto) {
+    try {
+      const conversation = await this.conversationsRepository.findOne({
+        where: { conversation_id: updateDto.conversation_id },
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+
+    const isInConversation = await this.cmService.checkUserInConversation(
+      user.user_id,
+      updateDto.conversation_id,
+    );
+    if (isInConversation) {
+      return await this.conversationsRepository.update(
+        { conversation_id: updateDto.conversation_id },
+        { ...updateDto },
+      );
+    }
+
+    throw new ForbiddenException();
+  }
 }
