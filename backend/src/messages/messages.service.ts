@@ -1,11 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from './entities/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUser } from 'src/users/users.interface';
-import { ConversationMember } from 'src/conversation-members/entities/conversation-member.entity';
 import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
 
 @Injectable()

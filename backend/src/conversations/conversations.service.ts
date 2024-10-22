@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
@@ -11,6 +13,7 @@ import { Repository } from 'typeorm';
 import { Conversation } from './entities/conversation.entity';
 import { IUser } from 'src/users/users.interface';
 import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
+import { DeleteConversationDto } from './dto/delete-conversation.dto';
 
 @Injectable()
 export class ConversationsService {
@@ -42,5 +45,18 @@ export class ConversationsService {
       user_id: conversation.createdBy,
     });
     return conversation;
+  }
+
+  async remote(user: IUser, dto: DeleteConversationDto) {
+    const conversation = await this.conversationsRepository.findOne({
+      where: { conversation_id: dto.conversation_id },
+    });
+    if (user.user_id != conversation.createdBy) throw new ForbiddenException();
+    if (conversation) {
+      return this.conversationsRepository.delete({
+        conversation_id: dto.conversation_id,
+      });
+    }
+    throw new BadRequestException();
   }
 }
