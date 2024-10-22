@@ -25,20 +25,13 @@ export class UsersController {
     return this.usersService.findUserById(user_id);
   }
 
-  /*
-    - Delete user
-    - Description: Kiểm tra xem người xóa là ai nếu xóa đúng id của họ thì 
-    kiểm tra user đã xóa hay chưa, nếu xóa rồi thì thông báo đã xóa, 
-    nếu chưa thì cập nhật bảng history là đã xóa.
-
-  */
-  @Post('/delete')
+  @Delete()
   @ResponseMessage('Delete user')
   deleteUser(@User() user: IUser) {
     return this.usersService.deleteUser(user);
   }
 
-  @Patch('update')
+  @Patch()
   @ResponseMessage('Update User')
   updateUser(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
     return this.usersService.updateUser(updateUserDto, user);

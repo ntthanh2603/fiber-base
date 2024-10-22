@@ -10,7 +10,6 @@ import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { HistorysService } from 'src/historys/historys.service';
 import { RoleType } from 'src/helper/helper.enum';
 
 @Injectable()
@@ -18,7 +17,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private historysService: HistorysService,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -49,9 +47,23 @@ export class UsersService {
   async findUserByEmail(userEmail: string) {
     const user = await this.usersRepository.findOne({
       where: { email: userEmail },
+      select: [
+        'user_id',
+        'email',
+        'username',
+        'age',
+        'gender',
+        'address',
+        'description',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+      ],
     });
+    if (!user) throw new NotFoundException('User does not exist');
 
-    return user;
+    if (!user.deletedAt) return user;
+    else throw new NotFoundException('User deleted');
   }
 
   async register(user: RegisterUserDto) {
@@ -91,10 +103,6 @@ export class UsersService {
 
   // Find one user by email
   async findUserById(user_id: string) {
-    const isDelete = this.historysService.isDeleted({
-      target_id: user_id,
-      role: RoleType.USER,
-    });
     const user = await this.usersRepository.findOne({
       where: { user_id },
       select: [
@@ -105,38 +113,26 @@ export class UsersService {
         'gender',
         'address',
         'description',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
       ],
     });
+    if (!user) throw new NotFoundException('User does not exist');
 
-    if (user && isDelete) {
-      return user;
-    }
-    throw new NotFoundException('Not found user');
+    if (!user.deletedAt) return user;
+    else throw new NotFoundException('User deleted');
   }
 
   // Delete user by id
   async deleteUser(user: IUser) {
-    const userDel = await this.findUserById(user.user_id);
+    const findUser = await this.findUserById(user.user_id);
 
-    const isDelete = await this.historysService.isDeleted({
-      target_id: user.user_id,
-      role: RoleType.USER,
-    });
-
-    if (!userDel) {
-      throw new NotFoundException('User not found');
-    }
-    if (userDel && !isDelete) {
-      return this.historysService.deleteHistory({
-        target_id: user.user_id,
-        deletedAt: new Date(),
-        deletedBy: user.email,
-        role: RoleType.USER,
-      });
-    }
-    return {
-      message: 'User has been deleted',
-    };
+    if (findUser.deletedAt)
+      return this.usersRepository.update(
+        { user_id: user.user_id },
+        { deletedAt: new Date() },
+      );
   }
 
   async updateUser(updateUserDto: UpdateUserDto, user: IUser) {

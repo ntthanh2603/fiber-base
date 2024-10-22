@@ -33,7 +33,15 @@ export class AuthService {
     return user;
   }
 
-  // Login user
+  createRefreshToken(payload) {
+    const refresh_token = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRE'),
+    });
+
+    return refresh_token;
+  }
+
   async login(loginUserDto: LoginUserDto, response: Response) {
     const { email, password } = loginUserDto;
     const user = await this.validateUser(email, password);
@@ -44,13 +52,10 @@ export class AuthService {
       email,
     };
 
-    // Tạo token
     const refresh_token = this.createRefreshToken(payload);
 
-    // Đẩy token lên database
     await this.usersService.updateUserToken(refresh_token, user_id);
 
-    // Trả cookies về cho client
     response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       maxAge: +this.configService.get<string>('JWT_REFRESH_EXPIRE'),
@@ -76,16 +81,6 @@ export class AuthService {
       email: newUser.email,
     };
   }
-
-  // Create token
-  createRefreshToken = (payload) => {
-    const refresh_token = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRE'),
-    });
-
-    return refresh_token;
-  };
 
   processNewToken = async (refreshToken: string, response: Response) => {
     try {

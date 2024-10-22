@@ -36,6 +36,15 @@ export class User {
   @Column({ type: 'enum', enum: StatusType, default: StatusType.OFF })
   status: StatusType;
 
+  @Column()
+  createdAt: Date;
+
+  @Column({ default: null })
+  updatedAt: Date;
+
+  @Column({ default: null })
+  deletedAt: Date;
+
   @Column({ default: null })
   refreshToken: string;
 }
