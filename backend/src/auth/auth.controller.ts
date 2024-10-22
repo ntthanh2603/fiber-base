@@ -25,11 +25,11 @@ export class AuthController {
   @ResponseMessage('User login')
   @Post('/login')
   @ApiBody({ type: LoginUserDto })
-  handleLogin(
+  async handleLogin(
     @Body() dto: LoginUserDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    return this.authService.login(dto, response);
+    return await this.authService.login(dto, response);
   }
 
   /*
@@ -44,8 +44,8 @@ export class AuthController {
   @ResponseMessage('Register a new user')
   @Post('/register')
   @ApiBody({ type: RegisterUserDto })
-  handleRegister(@Body() registerUserDto: RegisterUserDto) {
-    return this.authService.register(registerUserDto);
+  async handleRegister(@Body() registerUserDto: RegisterUserDto) {
+    return await this.authService.register(registerUserDto);
   }
 
   // Get account
@@ -70,12 +70,12 @@ export class AuthController {
   @Public()
   @ResponseMessage('Get user by refresh token')
   @Get('/refresh')
-  handleRefreshToken(
+  async handleRefreshToken(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
     const refreshToken = request.cookies['refresh_token'];
-    return this.authService.processNewToken(refreshToken, response);
+    return await this.authService.processNewToken(refreshToken, response);
   }
 
   /*
@@ -89,10 +89,10 @@ export class AuthController {
   */
   @Post('/logout')
   @ResponseMessage('Logout user')
-  hendleLogout(
+  async hendleLogout(
     @Res({ passthrough: true }) response: Response,
     @User() user: IUser,
   ) {
-    return this.authService.logout(response, user);
+    return await this.authService.logout(response, user);
   }
 }

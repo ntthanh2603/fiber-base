@@ -22,19 +22,19 @@ export class RelationshipsController {
   // Relationship 2 user
   @Post()
   @ResponseMessage('Create relationship')
-  create(
+  async reate(
     @Body() createRelationshipDto: CreateRelationshipDto,
     @User() user: IUser,
   ) {
-    return this.relationshipsService.update(createRelationshipDto, user);
+    return await this.relationshipsService.update(createRelationshipDto, user);
   }
 
   @Patch()
   @ResponseMessage('Create relationship')
-  update(
+  async update(
     @Body() updateRelationshipDto: UpdateRelationshipDto,
     @User() user: IUser,
   ) {
-    return this.relationshipsService.update(updateRelationshipDto, user);
+    return await this.relationshipsService.update(updateRelationshipDto, user);
   }
 }

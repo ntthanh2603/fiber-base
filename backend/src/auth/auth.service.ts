@@ -115,9 +115,9 @@ export class AuthService {
     }
   }
 
-  logout = async (response: Response, user: IUser) => {
+  async logout(response: Response, user: IUser) {
     await this.usersService.updateUserToken('', user.user_id);
     response.clearCookie('refresh_token');
     return 'OK';
-  };
+  }
 }

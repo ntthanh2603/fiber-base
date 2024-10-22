@@ -19,7 +19,10 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
   @Post()
   @ResponseMessage('Create message')
-  create(@User() user: IUser, @Body() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(user, createMessageDto);
+  async create(
+    @User() user: IUser,
+    @Body() createMessageDto: CreateMessageDto,
+  ) {
+    return await this.messagesService.create(user, createMessageDto);
   }
 }

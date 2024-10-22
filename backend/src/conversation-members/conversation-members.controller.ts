@@ -21,7 +21,7 @@ export class ConversationMembersController {
 
   // Add user in conversation
   @Post()
-  addUser(@Body() cmDto: CreateConversationMemberDto) {
-    return this.conversationMembersService.addUser(cmDto);
+  async addUser(@Body() cmDto: CreateConversationMemberDto) {
+    return await this.conversationMembersService.addUser(cmDto);
   }
 }
