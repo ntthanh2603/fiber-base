@@ -1,7 +1,10 @@
+import { Conversation } from './../conversations/entities/conversation.entity';
 import { UsersService } from 'src/users/users.service';
 import { IUser } from './../users/users.interface';
 import { ConversationsService } from './../conversations/conversations.service';
 import {
+  BadRequestException,
+  ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
@@ -12,6 +15,7 @@ import { UpdateConversationMemberDto } from './dto/update-conversation-member.dt
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConversationMember } from './entities/conversation-member.entity';
+import { DeleteConversationMemberDto } from './dto/delete-conversation-member.dto';
 
 @Injectable()
 export class ConversationMembersService {
@@ -53,5 +57,30 @@ export class ConversationMembersService {
       where: { user_id, conversation_id },
     });
     return cm ? true : false;
+  }
+
+  async remote(user: IUser, deleteDto: DeleteConversationMemberDto) {
+    try {
+      const conversation = await this.conversationsService.findConversionById(
+        deleteDto.conversation_id,
+      );
+
+      if (user.user_id == conversation.createdBy) {
+        throw new ForbiddenException();
+      }
+      const check = this.cmRepository.findOne({
+        where: {
+          user_id: user.user_id,
+          conversation_id: deleteDto.conversation_id,
+        },
+      });
+      if (check)
+        return await this.cmRepository.delete({
+          user_id: user.user_id,
+          conversation_id: deleteDto.conversation_id,
+        });
+    } catch (e) {
+      throw new BadRequestException();
+    }
   }
 }

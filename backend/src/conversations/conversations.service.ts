@@ -48,16 +48,21 @@ export class ConversationsService {
   }
 
   async remote(user: IUser, dto: DeleteConversationDto) {
-    const conversation = await this.conversationsRepository.findOne({
-      where: { conversation_id: dto.conversation_id },
-    });
-    if (user.user_id != conversation.createdBy) throw new ForbiddenException();
-    if (conversation) {
-      return this.conversationsRepository.delete({
-        conversation_id: dto.conversation_id,
+    try {
+      const conversation = await this.conversationsRepository.findOne({
+        where: { conversation_id: dto.conversation_id },
       });
+      if (user.user_id != conversation.createdBy)
+        throw new ForbiddenException();
+      if (conversation) {
+        return this.conversationsRepository.delete({
+          conversation_id: dto.conversation_id,
+        });
+      }
+      throw new BadRequestException();
+    } catch {
+      throw new NotFoundException('Conversation not found');
     }
-    throw new BadRequestException();
   }
 
   async update(user: IUser, updateDto: UpdateConversationDto) {
