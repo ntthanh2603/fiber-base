@@ -5,12 +5,13 @@ import { DatabaseModule } from 'src/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConversationMember } from './entities/conversation-member.entity';
 import { ConversationsModule } from 'src/conversations/conversations.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ConversationMember]),
     DatabaseModule,
-
+    UsersModule,
     forwardRef(() => ConversationsModule),
   ],
   controllers: [ConversationMembersController],

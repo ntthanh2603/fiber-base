@@ -8,10 +8,11 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ConversationMembersService } from './conversation-members.service';
-import { User } from 'src/decorator/customize';
-import { IUser } from 'src/users/users.interface';
-import { CreateConversationMemberDto } from './dto/create-conversation-member.dto';
 
+import { CreateConversationMemberDto } from './dto/create-conversation-member.dto';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Conversation members')
 @Controller('conversation-members')
 export class ConversationMembersController {
   constructor(
@@ -19,7 +20,7 @@ export class ConversationMembersController {
   ) {}
 
   // Add user in conversation
-  @Post('/add')
+  @Post()
   addUser(@Body() cmDto: CreateConversationMemberDto) {
     return this.conversationMembersService.addUser(cmDto);
   }

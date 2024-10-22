@@ -1,3 +1,4 @@
+import { UsersService } from 'src/users/users.service';
 import { IUser } from './../users/users.interface';
 import { ConversationsService } from './../conversations/conversations.service';
 import {
@@ -19,6 +20,7 @@ export class ConversationMembersService {
     private cmRepository: Repository<ConversationMember>,
     @Inject(forwardRef(() => ConversationsService))
     private conversationsService: ConversationsService,
+    private usersService: UsersService,
   ) {}
 
   async createConversation(cmDto: CreateConversationMemberDto) {
@@ -26,7 +28,8 @@ export class ConversationMembersService {
       cmDto.conversation_id,
     );
 
-    if (conversation)
+    const user = await this.usersService.findUserById(cmDto.user_id);
+    if (conversation && user)
       return await this.cmRepository.save({
         conversation_id: cmDto.conversation_id,
         user_id: cmDto.user_id,

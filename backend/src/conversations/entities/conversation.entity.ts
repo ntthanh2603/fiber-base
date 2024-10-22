@@ -5,10 +5,10 @@ export class Conversation {
   @PrimaryGeneratedColumn('uuid')
   conversation_id: string;
 
-  @Column({ default: null })
+  @Column()
   conversation_name: string;
 
-  @Column({ default: null })
+  @Column({ default: 'tuanthanh.img.com' })
   avartar: string;
 
   @Column()
