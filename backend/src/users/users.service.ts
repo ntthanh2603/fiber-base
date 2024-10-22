@@ -10,7 +10,6 @@ import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RoleType } from 'src/helper/helper.enum';
 
 @Injectable()
 export class UsersService {
@@ -30,12 +29,7 @@ export class UsersService {
   }
 
   updateUserToken = (refreshToken: string, user_id: string) => {
-    return this.usersRepository
-      .createQueryBuilder()
-      .update(User)
-      .set({ refreshToken: refreshToken })
-      .where('user_id = :user_id', { user_id })
-      .execute();
+    return this.usersRepository.update({ user_id }, { refreshToken });
   };
 
   findUserByToken = async (refreshToken: string) => {
@@ -47,37 +41,25 @@ export class UsersService {
   async findUserByEmail(userEmail: string) {
     const user = await this.usersRepository.findOne({
       where: { email: userEmail },
-      select: [
-        'user_id',
-        'email',
-        'username',
-        'age',
-        'gender',
-        'address',
-        'description',
-        'createdAt',
-        'updatedAt',
-        'deletedAt',
-      ],
     });
-    if (!user) throw new NotFoundException('User does not exist');
 
-    if (!user.deletedAt) return user;
-    else throw new NotFoundException('User deleted');
+    if (user) if (!user.deletedAt) return user;
+    return null;
   }
 
   async register(user: RegisterUserDto) {
     const { username, email, password, age, gender, address, description } =
       user;
 
-    const isExist = await this.findUserByEmail(email);
-    if (isExist) {
+    const userDb = await this.findUserByEmail(email);
+
+    if (userDb) {
       throw new BadRequestException(`Email: ${email} already exists`);
     }
 
     const hashPassword = this.getHashPassword(password);
 
-    let newUser = {
+    const newUser = {
       username,
       email,
       password: hashPassword,
@@ -85,18 +67,10 @@ export class UsersService {
       gender,
       address,
       description,
+      createdAt: new Date(),
     };
 
-    await this.usersRepository.save(newUser);
-
-    const newRegister = await this.findUserByEmail(email);
-
-    await this.historysService.createHistoty({
-      target_id: newRegister.user_id,
-      createdBy: email,
-      createdAt: new Date(),
-      role: RoleType.USER,
-    });
+    const newRegister = await this.usersRepository.save(newUser);
 
     return newRegister;
   }
@@ -118,17 +92,15 @@ export class UsersService {
         'deletedAt',
       ],
     });
-    if (!user) throw new NotFoundException('User does not exist');
 
     if (!user.deletedAt) return user;
-    else throw new NotFoundException('User deleted');
+    return null;
   }
 
-  // Delete user by id
   async deleteUser(user: IUser) {
-    const findUser = await this.findUserById(user.user_id);
+    const userDb = await this.findUserById(user.user_id);
 
-    if (findUser.deletedAt)
+    if (userDb)
       return this.usersRepository.update(
         { user_id: user.user_id },
         { deletedAt: new Date() },
@@ -136,25 +108,12 @@ export class UsersService {
   }
 
   async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
-    const empty = await this.findUserById(user.user_id);
+    const userDb = await this.findUserById(user.user_id);
 
-    const isDelete = await this.historysService.isDeleted({
-      target_id: user.user_id,
-      role: RoleType.USER,
-    });
-
-    if (empty && !isDelete) {
-      await this.historysService.updateHistory({
-        target_id: user.user_id,
-        updatedAt: new Date(),
-        updatedBy: user.email,
-        role: RoleType.USER,
-      });
+    if (userDb)
       return this.usersRepository.update(
-        { user_id: user.user_id },
+        { user_id: userDb.user_id },
         { ...updateUserDto },
       );
-    }
-    throw new NotFoundException('Not found user');
   }
 }

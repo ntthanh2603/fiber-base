@@ -46,6 +46,7 @@ export class AuthService {
     const { email, password } = loginUserDto;
     const user = await this.validateUser(email, password);
     const { user_id, username } = user;
+
     const payload = {
       user_id,
       username,
@@ -73,7 +74,7 @@ export class AuthService {
 
   // Register user
   async register(user: RegisterUserDto) {
-    let newUser = await this.usersService.register(user);
+    const newUser = await this.usersService.register(user);
 
     return {
       user_id: newUser.user_id,
@@ -82,7 +83,7 @@ export class AuthService {
     };
   }
 
-  processNewToken = async (refreshToken: string, response: Response) => {
+  async processNewToken(refreshToken: string, response: Response) {
     try {
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
@@ -112,7 +113,7 @@ export class AuthService {
     } catch (error) {
       throw new BadRequestException('Refresh invalid');
     }
-  };
+  }
 
   logout = async (response: Response, user: IUser) => {
     await this.usersService.updateUserToken('', user.user_id);

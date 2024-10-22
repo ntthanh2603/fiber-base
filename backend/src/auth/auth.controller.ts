@@ -7,7 +7,7 @@ import { IUser } from 'src/users/users.interface';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -43,6 +43,7 @@ export class AuthController {
   @Public()
   @ResponseMessage('Register a new user')
   @Post('/register')
+  @ApiBody({ type: RegisterUserDto })
   handleRegister(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
   }

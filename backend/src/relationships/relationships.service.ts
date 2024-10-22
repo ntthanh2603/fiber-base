@@ -1,11 +1,16 @@
 import { User } from './../users/entities/user.entity';
 import { UsersService } from './../users/users.service';
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRelationshipDto } from './dto/create-relationship.dto';
 import { UpdateRelationshipDto } from './dto/update-relationship.dto';
 import { Relationship } from './entities/relationship.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { IUser } from 'src/users/users.interface';
 
 @Injectable()
 export class RelationshipsService {
@@ -16,9 +21,12 @@ export class RelationshipsService {
   ) {}
 
   // Relationship two user
-  async relationshipUser(createRelationshipDto: CreateRelationshipDto) {
-    const { user1_id, user2_id, relationship } = createRelationshipDto;
+  async update(updateRelationshipDto: UpdateRelationshipDto, user: IUser) {
+    const { user1_id, user2_id, relationship } = updateRelationshipDto;
 
+    if (user1_id != user.user_id && user2_id != user.user_id) {
+      throw new ForbiddenException();
+    }
     const user1 = await this.usersService.findUserById(user1_id);
     const user2 = await this.usersService.findUserById(user2_id);
 
@@ -49,7 +57,7 @@ export class RelationshipsService {
       };
     }
     // Create relationship
-    else {
+    else if (!existingRelationship) {
       const newRelationship = new CreateRelationshipDto();
       newRelationship.user1_id = user1_id;
       newRelationship.user2_id = user2_id;
@@ -69,6 +77,6 @@ export class RelationshipsService {
           relationshipUpdate: relationship,
         },
       };
-    }
+    } else throw new NotFoundException('Not found user');
   }
 }
