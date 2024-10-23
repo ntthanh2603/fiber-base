@@ -13,6 +13,7 @@ import { Group } from './entities/group.entity';
 import { Repository } from 'typeorm';
 import { GroupUsersService } from 'src/groupusers/groupusers.service';
 import { RoleType } from 'src/helper/helper.enum';
+import { DeleteGroupDto } from './dto/delete-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -46,12 +47,12 @@ export class GroupsService {
         user.user_id,
         updateDto.group_id,
       );
-      const group = this.findOneGroupById(updateDto.group_id);
+      const group = await this.findOneGroupById(updateDto.group_id);
 
       if (!group) throw new BadRequestException();
 
       if (groupuser && groupuser.role == RoleType.ADMIN) {
-        return this.groupsRepository.update(
+        return await this.groupsRepository.update(
           { group_id: updateDto.group_id },
           { ...updateDto },
         );
@@ -67,5 +68,25 @@ export class GroupsService {
         group_id: group_id,
       },
     });
+  }
+
+  async remote(user: IUser, deleteDto: DeleteGroupDto) {
+    try {
+      const groupuser = await this.groupusersService.findUserInGroup(
+        user.user_id,
+        deleteDto.group_id,
+      );
+      const group = await this.findOneGroupById(deleteDto.group_id);
+
+      if (!group) throw new BadRequestException();
+
+      if (groupuser && groupuser.role == RoleType.ADMIN) {
+        return await this.groupsRepository.delete({
+          group_id: deleteDto.group_id,
+        });
+      }
+    } catch {
+      throw new ForbiddenException();
+    }
   }
 }

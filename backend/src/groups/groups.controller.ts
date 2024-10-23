@@ -13,6 +13,7 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { IUser } from 'src/users/users.interface';
 import { User } from 'src/decorator/customize';
+import { DeleteGroupDto } from './dto/delete-group.dto';
 
 @ApiTags('Groups')
 @Controller('groups')
@@ -29,5 +30,11 @@ export class GroupsController {
   @ApiBody({ type: UpdateGroupDto })
   async update(@User() user: IUser, @Body() updateDto: UpdateGroupDto) {
     return await this.groupsService.update(user, updateDto);
+  }
+
+  @Delete()
+  @ApiBody({ type: DeleteGroupDto })
+  async remote(@User() user: IUser, @Body() deleteDto: DeleteGroupDto) {
+    return await this.groupsService.remote(user, deleteDto);
   }
 }
