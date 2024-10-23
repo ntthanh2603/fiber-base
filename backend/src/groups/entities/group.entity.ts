@@ -6,12 +6,12 @@ export class Group {
   group_id: string;
 
   @Column()
-  group_name: string;
+  groupname: string;
 
   @Column()
   description: string;
 
-  @Column()
+  @Column({ default: null })
   avartar: string;
 
   @Column()

@@ -13,9 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { RelationshipsModule } from './relationships/relationships.module';
 import { ConversationMembersModule } from './conversation-members/conversation-members.module';
 import { ConversationsModule } from './conversations/conversations.module';
-import { UsergroupModule } from './usergroup/usergroup.module';
 import { UsergroupsModule } from './usergroups/usergroups.module';
-import { HagtafsModule } from './hagtafs/hagtafs.module';
 import { HagtagsModule } from './hagtags/hagtags.module';
 import { MediasModule } from './medias/medias.module';
 @Module({
@@ -38,9 +36,7 @@ import { MediasModule } from './medias/medias.module';
     RelationshipsModule,
     ConversationMembersModule,
     ConversationsModule,
-    UsergroupModule,
     UsergroupsModule,
-    HagtafsModule,
     HagtagsModule,
     MediasModule,
   ],
