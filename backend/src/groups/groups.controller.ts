@@ -24,4 +24,10 @@ export class GroupsController {
   async create(@User() user: IUser, @Body() createDto: CreateGroupDto) {
     return await this.groupsService.create(user, createDto);
   }
+
+  @Patch()
+  @ApiBody({ type: UpdateGroupDto })
+  async update(@User() user: IUser, @Body() updateDto: UpdateGroupDto) {
+    return await this.groupsService.update(user, updateDto);
+  }
 }
