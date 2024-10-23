@@ -37,4 +37,6 @@ export enum RoleType {
   ADMIN = 'admin',
   USER = 'user',
   GROUP = 'group',
+  POST = 'post',
+  COMMENT = 'comment',
 }

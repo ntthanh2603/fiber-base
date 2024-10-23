@@ -1,9 +1,18 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Group {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  group_id: string;
+
+  @Column()
+  group_name: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  avartar: string;
 
   @Column()
   createdAt: Date;

@@ -33,8 +33,6 @@ export class ConversationMembersController {
     @User() user: IUser,
     @Body() deleteDto: DeleteConversationMemberDto,
   ) {
-    console.log(user);
-
     return await this.conversationMembersService.remote(user, deleteDto);
   }
 }

@@ -1,7 +1,26 @@
-import { Entity, PrimaryColumn } from 'typeorm';
+import { ReactionType, RoleType } from 'src/helper/helper.enum';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('reactions')
 export class Reaction {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  reaction_id: string;
+
+  @Column()
+  user_id: string;
+
+  @Column()
+  target_id: string;
+
+  @Column({
+    type: 'enum',
+    enum: RoleType,
+  })
+  targetType: RoleType;
+
+  @Column({
+    type: 'enum',
+    enum: ReactionType,
+  })
+  reaction: ReactionType;
 }
