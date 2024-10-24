@@ -14,6 +14,7 @@ import { Repository } from 'typeorm';
 import { GroupUsersService } from 'src/groupusers/groupusers.service';
 import { RoleType } from 'src/helper/helper.enum';
 import { DeleteGroupDto } from './dto/delete-group.dto';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Injectable()
 export class GroupsService {
@@ -23,6 +24,8 @@ export class GroupsService {
 
     @Inject(forwardRef(() => GroupUsersService))
     private groupusersService: GroupUsersService,
+
+    private functionHelper: FunctionHelper,
   ) {}
 
   async create(user: IUser, createDto: CreateGroupDto) {
@@ -47,6 +50,7 @@ export class GroupsService {
         user.user_id,
         updateDto.group_id,
       );
+
       const group = await this.findOneGroupById(updateDto.group_id);
 
       if (!group) throw new BadRequestException();
@@ -54,18 +58,21 @@ export class GroupsService {
       if (groupuser && groupuser.role == RoleType.ADMIN) {
         return await this.groupsRepository.update(
           { group_id: updateDto.group_id },
-          { ...updateDto },
+          { ...updateDto, updatedAt: new Date(), updatedBy: user.user_id },
         );
       }
-    } catch {
-      throw new ForbiddenException();
+    } catch (e) {
+      throw e;
     }
   }
 
   async findOneGroupById(group_id: string) {
+    if (!this.functionHelper.isValidUUID(group_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
     return await this.groupsRepository.findOne({
       where: {
-        group_id: group_id,
+        group_id,
       },
     });
   }

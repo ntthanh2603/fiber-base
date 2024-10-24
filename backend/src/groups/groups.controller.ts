@@ -29,6 +29,8 @@ export class GroupsController {
   @Patch()
   @ApiBody({ type: UpdateGroupDto })
   async update(@User() user: IUser, @Body() updateDto: UpdateGroupDto) {
+    console.log(user, updateDto);
+
     return await this.groupsService.update(user, updateDto);
   }
 

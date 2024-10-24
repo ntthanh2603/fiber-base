@@ -1,3 +1,4 @@
+import { UsersModule } from './../users/users.module';
 import { forwardRef, Module } from '@nestjs/common';
 import { GroupUsersService } from './groupusers.service';
 
@@ -12,6 +13,7 @@ import { GroupUsersController } from './groupusers.controller';
     TypeOrmModule.forFeature([GroupUser]),
     DatabaseModule,
     forwardRef(() => GroupsModule),
+    UsersModule,
   ],
   controllers: [GroupUsersController],
   providers: [GroupUsersService],

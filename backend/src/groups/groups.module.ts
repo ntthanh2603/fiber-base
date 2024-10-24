@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
 import { DatabaseModule } from 'src/database/database.module';
 import { GroupUsersModule } from 'src/groupusers/groupusers.module';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { GroupUsersModule } from 'src/groupusers/groupusers.module';
     forwardRef(() => GroupUsersModule),
   ],
   controllers: [GroupsController],
-  providers: [GroupsService],
+  providers: [GroupsService, FunctionHelper],
   exports: [GroupsService],
 })
 export class GroupsModule {}
