@@ -25,7 +25,7 @@ export class FilesController {
 
   @Public()
   @Post('upload')
-  @UseInterceptors(FileInterceptor('fileUpload'))
+  @UseInterceptors(FileInterceptor('avartarUser'))
   uploadFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
@@ -33,7 +33,7 @@ export class FilesController {
           fileType: 'png',
         })
         .addMaxSizeValidator({
-          maxSize: 10000,
+          maxSize: 1000 * 1024,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -41,6 +41,8 @@ export class FilesController {
     )
     file: Express.Multer.File,
   ) {
+    console.log('>> file', file);
+
     return {
       filename: file.filename,
     };

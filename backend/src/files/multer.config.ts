@@ -3,9 +3,9 @@ import {
   MulterModuleOptions,
   MulterOptionsFactory,
 } from '@nestjs/platform-express';
-import fs from 'fs';
 import { diskStorage } from 'multer';
-import path, { join } from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class MulterConfigService implements MulterOptionsFactory {
@@ -42,7 +42,7 @@ export class MulterConfigService implements MulterOptionsFactory {
         destination: (req, file, cb) => {
           const folder = req?.headers?.folder_type ?? 'default';
           this.ensureExists(`public/images/${folder}`);
-          cb(null, join(this.getRootPath(), `public/images/${folder}`));
+          cb(null, path.join(this.getRootPath(), `public/images/${folder}`));
         },
         filename: (req, file, cb) => {
           //get image extension

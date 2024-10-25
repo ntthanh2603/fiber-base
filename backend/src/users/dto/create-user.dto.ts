@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { GenderType } from 'src/helper/helper.enum';
 
 export class RegisterUserDto {
@@ -20,17 +26,26 @@ export class RegisterUserDto {
 
   @IsNotEmpty({ message: 'Tuổi không được trống' })
   @ApiProperty({ example: 20, description: 'age' })
+  @IsOptional()
   age: number;
 
   @IsNotEmpty({ message: 'Giới tính không được trống' })
   @ApiProperty({ example: GenderType.MALE, description: 'gender' })
+  @IsOptional()
   gender: GenderType;
 
   @IsNotEmpty({ message: 'Địa chỉ không được trống' })
   @ApiProperty({ example: 'Cau Giay, Ha Noi', description: 'address' })
+  @IsOptional()
   address: string;
 
   @IsNotEmpty({ message: 'Thêm mô tả' })
   @ApiProperty({ example: 'Good boy', description: 'description' })
+  @IsOptional()
   description: string;
+
+  @IsNotEmpty({ message: 'Avartarn not null' })
+  @ApiProperty({ example: 'image.png', description: 'avartar' })
+  @IsOptional()
+  avartar: string;
 }
