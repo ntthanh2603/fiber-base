@@ -16,6 +16,7 @@ import { ConversationsModule } from './conversations/conversations.module';
 import { GroupUsersModule } from './groupusers/groupusers.module';
 import { HagtagsModule } from './hagtags/hagtags.module';
 import { MediasModule } from './medias/medias.module';
+import { FilesModule } from './files/files.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +40,7 @@ import { MediasModule } from './medias/medias.module';
     GroupUsersModule,
     HagtagsModule,
     MediasModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
