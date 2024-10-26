@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -13,15 +14,27 @@ import { UsersService } from 'src/users/users.service';
 import { urlToHttpOptions } from 'url';
 import { RoleType } from 'src/helper/helper.enum';
 import { DeletePostDto } from './dto/delete-post.dto';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
+    private functionHelper: FunctionHelper,
   ) {}
 
-  async findOne(target_id: string, role: RoleType) {
+  async findPostById(post_id: string) {
+    if (!this.functionHelper.isValidUUID(post_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
+    const post = await this.postsRepository.findOne({ where: { post_id } });
+
+    if (post) return post;
+    throw new NotFoundException();
+  }
+
+  async findPost(target_id: string, role: RoleType) {
     const post = await this.postsRepository.findOne({
       where: {
         target_id,
@@ -29,7 +42,7 @@ export class PostsService {
       },
     });
     if (post) return post;
-    throw new BadRequestException();
+    throw new NotFoundException();
   }
 
   async create(
@@ -63,7 +76,7 @@ export class PostsService {
     updateDto: UpdatePostDto,
     file: Express.Multer.File,
   ) {
-    const post = await this.findOne(updateDto.target_id, updateDto.role);
+    const post = await this.findPost(updateDto.target_id, updateDto.role);
 
     if (post.target_id == user.user_id)
       return await this.postsRepository.update(
@@ -81,7 +94,7 @@ export class PostsService {
   }
 
   async remote(user: IUser, deleteDto: DeletePostDto) {
-    const post = await this.findOne(deleteDto.target_id, deleteDto.role);
+    const post = await this.findPost(deleteDto.target_id, deleteDto.role);
     if (user.user_id == post.target_id) {
       return await this.postsRepository.delete(post);
     }

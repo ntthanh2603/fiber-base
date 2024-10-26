@@ -1,26 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { Comment } from './entities/comment.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { IUser } from 'src/users/users.interface';
+import { PostsService } from 'src/posts/posts.service';
+import { RoleType } from 'src/helper/helper.enum';
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
-  }
+  constructor(
+    @InjectRepository(Comment)
+    private commentsRepository: Repository<Comment>,
+    private postsService: PostsService,
+  ) {}
 
-  findAll() {
-    return `This action returns all comments`;
-  }
+  async create(user: IUser, createDto: CreateCommentDto) {
+    const post = await this.postsService.findPostById(createDto.post_is);
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+    if (post) {
+      return await this.commentsRepository.save({
+        user_id: user.user_id,
+        post_id: createDto.post_is,
+        content: createDto.content,
+      });
+    }
+    throw new BadRequestException();
   }
 }

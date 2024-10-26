@@ -8,6 +8,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from 'src/files/multer.config';
 import { UsersModule } from 'src/users/users.module';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from 'src/users/users.module';
     }),
   ],
   controllers: [PostsController],
-  providers: [PostsService],
+  providers: [PostsService, FunctionHelper],
+  exports: [PostsService],
 })
 export class PostsModule {}
