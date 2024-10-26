@@ -17,4 +17,13 @@ export class Post {
     enum: RoleType,
   })
   role: RoleType;
+
+  @Column({ default: null })
+  media: string;
+
+  @Column()
+  createdAt: Date;
+
+  @Column()
+  createdBy: string;
 }

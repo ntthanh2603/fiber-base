@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Post } from './entities/post.entity';
+import { IUser } from 'src/users/users.interface';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
-  }
+  constructor(
+    @InjectRepository(Post)
+    private postsRepository: Repository<Post>,
+  ) {}
 
-  findAll() {
-    return `This action returns all posts`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
-  }
-
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async create(
+    user: IUser,
+    createDto: CreatePostDto,
+    file: Express.Multer.File,
+  ) {
+    try {
+      return await this.postsRepository.save({
+        target_id: user.user_id,
+        content: createDto.content,
+        role: createDto.role,
+        media: `images/${file.fieldname}/${file.filename}`,
+        createdAt: new Date(),
+        createdBy: user.user_id,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }
