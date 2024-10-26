@@ -18,6 +18,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { IUser } from 'src/users/users.interface';
 import { Public, User } from 'src/decorator/customize';
+import { DeletePostDto } from './dto/delete-post.dto';
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -68,5 +69,10 @@ export class PostsController {
     file: Express.Multer.File,
   ) {
     return await this.postsService.update(user, updateDto, file);
+  }
+
+  @Delete()
+  async remote(@User() user: IUser, @Body() deleteDto: DeletePostDto) {
+    return await this.postsService.remote(user, deleteDto);
   }
 }

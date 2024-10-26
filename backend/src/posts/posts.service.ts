@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +12,7 @@ import { IUser } from 'src/users/users.interface';
 import { UsersService } from 'src/users/users.service';
 import { urlToHttpOptions } from 'url';
 import { RoleType } from 'src/helper/helper.enum';
+import { DeletePostDto } from './dto/delete-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -73,5 +78,13 @@ export class PostsService {
       );
 
     throw new BadRequestException();
+  }
+
+  async remote(user: IUser, deleteDto: DeletePostDto) {
+    const post = await this.findOne(deleteDto.target_id, deleteDto.role);
+    if (user.user_id == post.target_id) {
+      return this.postsRepository.delete(post);
+    }
+    throw new ForbiddenException();
   }
 }
