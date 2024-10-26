@@ -83,7 +83,7 @@ export class PostsService {
   async remote(user: IUser, deleteDto: DeletePostDto) {
     const post = await this.findOne(deleteDto.target_id, deleteDto.role);
     if (user.user_id == post.target_id) {
-      return this.postsRepository.delete(post);
+      return await this.postsRepository.delete(post);
     }
     throw new ForbiddenException();
   }
