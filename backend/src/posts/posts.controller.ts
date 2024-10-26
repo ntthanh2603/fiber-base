@@ -25,7 +25,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('mediaPost'))
+  @UseInterceptors(FileInterceptor('media-post'))
   async create(
     @User() user: IUser,
     @Body() createDto: CreatePostDto,
@@ -39,6 +39,7 @@ export class PostsController {
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+          fileIsRequired: false,
         }),
     )
     file: Express.Multer.File,
@@ -46,5 +47,26 @@ export class PostsController {
     return await this.postsService.create(user, createDto, file);
   }
 
-  // @Patch()
+  @Patch()
+  @UseInterceptors(FileInterceptor('media-post'))
+  async update(
+    @User() user: IUser,
+    @Body() updateDto: UpdatePostDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'png',
+        })
+        .addMaxSizeValidator({
+          maxSize: 1000 * 1024,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+          fileIsRequired: false,
+        }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return await this.postsService.update(user, updateDto, file);
+  }
 }
