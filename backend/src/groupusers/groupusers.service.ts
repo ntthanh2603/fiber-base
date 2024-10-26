@@ -17,6 +17,7 @@ import { RoleType } from 'src/helper/helper.enum';
 import { AddUserGroupDto } from './dto/add-usergroup.dto';
 import { AddAdminGroupDto } from './dto/add-admingroup.dto';
 import { UsersService } from 'src/users/users.service';
+import { DeleteGroupUserDto } from './dto/delete-groupuser.dto';
 
 @Injectable()
 export class GroupUsersService {
@@ -90,6 +91,28 @@ export class GroupUsersService {
       } else throw new ForbiddenException();
     } catch (err) {
       throw err;
+    }
+  }
+
+  async remote(user: IUser, deleteDto: DeleteGroupUserDto) {
+    const groupuser = await this.findUserInGroup(
+      user.user_id,
+      deleteDto.group_id,
+    );
+
+    if (!groupuser) {
+      throw new BadRequestException('Input false');
+    } else if (groupuser.role == RoleType.USER) {
+      return await this.groupusersRepository.delete(groupuser);
+    } else if (groupuser.role == RoleType.ADMIN) {
+      const countAdmin = await this.groupusersRepository.countBy({
+        group_id: deleteDto.group_id,
+        role: RoleType.ADMIN,
+      });
+      if (countAdmin >= 2) {
+        return await this.groupusersRepository.delete(groupuser);
+      }
+      throw new BadRequestException('User is Admin and group only has 1 admin');
     }
   }
 }
