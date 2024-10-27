@@ -7,6 +7,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { GroupUser } from './entities/groupuser.entity';
 import { GroupsModule } from 'src/groups/groups.module';
 import { GroupUsersController } from './groupusers.controller';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { GroupUsersController } from './groupusers.controller';
     UsersModule,
   ],
   controllers: [GroupUsersController],
-  providers: [GroupUsersService],
+  providers: [GroupUsersService, FunctionHelper],
   exports: [GroupUsersService],
 })
 export class GroupUsersModule {}

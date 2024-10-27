@@ -25,6 +25,11 @@ export class CommentsController {
     return this.commentsService.create(user, createDto);
   }
 
+  @Patch()
+  update(@User() user: IUser, @Body() updateDto: UpdateCommentDto) {
+    return this.commentsService.update(user, updateDto);
+  }
+
   @Delete()
   remore(@User() user: IUser, @Body() deleteDto: DeleteCommentDto) {
     return this.commentsService.remote(user, deleteDto);

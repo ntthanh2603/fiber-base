@@ -8,6 +8,7 @@ import { PostsModule } from 'src/posts/posts.module';
 import { UsersModule } from 'src/users/users.module';
 import { RelationshipsModule } from 'src/relationships/relationships.module';
 import { GroupUsersModule } from 'src/groupusers/groupusers.module';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { GroupUsersModule } from 'src/groupusers/groupusers.module';
     GroupUsersModule,
   ],
   controllers: [CommentsController],
-  providers: [CommentsService],
+  providers: [CommentsService, FunctionHelper],
 })
 export class CommentsModule {}

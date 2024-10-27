@@ -15,6 +15,7 @@ import { RelationshipType, RoleType, ScopeType } from 'src/helper/helper.enum';
 import { RelationshipsService } from 'src/relationships/relationships.service';
 import { GroupUsersService } from 'src/groupusers/groupusers.service';
 import { DeleteCommentDto } from './dto/delete-comment.dto';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Injectable()
 export class CommentsService {
@@ -24,9 +25,13 @@ export class CommentsService {
     private postsService: PostsService,
     private relationshipsService: RelationshipsService,
     private groupusersService: GroupUsersService,
+    private functionHelper: FunctionHelper,
   ) {}
 
   async findCommentById(comment_id) {
+    if (!this.functionHelper.isValidUUID(comment_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
     const comment = await this.commentsRepository.findOne({
       where: {
         comment_id,
@@ -36,12 +41,12 @@ export class CommentsService {
     throw new NotFoundException();
   }
   async create(user: IUser, createDto: CreateCommentDto) {
-    const post = await this.postsService.findPostById(createDto.post_is);
+    const post = await this.postsService.findPostById(createDto.post_id);
 
     if (post.scope == ScopeType.PUBLIC) {
       return await this.commentsRepository.save({
         user_id: user.user_id,
-        post_id: createDto.post_is,
+        post_id: createDto.post_id,
         content: createDto.content,
       });
     }
@@ -54,7 +59,7 @@ export class CommentsService {
       if (relationship.relationship == RelationshipType.FRIEND) {
         return await this.commentsRepository.save({
           user_id: user.user_id,
-          post_id: createDto.post_is,
+          post_id: createDto.post_id,
           content: createDto.content,
         });
       }
@@ -69,7 +74,7 @@ export class CommentsService {
       if (groupuser.role == RoleType.ADMIN || groupuser.role == RoleType.USER) {
         return await this.commentsRepository.save({
           user_id: user.user_id,
-          post_id: createDto.post_is,
+          post_id: createDto.post_id,
           content: createDto.content,
         });
       }
@@ -78,11 +83,28 @@ export class CommentsService {
     throw new BadRequestException();
   }
 
+  async update(user: IUser, updateDto: UpdateCommentDto) {
+    const comment = await this.findCommentById(updateDto.comment_id);
+
+    if (user.user_id == comment.user_id) {
+      return this.commentsRepository.update(
+        {
+          comment_id: updateDto.comment_id,
+        },
+        {
+          content: updateDto.content,
+        },
+      );
+    }
+  }
+
   async remote(user: IUser, deleteDto: DeleteCommentDto) {
     const comment = await this.findCommentById(deleteDto.comment_id);
 
     if (user.user_id == comment.user_id) {
       return this.commentsRepository.delete(comment);
     }
+
+    throw new BadRequestException();
   }
 }

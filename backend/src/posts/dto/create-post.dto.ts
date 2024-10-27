@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { RoleType } from 'src/helper/helper.enum';
+import { RoleType, ScopeType } from 'src/helper/helper.enum';
 
 export class CreatePostDto {
   @IsString()
@@ -16,5 +16,5 @@ export class CreatePostDto {
 
   @IsString()
   @IsNotEmpty()
-  scope: string;
+  scope: ScopeType;
 }

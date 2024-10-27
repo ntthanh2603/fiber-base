@@ -19,6 +19,7 @@ import { AddUserGroupDto } from './dto/add-usergroup.dto';
 import { AddAdminGroupDto } from './dto/add-admingroup.dto';
 import { UsersService } from 'src/users/users.service';
 import { DeleteGroupUserDto } from './dto/delete-groupuser.dto';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Injectable()
 export class GroupUsersService {
@@ -30,9 +31,14 @@ export class GroupUsersService {
     private groupsService: GroupsService,
 
     private usersService: UsersService,
+
+    private functionHelper: FunctionHelper,
   ) {}
 
   async findUserInGroup(user_id: string, group_id: string) {
+    if (!this.functionHelper.isValidUUID(group_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
     return await this.groupusersRepository.findOne({
       where: { user_id: user_id, group_id: group_id },
     });
