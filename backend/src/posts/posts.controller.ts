@@ -72,7 +72,7 @@ export class PostsController {
   }
 
   @Delete()
-  async remote(@User() user: IUser, @Body() deleteDto: DeletePostDto) {
-    return await this.postsService.remote(user, deleteDto);
+  remote(@User() user: IUser, @Body() deleteDto: DeletePostDto) {
+    return this.postsService.remote(user, deleteDto);
   }
 }

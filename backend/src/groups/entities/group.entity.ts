@@ -1,3 +1,4 @@
+import { ScopeType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -13,6 +14,12 @@ export class Group {
 
   @Column({ default: null })
   avartar: string;
+
+  @Column({
+    type: 'enum',
+    enum: ScopeType,
+  })
+  scope: ScopeType;
 
   @Column()
   createdAt: Date;

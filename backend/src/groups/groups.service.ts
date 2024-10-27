@@ -5,6 +5,7 @@ import {
   forwardRef,
   Inject,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -34,6 +35,7 @@ export class GroupsService {
       description: createDto.description,
       createdAt: new Date(),
       createdBy: user.user_id,
+      scope: createDto.scope,
     });
 
     await this.groupusersService.create({
@@ -70,11 +72,14 @@ export class GroupsService {
     if (!this.functionHelper.isValidUUID(group_id)) {
       throw new BadRequestException('Invalid group ID format');
     }
-    return await this.groupsRepository.findOne({
+    const group = await this.groupsRepository.findOne({
       where: {
         group_id,
       },
     });
+    if (group) return group;
+
+    throw new NotFoundException();
   }
 
   async remote(user: IUser, deleteDto: DeleteGroupDto) {

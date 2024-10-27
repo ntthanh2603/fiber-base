@@ -1,3 +1,4 @@
+import { ScopeType } from './../../helper/helper.enum';
 import { RoleType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -20,6 +21,12 @@ export class Post {
 
   @Column({ default: null })
   media: string;
+
+  @Column({
+    type: 'enum',
+    enum: ScopeType,
+  })
+  scope: ScopeType;
 
   @Column()
   createdAt: Date;

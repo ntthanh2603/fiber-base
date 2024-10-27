@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { ScopeType } from 'src/helper/helper.enum';
 
 export class CreateGroupDto {
   @IsString()
@@ -8,7 +9,12 @@ export class CreateGroupDto {
   groupname: string;
 
   @IsNotEmpty()
-  @IsString({})
+  @IsString()
   @ApiProperty({ example: 'Description group' })
   description: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: ScopeType.PUBLIC })
+  scope: ScopeType;
 }

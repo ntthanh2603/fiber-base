@@ -17,6 +17,7 @@ export enum StatusType {
 export enum ScopeType {
   PUBLIC = 'public',
   PRIVATE = 'private',
+  PROTECTED = 'protected',
 }
 
 export enum MediaType {

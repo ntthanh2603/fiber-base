@@ -1,3 +1,4 @@
+import { Public } from 'src/decorator/customize';
 import {
   BadRequestException,
   ForbiddenException,
@@ -13,7 +14,7 @@ import { GroupsService } from 'src/groups/groups.service';
 import { CreateGroupUserDto } from './dto/create-groupuser.dto';
 import { IUser } from 'src/users/users.interface';
 
-import { RoleType } from 'src/helper/helper.enum';
+import { RoleType, ScopeType } from 'src/helper/helper.enum';
 import { AddUserGroupDto } from './dto/add-usergroup.dto';
 import { AddAdminGroupDto } from './dto/add-admingroup.dto';
 import { UsersService } from 'src/users/users.service';
@@ -44,26 +45,27 @@ export class GroupUsersService {
   }
 
   async addUser(user: IUser, addDto: AddUserGroupDto) {
-    try {
-      const group = await this.groupsService.findOneGroupById(addDto.group_id);
-      if (!group) throw new BadRequestException();
+    const group = await this.groupsService.findOneGroupById(addDto.group_id);
 
-      const groupuser = this.groupusersRepository.findOne({
-        where: {
-          user_id: user.user_id,
-          group_id: addDto.group_id,
-        },
+    const groupuser = await this.findUserInGroup(user.user_id, addDto.group_id);
+
+    if (group.scope == ScopeType.PUBLIC && !groupuser) {
+      return this.groupusersRepository.save({
+        user_id: user.user_id,
+        group_id: addDto.group_id,
+        role: RoleType.USER,
       });
-      if (!groupuser) {
+    } else if (group.scope == ScopeType.PROTECTED && !groupuser) {
+      if (groupuser.role == RoleType.ADMIN) {
         return this.groupusersRepository.save({
           user_id: user.user_id,
           group_id: addDto.group_id,
           role: RoleType.USER,
         });
-      } else throw new BadRequestException();
-    } catch (err) {
-      throw err;
-    }
+      } else {
+        throw new ForbiddenException();
+      }
+    } else throw new BadRequestException();
   }
 
   async addAdmin(user: IUser, addDto: AddAdminGroupDto) {

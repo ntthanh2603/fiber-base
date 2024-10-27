@@ -24,19 +24,19 @@ export class GroupUsersController {
 
   @Post('add-user')
   @ApiProperty({ type: AddUserGroupDto })
-  async addUser(@User() user: IUser, @Body() addDto: AddUserGroupDto) {
-    return await this.groupusersService.addUser(user, addDto);
+  addUser(@User() user: IUser, @Body() addDto: AddUserGroupDto) {
+    return this.groupusersService.addUser(user, addDto);
   }
 
   @Post('add-admin')
   @ApiProperty({ type: AddAdminGroupDto })
-  async addAdmin(@User() user: IUser, @Body() addDto: AddAdminGroupDto) {
-    return await this.groupusersService.addAdmin(user, addDto);
+  addAdmin(@User() user: IUser, @Body() addDto: AddAdminGroupDto) {
+    return this.groupusersService.addAdmin(user, addDto);
   }
 
   @Delete()
   @ApiProperty({ type: DeleteGroupUserDto })
-  async remote(@User() user: IUser, @Body() deleteDto: DeleteGroupUserDto) {
-    return await this.groupusersService.remote(user, deleteDto);
+  remote(@User() user: IUser, @Body() deleteDto: DeleteGroupUserDto) {
+    return this.groupusersService.remote(user, deleteDto);
   }
 }

@@ -1,3 +1,4 @@
+import { GroupsService } from 'src/groups/groups.service';
 import {
   BadRequestException,
   ForbiddenException,
@@ -12,9 +13,10 @@ import { Post } from './entities/post.entity';
 import { IUser } from 'src/users/users.interface';
 import { UsersService } from 'src/users/users.service';
 import { urlToHttpOptions } from 'url';
-import { RoleType } from 'src/helper/helper.enum';
+import { RoleType, ScopeType } from 'src/helper/helper.enum';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { FunctionHelper } from 'src/helper/helper.function';
+import { GroupUsersService } from 'src/groupusers/groupusers.service';
 
 @Injectable()
 export class PostsService {
@@ -22,6 +24,8 @@ export class PostsService {
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
     private functionHelper: FunctionHelper,
+    private groupuserService: GroupUsersService,
+    private groupsService: GroupsService,
   ) {}
 
   async findPostById(post_id: string) {
@@ -50,24 +54,60 @@ export class PostsService {
     createDto: CreatePostDto,
     file: Express.Multer.File,
   ) {
-    if (file) {
-      return await this.postsRepository.save({
-        target_id: user.user_id,
-        content: createDto.content,
-        role: createDto.role,
-        media: `images/${file.fieldname}/${file.filename}`,
-        createdAt: new Date(),
-        createdBy: user.user_id,
-      });
-    } else {
-      return await this.postsRepository.save({
-        target_id: user.user_id,
-        content: createDto.content,
-        role: createDto.role,
-        media: null,
-        createdAt: new Date(),
-        createdBy: user.user_id,
-      });
+    switch (createDto.role) {
+      case RoleType.USER:
+        if (file) {
+          return await this.postsRepository.save({
+            target_id: user.user_id,
+            content: createDto.content,
+            role: createDto.role,
+            media: `images/${file.fieldname}/${file.filename}`,
+            createdAt: new Date(),
+            createdBy: user.user_id,
+          });
+        } else {
+          return await this.postsRepository.save({
+            target_id: user.user_id,
+            content: createDto.content,
+            role: createDto.role,
+            media: null,
+            createdAt: new Date(),
+            createdBy: user.user_id,
+          });
+        }
+
+      case RoleType.GROUP:
+        const group = await this.groupsService.findOneGroupById(
+          createDto.target_id,
+        );
+        const groupuser = await this.groupuserService.findUserInGroup(
+          user.user_id,
+          createDto.target_id,
+        );
+        if (
+          group.scope == ScopeType.PUBLIC ||
+          (group.scope == ScopeType.PROTECTED && groupuser)
+        ) {
+          if (file) {
+            return await this.postsRepository.save({
+              target_id: user.user_id,
+              content: createDto.content,
+              role: createDto.role,
+              media: `images/${file.fieldname}/${file.filename}`,
+              createdAt: new Date(),
+              createdBy: user.user_id,
+            });
+          } else {
+            return await this.postsRepository.save({
+              target_id: user.user_id,
+              content: createDto.content,
+              role: createDto.role,
+              media: null,
+              createdAt: new Date(),
+              createdBy: user.user_id,
+            });
+          }
+        }
     }
   }
 

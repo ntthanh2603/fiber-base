@@ -13,4 +13,8 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   role: RoleType;
+
+  @IsString()
+  @IsNotEmpty()
+  scope: string;
 }

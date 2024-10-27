@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateGroupDto } from './create-group.dto';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ScopeType } from 'src/helper/helper.enum';
 
 export class UpdateGroupDto {
   @IsString()
@@ -18,4 +19,8 @@ export class UpdateGroupDto {
   @IsString()
   @IsOptional()
   avartar: string;
+
+  @IsString()
+  @IsOptional()
+  scope: ScopeType;
 }
