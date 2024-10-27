@@ -5,9 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from 'src/database/database.module';
 import { Comment } from './entities/comment.entity';
 import { PostsModule } from 'src/posts/posts.module';
+import { UsersModule } from 'src/users/users.module';
+import { RelationshipsModule } from 'src/relationships/relationships.module';
+import { GroupUsersModule } from 'src/groupusers/groupusers.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment]), DatabaseModule, PostsModule],
+  imports: [
+    TypeOrmModule.forFeature([Comment]),
+    DatabaseModule,
+    PostsModule,
+    RelationshipsModule,
+    GroupUsersModule,
+  ],
   controllers: [CommentsController],
   providers: [CommentsService],
 })

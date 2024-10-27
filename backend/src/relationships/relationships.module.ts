@@ -14,5 +14,6 @@ import { UsersModule } from 'src/users/users.module';
   ],
   controllers: [RelationshipsController],
   providers: [RelationshipsService],
+  exports: [RelationshipsService],
 })
 export class RelationshipsModule {}

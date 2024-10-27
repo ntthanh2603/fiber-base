@@ -79,4 +79,13 @@ export class RelationshipsService {
       };
     } else throw new NotFoundException('Not found user');
   }
+
+  async findRelationship(user1_id: string, user2_id: string) {
+    return await this.relationshipsRepository.findOne({
+      where: {
+        user1_id,
+        user2_id,
+      },
+    });
+  }
 }
