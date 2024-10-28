@@ -16,7 +16,7 @@ export class Reaction {
     type: 'enum',
     enum: RoleType,
   })
-  targetType: RoleType;
+  role: RoleType;
 
   @Column({
     type: 'enum',
