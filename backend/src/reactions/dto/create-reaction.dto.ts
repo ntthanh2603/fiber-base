@@ -9,6 +9,7 @@ export class CreateReactionDto {
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ example: RoleType.POST })
   role: RoleType;
 
   @IsString()

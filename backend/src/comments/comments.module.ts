@@ -20,5 +20,6 @@ import { FunctionHelper } from 'src/helper/helper.function';
   ],
   controllers: [CommentsController],
   providers: [CommentsService, FunctionHelper],
+  exports: [CommentsService],
 })
 export class CommentsModule {}

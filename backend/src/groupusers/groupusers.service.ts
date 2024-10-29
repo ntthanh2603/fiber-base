@@ -35,11 +35,11 @@ export class GroupUsersService {
     private functionHelper: FunctionHelper,
   ) {}
 
-  async findUserInGroup(user_id: string, group_id: string) {
+  findUserInGroup(user_id: string, group_id: string) {
     if (!this.functionHelper.isValidUUID(group_id)) {
       throw new BadRequestException('Invalid group ID format');
     }
-    return await this.groupusersRepository.findOne({
+    return this.groupusersRepository.findOne({
       where: { user_id: user_id, group_id: group_id },
     });
   }

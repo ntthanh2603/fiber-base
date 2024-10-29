@@ -71,7 +71,12 @@ export class CommentsService {
         user.user_id,
         post.target_id,
       );
-      if (groupuser.role == RoleType.ADMIN || groupuser.role == RoleType.USER) {
+      console.log(groupuser);
+
+      if (
+        groupuser.role == RoleType.ADMIN ||
+        groupuser?.role == RoleType.USER
+      ) {
         return await this.commentsRepository.save({
           user_id: user.user_id,
           post_id: createDto.post_id,
