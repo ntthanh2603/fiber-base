@@ -1,4 +1,4 @@
-import { ScopeType } from 'src/helper/helper.enum';
+import { PrivacyType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -17,9 +17,9 @@ export class Group {
 
   @Column({
     type: 'enum',
-    enum: ScopeType,
+    enum: PrivacyType,
   })
-  scope: ScopeType;
+  privacy: PrivacyType;
 
   @Column()
   createdAt: Date;

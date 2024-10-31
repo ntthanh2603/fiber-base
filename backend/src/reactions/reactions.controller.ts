@@ -14,14 +14,14 @@ import { CreateReactionDto } from './dto/create-reaction.dto';
 import { ApiAcceptedResponse, ApiBody, ApiTags } from '@nestjs/swagger';
 import { IUser } from 'src/users/users.interface';
 import { User } from 'src/decorator/customize';
-import { PostReactionProtecedGuard } from 'src/guard/guard-post';
+import { PostGuard } from 'src/guard/guard-post';
 
 @ApiTags('Reactions')
 @Controller('reactions')
 export class ReactionsController {
   constructor(private readonly reactionsService: ReactionsService) {}
 
-  @UseGuards(PostReactionProtecedGuard)
+  @UseGuards(PostGuard)
   @Post()
   @ApiBody({ type: CreateReactionDto })
   create(@User() user: IUser, @Body() dto: CreateReactionDto) {

@@ -1,5 +1,5 @@
-import { ReactionType, RoleType } from 'src/helper/helper.enum';
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { ReactionPostType, ReactionType } from 'src/helper/helper.enum';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('reactions')
 export class Reaction {
@@ -14,9 +14,9 @@ export class Reaction {
 
   @Column({
     type: 'enum',
-    enum: RoleType,
+    enum: ReactionPostType,
   })
-  role: RoleType;
+  reactionType: ReactionPostType;
 
   @Column({
     type: 'enum',

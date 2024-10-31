@@ -1,5 +1,4 @@
-import { ScopeType } from './../../helper/helper.enum';
-import { RoleType } from 'src/helper/helper.enum';
+import { PostType, PrivacyType } from './../../helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('posts')
@@ -15,18 +14,18 @@ export class Post {
 
   @Column({
     type: 'enum',
-    enum: RoleType,
+    enum: PostType,
   })
-  role: RoleType;
+  postType: PostType;
 
   @Column({ default: null })
   media: string;
 
   @Column({
     type: 'enum',
-    enum: ScopeType,
+    enum: PrivacyType,
   })
-  scope: ScopeType;
+  privacyType: PrivacyType;
 
   @Column()
   createdAt: Date;

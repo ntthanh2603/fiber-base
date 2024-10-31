@@ -14,7 +14,7 @@ export enum StatusType {
   OFF = 'off',
 }
 
-export enum ScopeType {
+export enum PrivacyType {
   PUBLIC = 'public',
   PRIVATE = 'private',
   PROTECTED = 'protected',
@@ -37,7 +37,19 @@ export enum ReactionType {
 export enum RoleType {
   ADMIN = 'admin',
   USER = 'user',
+}
+
+export enum PostType {
+  USER = 'user',
   GROUP = 'group',
-  POST = 'post',
+}
+
+export enum ReactionPostType {
   COMMENT = 'comment',
+  POST = 'post',
+}
+
+export enum GroupUserType {
+  USER = 'user',
+  ADMIN = 'admin',
 }

@@ -1,4 +1,4 @@
-import { RoleType } from 'src/helper/helper.enum';
+import { GroupUserType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -12,6 +12,6 @@ export class GroupUser {
   @Column()
   group_id: string;
 
-  @Column({ type: 'enum', enum: RoleType })
-  role: RoleType;
+  @Column({ type: 'enum', enum: GroupUserType })
+  groupuserType: GroupUserType;
 }

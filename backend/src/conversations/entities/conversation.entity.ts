@@ -13,4 +13,7 @@ export class Conversation {
 
   @Column()
   createdBy: string;
+
+  @Column()
+  createdAt: Date;
 }

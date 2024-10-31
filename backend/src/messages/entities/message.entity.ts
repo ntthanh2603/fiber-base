@@ -6,7 +6,7 @@ export class Message {
   message_id: string;
 
   @Column()
-  user_id: string;
+  createdBy: string;
 
   @Column()
   conversation_id: string;
@@ -15,5 +15,5 @@ export class Message {
   message: string;
 
   @Column()
-  time: Date;
+  createdAt: Date;
 }

@@ -6,11 +6,14 @@ export class Comment {
   comment_id: string;
 
   @Column()
-  user_id: string;
-
-  @Column()
   post_id: string;
 
   @Column()
   content: string;
+
+  @Column()
+  createdBy: string;
+
+  @Column()
+  createdAt: string;
 }
