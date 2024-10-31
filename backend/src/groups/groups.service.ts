@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
 import { Repository } from 'typeorm';
 import { GroupUsersService } from 'src/groupusers/groupusers.service';
-import { RoleType } from 'src/helper/helper.enum';
+import { GroupUserType, RoleType } from 'src/helper/helper.enum';
 import { DeleteGroupDto } from './dto/delete-group.dto';
 import { FunctionHelper } from 'src/helper/helper.function';
 
@@ -35,36 +35,32 @@ export class GroupsService {
       description: createDto.description,
       createdAt: new Date(),
       createdBy: user.user_id,
-      scope: createDto.scope,
+      privacy: createDto.privacy,
     });
 
     await this.groupusersService.create({
       user_id: user.user_id,
       group_id: group.group_id,
-      role: RoleType.ADMIN,
+      groupuserType: GroupUserType.ADMIN,
     });
     return group;
   }
 
   async update(user: IUser, updateDto: UpdateGroupDto) {
-    try {
-      const groupuser = await this.groupusersService.findUserInGroup(
-        user.user_id,
-        updateDto.group_id,
+    const groupuser = await this.groupusersService.findUserInGroup(
+      user.user_id,
+      updateDto.group_id,
+    );
+
+    const group = await this.findOneGroupById(updateDto.group_id);
+
+    if (!group) throw new BadRequestException();
+
+    if (groupuser && groupuser.groupuserType == GroupUserType.ADMIN) {
+      return await this.groupsRepository.update(
+        { group_id: updateDto.group_id },
+        { ...updateDto, updatedAt: new Date(), updatedBy: user.user_id },
       );
-
-      const group = await this.findOneGroupById(updateDto.group_id);
-
-      if (!group) throw new BadRequestException();
-
-      if (groupuser && groupuser.role == RoleType.ADMIN) {
-        return await this.groupsRepository.update(
-          { group_id: updateDto.group_id },
-          { ...updateDto, updatedAt: new Date(), updatedBy: user.user_id },
-        );
-      }
-    } catch (e) {
-      throw e;
     }
   }
 
@@ -83,22 +79,20 @@ export class GroupsService {
   }
 
   async remote(user: IUser, deleteDto: DeleteGroupDto) {
-    try {
-      const groupuser = await this.groupusersService.findUserInGroup(
-        user.user_id,
-        deleteDto.group_id,
-      );
-      const group = await this.findOneGroupById(deleteDto.group_id);
+    const groupuser = await this.groupusersService.findUserInGroup(
+      user.user_id,
+      deleteDto.group_id,
+    );
+    const group = await this.findOneGroupById(deleteDto.group_id);
 
-      if (!group) throw new BadRequestException();
+    if (!group) throw new BadRequestException();
 
-      if (groupuser && groupuser.role == RoleType.ADMIN) {
-        return await this.groupsRepository.delete({
-          group_id: deleteDto.group_id,
-        });
-      }
-    } catch {
-      throw new ForbiddenException();
+    await this.groupusersService.deleteAllUser(deleteDto.group_id);
+
+    if (groupuser && groupuser.groupuserType == GroupUserType.ADMIN) {
+      return await this.groupsRepository.delete({
+        group_id: deleteDto.group_id,
+      });
     }
   }
 }

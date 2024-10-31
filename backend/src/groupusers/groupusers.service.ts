@@ -14,7 +14,7 @@ import { GroupsService } from 'src/groups/groups.service';
 import { CreateGroupUserDto } from './dto/create-groupuser.dto';
 import { IUser } from 'src/users/users.interface';
 
-import { RoleType, ScopeType } from 'src/helper/helper.enum';
+import { GroupUserType, PrivacyType, RoleType } from 'src/helper/helper.enum';
 import { AddUserGroupDto } from './dto/add-usergroup.dto';
 import { AddAdminGroupDto } from './dto/add-admingroup.dto';
 import { UsersService } from 'src/users/users.service';
@@ -35,11 +35,11 @@ export class GroupUsersService {
     private functionHelper: FunctionHelper,
   ) {}
 
-  findUserInGroup(user_id: string, group_id: string) {
+  async findUserInGroup(user_id: string, group_id: string) {
     if (!this.functionHelper.isValidUUID(group_id)) {
       throw new BadRequestException('Invalid group ID format');
     }
-    return this.groupusersRepository.findOne({
+    return await this.groupusersRepository.findOne({
       where: { user_id: user_id, group_id: group_id },
     });
   }
@@ -55,18 +55,18 @@ export class GroupUsersService {
 
     const groupuser = await this.findUserInGroup(user.user_id, addDto.group_id);
 
-    if (group.scope == ScopeType.PUBLIC && !groupuser) {
+    if (group.privacy == PrivacyType.PUBLIC && !groupuser) {
       return this.groupusersRepository.save({
         user_id: user.user_id,
         group_id: addDto.group_id,
         role: RoleType.USER,
       });
-    } else if (group.scope == ScopeType.PROTECTED && !groupuser) {
-      if (groupuser.role == RoleType.ADMIN) {
+    } else if (group.privacy == PrivacyType.PROTECTED && !groupuser) {
+      if (groupuser.groupuserType == GroupUserType.ADMIN) {
         return this.groupusersRepository.save({
           user_id: user.user_id,
           group_id: addDto.group_id,
-          role: RoleType.USER,
+          groupuserType: GroupUserType.USER,
         });
       } else {
         throw new ForbiddenException();
@@ -86,7 +86,7 @@ export class GroupUsersService {
         addDto.group_id,
       );
 
-      if (groupuser.role == RoleType.ADMIN) {
+      if (groupuser.groupuserType == GroupUserType.ADMIN) {
         await this.groupusersRepository.delete({
           user_id: addDto.user_id,
           group_id: addDto.group_id,
@@ -94,7 +94,7 @@ export class GroupUsersService {
         return await this.groupusersRepository.save({
           user_id: addDto.user_id,
           group_id: addDto.group_id,
-          role: RoleType.ADMIN,
+          groupuserType: GroupUserType.ADMIN,
         });
       } else throw new ForbiddenException();
     } catch (err) {
@@ -110,17 +110,23 @@ export class GroupUsersService {
 
     if (!groupuser) {
       throw new BadRequestException('Input false');
-    } else if (groupuser.role == RoleType.USER) {
+    } else if (groupuser.groupuserType == GroupUserType.USER) {
       return await this.groupusersRepository.delete(groupuser);
-    } else if (groupuser.role == RoleType.ADMIN) {
+    } else if (groupuser.groupuserType == GroupUserType.ADMIN) {
       const countAdmin = await this.groupusersRepository.countBy({
         group_id: deleteDto.group_id,
-        role: RoleType.ADMIN,
+        groupuserType: GroupUserType.ADMIN,
       });
       if (countAdmin >= 2) {
         return await this.groupusersRepository.delete(groupuser);
       }
       throw new BadRequestException('User is Admin and group only has 1 admin');
     }
+  }
+
+  async deleteAllUser(group_id: string) {
+    return await this.groupusersRepository.delete({
+      group_id,
+    });
   }
 }

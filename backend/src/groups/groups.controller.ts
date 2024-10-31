@@ -22,21 +22,19 @@ export class GroupsController {
 
   @Post()
   @ApiBody({ type: CreateGroupDto })
-  async create(@User() user: IUser, @Body() createDto: CreateGroupDto) {
-    return await this.groupsService.create(user, createDto);
+  create(@User() user: IUser, @Body() createDto: CreateGroupDto) {
+    return this.groupsService.create(user, createDto);
   }
 
   @Patch()
   @ApiBody({ type: UpdateGroupDto })
-  async update(@User() user: IUser, @Body() updateDto: UpdateGroupDto) {
-    console.log(user, updateDto);
-
-    return await this.groupsService.update(user, updateDto);
+  update(@User() user: IUser, @Body() updateDto: UpdateGroupDto) {
+    return this.groupsService.update(user, updateDto);
   }
 
   @Delete()
   @ApiBody({ type: DeleteGroupDto })
-  async remote(@User() user: IUser, @Body() deleteDto: DeleteGroupDto) {
-    return await this.groupsService.remote(user, deleteDto);
+  remote(@User() user: IUser, @Body() deleteDto: DeleteGroupDto) {
+    return this.groupsService.remote(user, deleteDto);
   }
 }

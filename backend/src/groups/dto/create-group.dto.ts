@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { ScopeType } from 'src/helper/helper.enum';
+import { PrivacyType } from 'src/helper/helper.enum';
 
 export class CreateGroupDto {
   @IsString()
@@ -15,6 +15,6 @@ export class CreateGroupDto {
 
   @IsNotEmpty()
   @IsString()
-  @ApiProperty({ example: ScopeType.PUBLIC })
-  scope: ScopeType;
+  @ApiProperty({ example: PrivacyType.PUBLIC })
+  privacy: PrivacyType;
 }

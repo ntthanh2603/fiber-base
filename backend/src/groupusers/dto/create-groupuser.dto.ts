@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { RoleType } from 'src/helper/helper.enum';
+import { GroupUserType, RoleType } from 'src/helper/helper.enum';
 
 export class CreateGroupUserDto {
   @IsString()
@@ -11,6 +11,6 @@ export class CreateGroupUserDto {
   group_id: string;
 
   @IsNotEmpty()
-  @IsEnum(RoleType)
-  role: RoleType;
+  @IsEnum(GroupUserType)
+  groupuserType: GroupUserType;
 }

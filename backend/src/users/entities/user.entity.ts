@@ -1,5 +1,5 @@
 import { MaxLength, MinLength } from 'class-validator';
-import { GenderType, StatusType } from 'src/helper/helper.enum';
+import { GenderType, PrivacyType, StatusType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -47,4 +47,7 @@ export class User {
 
   @Column({ default: null })
   refreshToken: string;
+
+  @Column({ type: 'enum', enum: PrivacyType, default: PrivacyType.PUBLIC })
+  privacy: PrivacyType;
 }

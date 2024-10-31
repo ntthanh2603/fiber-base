@@ -21,19 +21,19 @@ export class UsersController {
   @Public()
   @Get(':user_id')
   @ResponseMessage('User by user_id')
-  async findUserById(@Param('user_id') user_id: string) {
-    return await this.usersService.findUserById(user_id);
+  findUserById(@Param('user_id') user_id: string) {
+    return this.usersService.findUserById(user_id);
   }
 
   @Delete()
   @ResponseMessage('Delete user')
-  async deleteUser(@User() user: IUser) {
-    return await this.usersService.deleteUser(user);
+  deleteUser(@User() user: IUser) {
+    return this.usersService.deleteUser(user);
   }
 
   @Patch()
   @ResponseMessage('Update User')
-  async updateUser(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
-    return await this.usersService.updateUser(updateUserDto, user);
+  updateUser(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
+    return this.usersService.updateUser(updateUserDto, user);
   }
 }

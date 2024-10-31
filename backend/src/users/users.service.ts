@@ -1,3 +1,4 @@
+import { FunctionHelper } from 'src/helper/helper.function';
 import {
   BadRequestException,
   Injectable,
@@ -10,12 +11,14 @@ import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PrivacyType } from 'src/helper/helper.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private functionHelper: FunctionHelper,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -68,6 +71,7 @@ export class UsersService {
       address,
       description,
       createdAt: new Date(),
+      privacy: PrivacyType.PUBLIC,
     };
 
     const newRegister = await this.usersRepository.save(newUser);
@@ -75,8 +79,10 @@ export class UsersService {
     return newRegister;
   }
 
-  // Find one user by email
   async findUserById(user_id: string) {
+    if (!this.functionHelper.isValidUUID(user_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
     const user = await this.usersRepository.findOne({
       where: { user_id },
       select: [
@@ -90,6 +96,7 @@ export class UsersService {
         'createdAt',
         'updatedAt',
         'deletedAt',
+        'privacy',
       ],
     });
 
