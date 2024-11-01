@@ -6,11 +6,6 @@ export class CommentGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const body = request.body;
-    const user = request.user;
-    console.log('>> user', user);
-    console.log('>> body', body);
-
     return false;
   }
 }

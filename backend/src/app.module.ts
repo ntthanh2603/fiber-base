@@ -3,20 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { GroupsModule } from './groups/groups.module';
-import { PostsModule } from './posts/posts.module';
-import { MessagesModule } from './messages/messages.module';
-import { ReactionsModule } from './reactions/reactions.module';
-import { CommentsModule } from './comments/comments.module';
+
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
-import { RelationshipsModule } from './relationships/relationships.module';
-import { ConversationMembersModule } from './conversation-members/conversation-members.module';
-import { ConversationsModule } from './conversations/conversations.module';
-import { GroupUsersModule } from './groupusers/groupusers.module';
-import { HagtagsModule } from './hagtags/hagtags.module';
-import { MediasModule } from './medias/medias.module';
+
 import { FilesModule } from './files/files.module';
+import { FunctionHelper } from './helper/helper.function';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,21 +20,10 @@ import { FilesModule } from './files/files.module';
       isGlobal: true,
     }),
     UsersModule,
-    GroupsModule,
-    PostsModule,
-    MessagesModule,
-    ReactionsModule,
-    CommentsModule,
     AuthModule,
-    RelationshipsModule,
-    ConversationMembersModule,
-    ConversationsModule,
-    GroupUsersModule,
-    HagtagsModule,
-    MediasModule,
     FilesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FunctionHelper],
 })
 export class AppModule {}
