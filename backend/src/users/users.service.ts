@@ -50,7 +50,7 @@ export class UsersService {
     return null;
   }
 
-  async register(user: RegisterUserDto) {
+  async register(user: RegisterUserDto, file) {
     const { username, email, password, age, gender, address, description } =
       user;
 
@@ -66,6 +66,7 @@ export class UsersService {
       username,
       email,
       password: hashPassword,
+      avartar: `images/${file.fieldname}/${file.filename}`,
       age,
       gender,
       address,
@@ -99,6 +100,8 @@ export class UsersService {
         'privacy',
       ],
     });
+
+    if (!user) return null;
 
     if (!user.deletedAt) return user;
     return null;

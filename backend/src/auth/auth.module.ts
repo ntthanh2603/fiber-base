@@ -8,6 +8,8 @@ import { JwtStrategy } from './passpost/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 
 import { AuthController } from './auth.controller';
+import { MulterModule } from '@nestjs/platform-express';
+import { MulterConfigService } from 'src/core/multer.config';
 
 @Module({
   imports: [
@@ -22,6 +24,9 @@ import { AuthController } from './auth.controller';
         },
       }),
       inject: [ConfigService],
+    }),
+    MulterModule.registerAsync({
+      useClass: MulterConfigService,
     }),
   ],
   controllers: [AuthController],

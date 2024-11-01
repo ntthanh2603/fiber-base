@@ -45,10 +45,6 @@ export class RegisterUserDto {
   @IsOptional()
   description: string;
 
-  @ApiProperty({ example: 'image.png', description: 'avartar' })
-  @IsOptional()
-  avartar: string;
-
   @IsOptional()
   @ApiProperty({ example: PrivacyType.PUBLIC })
   privacy: PrivacyType;

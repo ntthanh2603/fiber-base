@@ -36,6 +36,9 @@ export class User {
   @Column({ type: 'enum', enum: StatusType, default: StatusType.OFF })
   status: StatusType;
 
+  @Column({ default: null })
+  refreshToken: string;
+
   @Column()
   createdAt: Date;
 
@@ -44,9 +47,6 @@ export class User {
 
   @Column({ default: null })
   deletedAt: Date;
-
-  @Column({ default: null })
-  refreshToken: string;
 
   @Column({ type: 'enum', enum: PrivacyType, default: PrivacyType.PUBLIC })
   privacy: PrivacyType;

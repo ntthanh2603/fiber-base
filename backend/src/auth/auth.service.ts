@@ -73,8 +73,8 @@ export class AuthService {
   }
 
   // Register user
-  async register(user: RegisterUserDto) {
-    const newUser = await this.usersService.register(user);
+  async register(user: RegisterUserDto, file: Express.Multer.File) {
+    const newUser = await this.usersService.register(user, file);
 
     return {
       user_id: newUser.user_id,
