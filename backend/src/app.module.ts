@@ -7,6 +7,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
 
 import { FunctionHelper } from './helper/helper.function';
+import { RelationshipsModule } from './relationships/relationships.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +20,7 @@ import { FunctionHelper } from './helper/helper.function';
     }),
     UsersModule,
     AuthModule,
+    RelationshipsModule,
   ],
   controllers: [AppController],
   providers: [AppService, FunctionHelper],

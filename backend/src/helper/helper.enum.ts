@@ -1,6 +1,7 @@
 export enum RelationshipType {
   FRIEND = 'friend',
-  FOLLOW = 'follow',
+  FOLLOWERS = 'followers',
+  FOLLOWING = 'following',
   NULL = 'null',
 }
 export enum GenderType {
