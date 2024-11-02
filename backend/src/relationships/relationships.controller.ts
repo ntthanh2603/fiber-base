@@ -11,7 +11,7 @@ import { RelationshipsService } from './relationships.service';
 import { CreateRelationshipDto } from './dto/create-relationship.dto';
 import { UpdateRelationshipDto } from './dto/update-relationship.dto';
 import { ResponseMessage, User } from 'src/decorator/customize';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { IUser } from 'src/users/users.interface';
 
 @ApiTags('Relationships')
@@ -19,21 +19,17 @@ import { IUser } from 'src/users/users.interface';
 export class RelationshipsController {
   constructor(private readonly relationshipsService: RelationshipsService) {}
 
-  @Post()
+  @Post('follow')
   @ResponseMessage('Create relationship')
-  follow(
-    @Body() updateRelationshipDto: UpdateRelationshipDto,
-    @User() user: IUser,
-  ) {
-    return this.relationshipsService.follow(updateRelationshipDto, user);
+  @ApiBody({ type: CreateRelationshipDto })
+  follow(@Body() dto: CreateRelationshipDto, @User() user: IUser) {
+    return this.relationshipsService.follow(dto, user);
   }
 
-  @Delete()
+  @Post('unfollow')
   @ResponseMessage('Create relationship')
-  unFollow(
-    @Body() updateRelationshipDto: UpdateRelationshipDto,
-    @User() user: IUser,
-  ) {
-    return this.relationshipsService.unFollow(updateRelationshipDto, user);
+  @ApiBody({ type: CreateRelationshipDto })
+  unFollow(@Body() dto: CreateRelationshipDto, @User() user: IUser) {
+    return this.relationshipsService.unFollow(dto, user);
   }
 }

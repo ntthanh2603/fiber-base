@@ -1,3 +1,4 @@
+import { ReactionPostType } from './../helper/helper.enum';
 import { User } from './../users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import {
@@ -12,6 +13,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUser } from 'src/users/users.interface';
 import { FunctionHelper } from 'src/helper/helper.function';
+import { RelationshipType } from 'src/helper/helper.enum';
+import { CreateRelationshipDto } from './dto/create-relationship.dto';
 
 @Injectable()
 export class RelationshipsService {
@@ -41,44 +44,80 @@ export class RelationshipsService {
     const relationship1 = await this.findRelationship(user_id1, user_id2);
     const relationship2 = await this.findRelationship(user_id1, user_id2);
 
-    if (relationship1 && relationship1) {
+    if (relationship1 && relationship2) {
+      return RelationshipType.FRIEND;
+    }
+    if (!relationship1 && relationship2) {
     }
   }
 
-  async follow(updateRelationshipDto: UpdateRelationshipDto, user: IUser) {
-    const { user_id2 } = updateRelationshipDto;
+  async follow(dto: CreateRelationshipDto, user: IUser) {
+    const { user_id2 } = dto;
+    const user_id1 = user.user_id;
 
     const user2 = await this.usersService.findUserById(user_id2);
 
     if (!user2) throw new NotFoundException();
 
-    const relationship = await this.findRelationship(user.user_id, user_id2);
+    const relationship_user1_user2 = await this.findRelationship(
+      user_id1,
+      user_id2,
+    );
 
-    if (!relationship) {
-      return await this.relationshipsRepository.save({
-        user_id1: user.user_id,
-        user_id2: user_id2,
-      });
+    const relationship_user2_user1 = await this.findRelationship(
+      user_id2,
+      user_id1,
+    );
+
+    if (!relationship_user1_user2) {
+      if (!relationship_user2_user1) {
+        await this.relationshipsRepository.save({
+          user_id1,
+          user_id2,
+          relationship: RelationshipType.FOLLOW,
+        });
+        return {
+          user_id1,
+          user_id2,
+          relationship: RelationshipType.FOLLOW,
+        };
+      } else {
+        await this.relationshipsRepository.save({
+          user_id1: user_id1,
+          user_id2: user_id2,
+          relationship: RelationshipType.FRIEND,
+        });
+
+        await this.relationshipsRepository.update(
+          {
+            user_id1: user_id2,
+            user_id2: user_id1,
+          },
+          {
+            relationship: RelationshipType.FRIEND,
+          },
+        );
+
+        return {
+          user_id1: user_id1,
+          user_id2: user_id2,
+          relationship: RelationshipType.FRIEND,
+        };
+      }
     }
-    return {
-      message: 'Followed',
-    };
+    throw new BadRequestException();
   }
 
-  async unFollow(updateRelationshipDto: UpdateRelationshipDto, user: IUser) {
-    const { user_id2 } = updateRelationshipDto;
-
-    const user2 = await this.usersService.findUserById(user_id2);
-
-    if (!user2) throw new NotFoundException();
-
-    const relationship = await this.findRelationship(user.user_id, user_id2);
-
-    if (relationship) {
-      return await this.relationshipsRepository.delete(relationship);
-    }
-    return {
-      message: 'UnFollowed',
-    };
+  async unFollow(dto: CreateRelationshipDto, user: IUser) {
+    // const { user_id2 } = updateRelationshipDto;
+    // const user2 = await this.usersService.findUserById(user_id2);
+    // if (!user2) throw new NotFoundException();
+    // const relationship = await this.findRelationship(user.user_id, user_id2);
+    // if (relationship) {
+    //   return await this.relationshipsRepository.delete(relationship);
+    // }
+    // return {
+    //   message: 'UnFollowed',
+    // };
   }
 }

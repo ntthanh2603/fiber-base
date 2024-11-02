@@ -12,6 +12,7 @@ import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrivacyType } from 'src/helper/helper.enum';
+import { Multer } from 'multer';
 
 @Injectable()
 export class UsersService {
@@ -50,7 +51,7 @@ export class UsersService {
     return null;
   }
 
-  async register(user: RegisterUserDto, file) {
+  async register(user: RegisterUserDto, file: Express.Multer.File) {
     const { username, email, password, age, gender, address, description } =
       user;
 
@@ -62,11 +63,16 @@ export class UsersService {
 
     const hashPassword = this.getHashPassword(password);
 
+    let avartar = '';
+
+    if (!file) avartar = null;
+    else avartar = `images/${file.fieldname}/${file.filename}`;
+
     const newUser = {
       username,
       email,
       password: hashPassword,
-      avartar: `images/${file.fieldname}/${file.filename}`,
+      avartar,
       age,
       gender,
       address,

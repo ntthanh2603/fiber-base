@@ -15,7 +15,6 @@ export class Relationship {
   @Column({
     type: 'enum',
     enum: RelationshipType,
-    default: RelationshipType.NULL,
   })
   relationship: RelationshipType;
 }
