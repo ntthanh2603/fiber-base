@@ -1,3 +1,4 @@
+import { MessagesModule } from './messgages/messgages.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -5,10 +6,8 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
-
 import { FunctionHelper } from './helper/helper.function';
 import { RelationshipsModule } from './relationships/relationships.module';
-import { MessgagesModule } from './messgages/messgages.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { ConversationMembersModule } from './conversation-members/conversation-members.module';
 @Module({
@@ -24,7 +23,7 @@ import { ConversationMembersModule } from './conversation-members/conversation-m
     UsersModule,
     AuthModule,
     RelationshipsModule,
-    MessgagesModule,
+    MessagesModule,
     ConversationsModule,
     ConversationMembersModule,
   ],
