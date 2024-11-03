@@ -8,6 +8,9 @@ import { AuthModule } from './auth/auth.module';
 
 import { FunctionHelper } from './helper/helper.function';
 import { RelationshipsModule } from './relationships/relationships.module';
+import { MessgagesModule } from './messgages/messgages.module';
+import { ConversationsModule } from './conversations/conversations.module';
+import { ConversationMembersModule } from './conversation-members/conversation-members.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +24,9 @@ import { RelationshipsModule } from './relationships/relationships.module';
     UsersModule,
     AuthModule,
     RelationshipsModule,
+    MessgagesModule,
+    ConversationsModule,
+    ConversationMembersModule,
   ],
   controllers: [AppController],
   providers: [AppService, FunctionHelper],
