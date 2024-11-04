@@ -48,7 +48,7 @@ export enum ReactionPostType {
   POST = 'post',
 }
 
-export enum GroupUserType {
+export enum MemberType {
   USER = 'user',
   ADMIN = 'admin',
 }

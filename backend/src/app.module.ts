@@ -10,6 +10,7 @@ import { FunctionHelper } from './helper/helper.function';
 import { RelationshipsModule } from './relationships/relationships.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { ConversationMembersModule } from './conversation-members/conversation-members.module';
+import { GroupMembersModule } from './group-members/group-members.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +27,7 @@ import { ConversationMembersModule } from './conversation-members/conversation-m
     MessagesModule,
     ConversationsModule,
     ConversationMembersModule,
+    GroupMembersModule,
   ],
   controllers: [AppController],
   providers: [AppService, FunctionHelper],
