@@ -4,5 +4,8 @@ import { IsString } from 'class-validator';
 export class CreateConversationDto {
   @IsString()
   @ApiProperty({ example: 'Chat me' })
-  conversation_name: string;
+  conversationName: string;
+
+  @IsString()
+  userOther_id: string;
 }

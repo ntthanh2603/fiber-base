@@ -1,3 +1,4 @@
+import { PrivacyType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -6,7 +7,7 @@ export class Conversation {
   conversation_id: string;
 
   @Column()
-  conversation_name: string;
+  conversationName: string;
 
   @Column({ default: 'tuanthanh.img.com' })
   avartar: string;
@@ -16,4 +17,7 @@ export class Conversation {
 
   @Column()
   createdAt: Date;
+
+  @Column({ default: PrivacyType.PUBLIC })
+  privacy: PrivacyType;
 }

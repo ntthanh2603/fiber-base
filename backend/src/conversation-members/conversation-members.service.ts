@@ -27,22 +27,22 @@ export class ConversationMembersService {
     private usersService: UsersService,
   ) {}
 
-  async createConversation(cmDto: CreateConversationMemberDto) {
-    const conversation = await this.conversationsService.findConversionById(
-      cmDto.conversation_id,
-    );
+  // async createConversation(dto: CreateConversationMemberDto) {
+  //   const conversation = await this.conversationsService.findConversionById(
+  //     dto.conversation_id,
+  //   );
 
-    const user = await this.usersService.findUserById(cmDto.user_id);
-    if (conversation && user)
-      return await this.cmRepository.save({
-        conversation_id: cmDto.conversation_id,
-        user_id: cmDto.user_id,
-      });
+  //   const user = await this.usersService.findUserById(dto.user_id);
+  //   if (conversation && user)
+  //     return await this.cmRepository.save({
+  //       conversation_id: dto.conversation_id,
+  //       user_id: dto.user_id,
+  //     });
 
-    throw new NotFoundException('Conversation has existed');
-  }
+  //   throw new NotFoundException('Conversation has existed');
+  // }
 
-  async addUser(cmDto: CreateConversationMemberDto) {
+  async addMember(cmDto: CreateConversationMemberDto) {
     const conversation = await this.conversationsService.findConversionById(
       cmDto.conversation_id,
     );

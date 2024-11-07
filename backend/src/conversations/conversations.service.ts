@@ -14,6 +14,7 @@ import { Conversation } from './entities/conversation.entity';
 import { IUser } from 'src/users/users.interface';
 import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
 import { DeleteConversationDto } from './dto/delete-conversation.dto';
+import { MemberType } from 'src/helper/helper.enum';
 
 @Injectable()
 export class ConversationsService {
@@ -34,16 +35,25 @@ export class ConversationsService {
   }
 
   async create(user: IUser, dto: CreateConversationDto) {
-    const createdBy = user.user_id;
     const conversation = await this.conversationsRepository.save({
-      conversation_name: dto.conversation_name,
-      createdBy: createdBy,
+      conversationName: dto.conversationName,
+      createdBy: user.user_id,
+      createdAt: new Date(),
     });
 
-    await this.cmService.createConversation({
+    // add admin
+    await this.cmService.addMember({
       conversation_id: conversation.conversation_id,
-      user_id: conversation.createdBy,
+      user_id: user.user_id,
+      memberType: MemberType.ADMIN,
     });
+    // add user
+    await this.cmService.addMember({
+      conversation_id: conversation.conversation_id,
+      user_id: dto.userOther_id,
+      memberType: MemberType.USER,
+    });
+
     return conversation;
   }
 
