@@ -16,6 +16,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConversationMember } from './entities/conversation-member.entity';
 import { DeleteConversationMemberDto } from './dto/delete-conversation-member.dto';
+import { MemberType } from 'src/helper/helper.enum';
 
 @Injectable()
 export class ConversationMembersService {
@@ -27,20 +28,14 @@ export class ConversationMembersService {
     private usersService: UsersService,
   ) {}
 
-  // async createConversation(dto: CreateConversationMemberDto) {
-  //   const conversation = await this.conversationsService.findConversionById(
-  //     dto.conversation_id,
-  //   );
-
-  //   const user = await this.usersService.findUserById(dto.user_id);
-  //   if (conversation && user)
-  //     return await this.cmRepository.save({
-  //       conversation_id: dto.conversation_id,
-  //       user_id: dto.user_id,
-  //     });
-
-  //   throw new NotFoundException('Conversation has existed');
-  // }
+  async findMember(user_id, conversation_id) {
+    return await this.cmRepository.findOne({
+      where: {
+        user_id: user_id,
+        conversation_id: conversation_id,
+      },
+    });
+  }
 
   async addMember(cmDto: CreateConversationMemberDto) {
     const conversation = await this.conversationsService.findConversionById(
@@ -82,5 +77,10 @@ export class ConversationMembersService {
     } catch (e) {
       throw new BadRequestException();
     }
+  }
+
+  async remoteAllMember(conversation_id) {
+    await this.cmRepository.delete({ conversation_id });
+    return;
   }
 }

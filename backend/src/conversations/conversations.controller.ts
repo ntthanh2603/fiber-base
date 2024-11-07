@@ -15,17 +15,17 @@ export class ConversationsController {
 
   @Post()
   @ApiBody({ type: CreateConversationDto })
-  async creare(@User() user: IUser, @Body() dto: CreateConversationDto) {
-    return await this.conversationsService.create(user, dto);
+  creare(@User() user: IUser, @Body() dto: CreateConversationDto) {
+    return this.conversationsService.create(user, dto);
   }
 
   @Delete()
-  async remote(@User() user: IUser, @Body() dto: DeleteConversationDto) {
-    return await this.conversationsService.remote(user, dto);
+  remote(@User() user: IUser, @Body() dto: DeleteConversationDto) {
+    return this.conversationsService.remote(user, dto);
   }
 
   @Patch()
-  async update(@User() user: IUser, @Body() updateDto: UpdateConversationDto) {
-    return await this.conversationsService.update(user, updateDto);
+  update(@User() user: IUser, @Body() updateDto: UpdateConversationDto) {
+    return this.conversationsService.update(user, updateDto);
   }
 }

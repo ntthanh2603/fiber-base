@@ -75,20 +75,34 @@ export class ConversationsService {
   }
 
   async remote(user: IUser, dto: DeleteConversationDto) {
-    try {
-      const conversation = await this.conversationsRepository.findOne({
-        where: { conversation_id: dto.conversation_id },
+    if (!this.functionHelper.isValidUUID(dto.conversation_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
+
+    const conversation = await this.conversationsRepository.findOne({
+      where: { conversation_id: dto.conversation_id },
+    });
+    if (!conversation) throw new BadRequestException();
+
+    const permissionUser = await this.cmService.findMember(
+      user.user_id,
+      conversation.conversation_id,
+    );
+
+    if (!permissionUser)
+      throw new ForbiddenException(
+        `${user.user_id} is not admin conversation ${dto.conversation_id}`,
+      );
+    else if (permissionUser.memberType == MemberType.USER) {
+      throw new ForbiddenException(
+        `${user.user_id} is not admin conversation ${dto.conversation_id}`,
+      );
+    } else {
+      await this.cmService.remoteAllMember(dto.conversation_id);
+
+      return await this.conversationsRepository.delete({
+        conversation_id: dto.conversation_id,
       });
-      if (user.user_id != conversation.createdBy)
-        throw new ForbiddenException();
-      if (conversation) {
-        return this.conversationsRepository.delete({
-          conversation_id: dto.conversation_id,
-        });
-      }
-      throw new BadRequestException();
-    } catch {
-      throw new NotFoundException('Conversation not found');
     }
   }
 
