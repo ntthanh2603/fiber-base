@@ -16,21 +16,6 @@ export class UpdateUserDto {
   @IsOptional()
   username: string;
 
-  @IsEmail()
-  @IsString()
-  @IsNotEmpty({ message: 'Email không được trống' })
-  @ApiProperty({ example: 'user@gmail.com', description: 'email' })
-  @IsOptional()
-  email: string;
-
-  @MinLength(8)
-  @MaxLength(10)
-  @IsString()
-  @IsNotEmpty({ message: 'Mật khẩu không được trống' })
-  @ApiProperty({ example: '12345678', description: 'password' })
-  @IsOptional()
-  password: string;
-
   @ApiProperty({ example: 20, description: 'age' })
   @IsOptional()
   age: number;

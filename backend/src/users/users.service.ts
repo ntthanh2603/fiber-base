@@ -12,7 +12,7 @@ import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrivacyType } from 'src/helper/helper.enum';
-import fs from 'fs';
+import * as fs from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -66,7 +66,7 @@ export class UsersService {
     let avatar = '';
 
     if (!file) avatar = null;
-    else avatar = `images/${file.fieldname}/${file.filename}`;
+    else avatar = file.path;
 
     const newUser = {
       username,
@@ -97,6 +97,7 @@ export class UsersService {
         'email',
         'username',
         'age',
+        'avatar',
         'gender',
         'address',
         'description',
@@ -123,8 +124,12 @@ export class UsersService {
       );
   }
 
-  async updateUser(dto: UpdateUserDto, user: IUser, file: Express.Multer.File) {
-    console.log(dto, user, file);
+  async updateProfile(
+    dto: UpdateUserDto,
+    user: IUser,
+    file: Express.Multer.File,
+  ) {
+    console.log('>> file', file);
 
     if (!file) {
       return await this.usersRepository.update(
@@ -135,25 +140,23 @@ export class UsersService {
       );
     } else {
       const findUser = await this.findUserById(user.user_id);
-      let avatar = findUser.avatar;
+      const avatar = findUser.avatar;
+      console.log('>> avatar', avatar);
+
       if (avatar) {
-        const oldAvatarPath = avatar;
         try {
-          // Kiểm tra file có tồn tại không
-          if (fs.existsSync(oldAvatarPath)) {
-            // Xóa file avatar cũ
-            fs.unlinkSync(oldAvatarPath);
+          if (fs.existsSync(avatar)) {
+            fs.unlinkSync(avatar);
           }
         } catch (error) {
           console.error('Error deleting old avatar:', error);
         }
       }
-
       return await this.usersRepository.update(
         { user_id: user.user_id },
         {
           ...dto,
-          avatar: `images/${file.fieldname}/${file.filename}`,
+          avatar: file.path,
         },
       );
     }

@@ -57,6 +57,6 @@ export class UsersController {
     )
     file: Express.Multer.File,
   ) {
-    return this.usersService.updateUser(updateUserDto, user, file);
+    return this.usersService.updateProfile(updateUserDto, user, file);
   }
 }
