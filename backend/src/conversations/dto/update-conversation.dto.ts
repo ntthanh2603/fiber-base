@@ -11,5 +11,5 @@ export class UpdateConversationDto {
 
   @IsString()
   @IsOptional()
-  avartar: string;
+  avatar: string;
 }

@@ -1,4 +1,53 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { RegisterUserDto } from './create-user.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { GenderType, PrivacyType } from 'src/helper/helper.enum';
 
-export class UpdateUserDto extends PartialType(RegisterUserDto) {}
+export class UpdateUserDto {
+  @IsNotEmpty({ message: 'Tên nguời dùng không được trống' })
+  @IsString()
+  @ApiProperty({ example: 'Nguyễn Tuấn Thành', description: 'username' })
+  @IsOptional()
+  username: string;
+
+  @IsEmail()
+  @IsString()
+  @IsNotEmpty({ message: 'Email không được trống' })
+  @ApiProperty({ example: 'user@gmail.com', description: 'email' })
+  @IsOptional()
+  email: string;
+
+  @MinLength(8)
+  @MaxLength(10)
+  @IsString()
+  @IsNotEmpty({ message: 'Mật khẩu không được trống' })
+  @ApiProperty({ example: '12345678', description: 'password' })
+  @IsOptional()
+  password: string;
+
+  @ApiProperty({ example: 20, description: 'age' })
+  @IsOptional()
+  age: number;
+
+  @ApiProperty({ example: GenderType.MALE, description: 'gender' })
+  @IsOptional()
+  gender: GenderType;
+
+  @ApiProperty({ example: 'Cau Giay, Ha Noi', description: 'address' })
+  @IsOptional()
+  address: string;
+
+  @ApiProperty({ example: 'Good boy', description: 'description' })
+  @IsOptional()
+  description: string;
+
+  @IsOptional()
+  @ApiProperty({ example: PrivacyType.PUBLIC })
+  privacy: PrivacyType;
+}

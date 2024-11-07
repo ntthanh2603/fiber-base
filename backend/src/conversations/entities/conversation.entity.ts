@@ -10,7 +10,7 @@ export class Conversation {
   conversationName: string;
 
   @Column({ default: 'tuanthanh.img.com' })
-  avartar: string;
+  avatar: string;
 
   @Column()
   createdBy: string;

@@ -38,7 +38,7 @@ export class AuthController {
   @Public()
   @ResponseMessage('Register a new user')
   @Post('/register')
-  @UseInterceptors(FileInterceptor('avartar-user'))
+  @UseInterceptors(FileInterceptor('avatar-user'))
   @ApiBody({ type: RegisterUserDto })
   handleRegister(
     @Body() registerUserDto: RegisterUserDto,

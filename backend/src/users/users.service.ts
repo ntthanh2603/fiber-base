@@ -12,7 +12,7 @@ import { RegisterUserDto } from './dto/create-user.dto';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrivacyType } from 'src/helper/helper.enum';
-import { Multer } from 'multer';
+import fs from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -55,7 +55,7 @@ export class UsersService {
     const { username, email, password, age, gender, address, description } =
       user;
 
-    const userDb = await this.findUserByEmail(email);
+    const userDb = await this.usersRepository.findOneBy({ email });
 
     if (userDb) {
       throw new BadRequestException(`Email: ${email} already exists`);
@@ -63,16 +63,16 @@ export class UsersService {
 
     const hashPassword = this.getHashPassword(password);
 
-    let avartar = '';
+    let avatar = '';
 
-    if (!file) avartar = null;
-    else avartar = `images/${file.fieldname}/${file.filename}`;
+    if (!file) avatar = null;
+    else avatar = `images/${file.fieldname}/${file.filename}`;
 
     const newUser = {
       username,
       email,
       password: hashPassword,
-      avartar,
+      avatar,
       age,
       gender,
       address,
@@ -123,13 +123,39 @@ export class UsersService {
       );
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, user: IUser) {
-    const userDb = await this.findUserById(user.user_id);
+  async updateUser(dto: UpdateUserDto, user: IUser, file: Express.Multer.File) {
+    console.log(dto, user, file);
 
-    if (userDb)
-      return this.usersRepository.update(
-        { user_id: userDb.user_id },
-        { ...updateUserDto },
+    if (!file) {
+      return await this.usersRepository.update(
+        { user_id: user.user_id },
+        {
+          ...dto,
+        },
       );
+    } else {
+      const findUser = await this.findUserById(user.user_id);
+      let avatar = findUser.avatar;
+      if (avatar) {
+        const oldAvatarPath = avatar;
+        try {
+          // Kiểm tra file có tồn tại không
+          if (fs.existsSync(oldAvatarPath)) {
+            // Xóa file avatar cũ
+            fs.unlinkSync(oldAvatarPath);
+          }
+        } catch (error) {
+          console.error('Error deleting old avatar:', error);
+        }
+      }
+
+      return await this.usersRepository.update(
+        { user_id: user.user_id },
+        {
+          ...dto,
+          avatar: `images/${file.fieldname}/${file.filename}`,
+        },
+      );
+    }
   }
 }

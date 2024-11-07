@@ -19,7 +19,7 @@ export class User {
   password: string;
 
   @Column({ default: null })
-  avartar: string;
+  avatar: string;
 
   @Column({ type: 'int' })
   age: number;

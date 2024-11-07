@@ -6,12 +6,17 @@ import {
   Param,
   Patch,
   Delete,
+  UploadedFile,
+  ParseFilePipeBuilder,
+  HttpStatus,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
 @Controller('users')
@@ -33,7 +38,25 @@ export class UsersController {
 
   @Patch()
   @ResponseMessage('Update User')
-  updateUser(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
-    return this.usersService.updateUser(updateUserDto, user);
+  @UseInterceptors(FileInterceptor('avatar-user'))
+  updateUser(
+    @Body() updateUserDto: UpdateUserDto,
+    @User() user: IUser,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: /(jpg|jpeg|png|gif)$/,
+        })
+        .addMaxSizeValidator({
+          maxSize: 1000 * 1024,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+          fileIsRequired: false,
+        }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.usersService.updateUser(updateUserDto, user, file);
   }
 }
