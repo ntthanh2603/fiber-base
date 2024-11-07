@@ -5,15 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from 'src/database/database.module';
 import { Conversation } from './entities/conversation.entity';
 import { ConversationMembersModule } from 'src/conversation-members/conversation-members.module';
+import { RelationshipsModule } from 'src/relationships/relationships.module';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Conversation]),
     DatabaseModule,
     forwardRef(() => ConversationMembersModule),
+    RelationshipsModule,
   ],
   controllers: [ConversationsController],
-  providers: [ConversationsService],
+  providers: [ConversationsService, FunctionHelper],
   exports: [ConversationsService],
 })
 export class ConversationsModule {}

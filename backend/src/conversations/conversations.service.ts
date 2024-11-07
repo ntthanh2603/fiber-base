@@ -14,7 +14,9 @@ import { Conversation } from './entities/conversation.entity';
 import { IUser } from 'src/users/users.interface';
 import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
 import { DeleteConversationDto } from './dto/delete-conversation.dto';
-import { MemberType } from 'src/helper/helper.enum';
+import { MemberType, RelationshipType } from 'src/helper/helper.enum';
+import { RelationshipsService } from 'src/relationships/relationships.service';
+import { FunctionHelper } from 'src/helper/helper.function';
 
 @Injectable()
 export class ConversationsService {
@@ -23,6 +25,8 @@ export class ConversationsService {
     private conversationsRepository: Repository<Conversation>,
     @Inject(forwardRef(() => ConversationMembersService))
     private cmService: ConversationMembersService,
+    private relationshipsService: RelationshipsService,
+    private functionHelper: FunctionHelper,
   ) {}
 
   // find conversation by id
@@ -35,26 +39,39 @@ export class ConversationsService {
   }
 
   async create(user: IUser, dto: CreateConversationDto) {
+    if (!this.functionHelper.isValidUUID(dto.userOther_id)) {
+      throw new BadRequestException('Invalid group ID format');
+    }
     const conversation = await this.conversationsRepository.save({
       conversationName: dto.conversationName,
       createdBy: user.user_id,
       createdAt: new Date(),
     });
 
-    // add admin
-    await this.cmService.addMember({
-      conversation_id: conversation.conversation_id,
-      user_id: user.user_id,
-      memberType: MemberType.ADMIN,
-    });
-    // add user
-    await this.cmService.addMember({
-      conversation_id: conversation.conversation_id,
-      user_id: dto.userOther_id,
-      memberType: MemberType.USER,
-    });
+    const relationship = await this.relationshipsService.findRelationship(
+      user.user_id,
+      dto.userOther_id,
+    );
 
-    return conversation;
+    if (relationship.relationship == RelationshipType.FRIEND) {
+      // add admin
+      await this.cmService.addMember({
+        conversation_id: conversation.conversation_id,
+        user_id: user.user_id,
+        memberType: MemberType.ADMIN,
+      });
+      // add user
+      await this.cmService.addMember({
+        conversation_id: conversation.conversation_id,
+        user_id: dto.userOther_id,
+        memberType: MemberType.USER,
+      });
+
+      return conversation;
+    } else
+      throw new BadRequestException(
+        `${user.user_id} and ${dto.userOther_id} not friend`,
+      );
   }
 
   async remote(user: IUser, dto: DeleteConversationDto) {
