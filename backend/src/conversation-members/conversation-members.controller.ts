@@ -21,18 +21,4 @@ export class ConversationMembersController {
   constructor(
     private readonly conversationMembersService: ConversationMembersService,
   ) {}
-
-  // @Post()
-  // async addUser(@Body() cmDto: CreateConversationMemberDto) {
-  //   return await this.conversationMembersService.addUser(cmDto);
-  // }
-
-  // @Delete()
-  // @ApiBody({ type: DeleteConversationMemberDto })
-  // async remote(
-  //   @User() user: IUser,
-  //   @Body() deleteDto: DeleteConversationMemberDto,
-  // ) {
-  // //   return await this.conversationMembersService.remote(user, deleteDto);
-  // }
 }
