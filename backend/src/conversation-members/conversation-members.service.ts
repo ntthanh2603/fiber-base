@@ -74,7 +74,7 @@ export class ConversationMembersService {
           user_id: user.user_id,
           conversation_id: deleteDto.conversation_id,
         });
-    } catch (e) {
+    } catch () {
       throw new BadRequestException();
     }
   }
