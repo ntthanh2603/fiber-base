@@ -5,7 +5,6 @@ import { DatabaseModule } from 'src/database/database.module';
 import { Relationship } from './entities/relationship.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
-import { FunctionHelper } from 'src/helper/helper.function';
 
 @Module({
   imports: [
@@ -14,7 +13,7 @@ import { FunctionHelper } from 'src/helper/helper.function';
     UsersModule,
   ],
   controllers: [RelationshipsController],
-  providers: [RelationshipsService, FunctionHelper],
+  providers: [RelationshipsService],
   exports: [RelationshipsService],
 })
 export class RelationshipsModule {}

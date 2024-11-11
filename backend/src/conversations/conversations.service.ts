@@ -16,7 +16,6 @@ import { ConversationMembersService } from 'src/conversation-members/conversatio
 import { DeleteConversationDto } from './dto/delete-conversation.dto';
 import { MemberType, RelationshipType } from 'src/helper/helper.enum';
 import { RelationshipsService } from 'src/relationships/relationships.service';
-import { FunctionHelper } from 'src/helper/helper.function';
 
 @Injectable()
 export class ConversationsService {
@@ -26,7 +25,6 @@ export class ConversationsService {
     @Inject(forwardRef(() => ConversationMembersService))
     private cmService: ConversationMembersService,
     private relationshipsService: RelationshipsService,
-    private functionHelper: FunctionHelper,
   ) {}
 
   // find conversation by id
@@ -39,19 +37,20 @@ export class ConversationsService {
   }
 
   async create(user: IUser, dto: CreateConversationDto) {
-    if (!this.functionHelper.isValidUUID(dto.userOther_id)) {
-      throw new BadRequestException('Invalid group ID format');
-    }
+    const relationship = await this.relationshipsService.findRelationship(
+      user.user_id,
+      dto.userOther_id,
+    );
+    if (!relationship)
+      throw new BadRequestException(
+        `${user.user_id} and ${dto.userOther_id} not relationship`,
+      );
+
     const conversation = await this.conversationsRepository.save({
       conversationName: dto.conversationName,
       createdBy: user.user_id,
       createdAt: new Date(),
     });
-
-    const relationship = await this.relationshipsService.findRelationship(
-      user.user_id,
-      dto.userOther_id,
-    );
 
     if (relationship.relationship == RelationshipType.FRIEND) {
       // add admin
@@ -75,10 +74,6 @@ export class ConversationsService {
   }
 
   async remote(user: IUser, dto: DeleteConversationDto) {
-    if (!this.functionHelper.isValidUUID(dto.conversation_id)) {
-      throw new BadRequestException('Invalid group ID format');
-    }
-
     const conversation = await this.conversationsRepository.findOne({
       where: { conversation_id: dto.conversation_id },
     });
@@ -106,26 +101,9 @@ export class ConversationsService {
     }
   }
 
-  async update(user: IUser, updateDto: UpdateConversationDto) {
-    try {
-      const conversation = await this.conversationsRepository.findOne({
-        where: { conversation_id: updateDto.conversation_id },
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-
-    const isInConversation = await this.cmService.checkUserInConversation(
-      user.user_id,
-      updateDto.conversation_id,
-    );
-    if (isInConversation) {
-      return await this.conversationsRepository.update(
-        { conversation_id: updateDto.conversation_id },
-        { ...updateDto },
-      );
-    }
-
-    throw new ForbiddenException();
-  }
+  async update(
+    user: IUser,
+    updateDto: UpdateConversationDto,
+    file: Express.Multer.File,
+  ) {}
 }

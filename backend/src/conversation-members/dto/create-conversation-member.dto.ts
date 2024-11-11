@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { MemberType } from 'src/helper/helper.enum';
 
 export class CreateConversationMemberDto {
@@ -8,6 +8,7 @@ export class CreateConversationMemberDto {
 
   @IsString()
   @IsNotEmpty({ message: 'Id by user not null' })
+  @IsUUID()
   user_id: string;
 
   @IsString()

@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
-import { FunctionHelper } from './helper/helper.function';
+
 import { RelationshipsModule } from './relationships/relationships.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { ConversationMembersModule } from './conversation-members/conversation-members.module';
@@ -30,6 +30,6 @@ import { GroupMembersModule } from './group-members/group-members.module';
     GroupMembersModule,
   ],
   controllers: [AppController],
-  providers: [AppService, FunctionHelper],
+  providers: [AppService],
 })
 export class AppModule {}

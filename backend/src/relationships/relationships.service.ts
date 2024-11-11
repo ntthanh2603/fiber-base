@@ -3,16 +3,15 @@ import { User } from './../users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UpdateRelationshipDto } from './dto/update-relationship.dto';
+
 import { Relationship } from './entities/relationship.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUser } from 'src/users/users.interface';
-import { FunctionHelper } from 'src/helper/helper.function';
+
 import { RelationshipType } from 'src/helper/helper.enum';
 import { CreateRelationshipDto } from './dto/create-relationship.dto';
 
@@ -22,16 +21,9 @@ export class RelationshipsService {
     @InjectRepository(Relationship)
     private relationshipsRepository: Repository<Relationship>,
     private usersService: UsersService,
-    private functionHelper: FunctionHelper,
   ) {}
 
   async findRelationship(user_id1: string, user_id2: string) {
-    if (
-      !this.functionHelper.isValidUUID(user_id1) &&
-      !this.functionHelper.isValidUUID(user_id2)
-    ) {
-      throw new BadRequestException('Invalid group ID format');
-    }
     return await this.relationshipsRepository.findOne({
       where: {
         user_id1,

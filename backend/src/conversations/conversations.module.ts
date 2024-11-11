@@ -6,7 +6,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { Conversation } from './entities/conversation.entity';
 import { ConversationMembersModule } from 'src/conversation-members/conversation-members.module';
 import { RelationshipsModule } from 'src/relationships/relationships.module';
-import { FunctionHelper } from 'src/helper/helper.function';
+
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from 'src/core/multer.config';
 
@@ -21,7 +21,7 @@ import { MulterConfigService } from 'src/core/multer.config';
     }),
   ],
   controllers: [ConversationsController],
-  providers: [ConversationsService, FunctionHelper],
+  providers: [ConversationsService],
   exports: [ConversationsService],
 })
 export class ConversationsModule {}

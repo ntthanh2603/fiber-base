@@ -1,4 +1,3 @@
-import { FunctionHelper } from 'src/helper/helper.function';
 import {
   BadRequestException,
   Injectable,
@@ -19,7 +18,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private functionHelper: FunctionHelper,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -87,9 +85,6 @@ export class UsersService {
   }
 
   async findUserById(user_id: string) {
-    if (!this.functionHelper.isValidUUID(user_id)) {
-      throw new BadRequestException('Invalid group ID format');
-    }
     const user = await this.usersRepository.findOne({
       where: { user_id },
       select: [
