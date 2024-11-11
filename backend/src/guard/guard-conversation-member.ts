@@ -15,12 +15,11 @@ export class MemberConversationGuard implements CanActivate {
     const user = request.user;
     const body = request.body;
 
-    const checkMember =
-      await this.conversationMembersService.checkUserInConversation(
-        user.user_id,
-        body.conversation_id,
-      );
+    const findMember = await this.conversationMembersService.findMember(
+      user.user_id,
+      body.conversation_id,
+    );
 
-    return checkMember ? true : false;
+    return findMember ? true : false;
   }
 }

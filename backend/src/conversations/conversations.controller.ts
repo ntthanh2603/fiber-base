@@ -43,8 +43,8 @@ export class ConversationsController {
   @UseGuards(MemberConversationGuard)
   @UseInterceptors(FileInterceptor('avatar-conversation'))
   update(
-    @User() user: IUser,
-    @Body() updateDto: UpdateConversationDto,
+    // @User() user: IUser,
+    @Body() dto: UpdateConversationDto,
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
@@ -60,6 +60,6 @@ export class ConversationsController {
     )
     file: Express.Multer.File,
   ) {
-    return this.conversationsService.update(user, updateDto, file);
+    return this.conversationsService.update(dto, file);
   }
 }

@@ -28,7 +28,7 @@ export class ConversationMembersService {
     private usersService: UsersService,
   ) {}
 
-  async findMember(user_id, conversation_id) {
+  async findMember(user_id: string, conversation_id: string) {
     return await this.cmRepository.findOne({
       where: {
         user_id: user_id,
@@ -45,13 +45,6 @@ export class ConversationMembersService {
     if (conversation) return this.cmRepository.save(cmDto);
 
     throw new NotFoundException('Conversation does not exist');
-  }
-
-  async checkUserInConversation(user_id: string, conversation_id: string) {
-    const cm = await this.cmRepository.findOne({
-      where: { user_id, conversation_id },
-    });
-    return cm ? true : false;
   }
 
   async remote(user: IUser, deleteDto: DeleteConversationMemberDto) {

@@ -102,11 +102,7 @@ export class ConversationsService {
     }
   }
 
-  async update(
-    user: IUser,
-    dto: UpdateConversationDto,
-    file: Express.Multer.File,
-  ) {
+  async update(dto: UpdateConversationDto, file: Express.Multer.File) {
     const findConversation = await this.findConversionById(dto.conversation_id);
 
     if (!file) {

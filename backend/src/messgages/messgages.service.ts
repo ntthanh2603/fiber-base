@@ -18,7 +18,7 @@ export class MessagesService {
   async create(user: IUser, createMessageDto: CreateMessageDto) {
     const user_id = user.user_id;
     const { conversation_id, message } = createMessageDto;
-    if (this.cmService.checkUserInConversation(user_id, conversation_id)) {
+    if (this.cmService.findMember(user_id, conversation_id)) {
       return await this.messagesRepository.save({
         user_id,
         conversation_id,
