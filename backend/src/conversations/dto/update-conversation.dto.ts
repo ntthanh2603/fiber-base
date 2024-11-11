@@ -8,8 +8,4 @@ export class UpdateConversationDto {
   @IsString()
   @IsOptional()
   conversation_name: string;
-
-  @IsString()
-  @IsOptional()
-  avatar: string;
 }
