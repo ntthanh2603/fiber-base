@@ -7,5 +7,5 @@ export class UpdateConversationDto {
 
   @IsString()
   @IsOptional()
-  conversation_name: string;
+  conversationName: string;
 }

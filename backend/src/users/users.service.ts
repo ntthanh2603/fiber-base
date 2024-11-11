@@ -124,8 +124,6 @@ export class UsersService {
     user: IUser,
     file: Express.Multer.File,
   ) {
-    console.log('>> file', file);
-
     if (!file) {
       return await this.usersRepository.update(
         { user_id: user.user_id },
@@ -136,7 +134,6 @@ export class UsersService {
     } else {
       const findUser = await this.findUserById(user.user_id);
       const avatar = findUser.avatar;
-      console.log('>> avatar', avatar);
 
       if (avatar) {
         try {

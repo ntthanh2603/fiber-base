@@ -1,3 +1,4 @@
+import { Message } from './../messgages/entities/messgage.entity';
 import { ConversationsService } from 'src/conversations/conversations.service';
 import {
   Controller,
@@ -12,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { IUser } from 'src/users/users.interface';
-import { User } from 'src/decorator/customize';
+import { ResponseMessage, User } from 'src/decorator/customize';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 
@@ -38,6 +39,7 @@ export class ConversationsController {
   }
 
   @Patch()
+  @ResponseMessage('Update conversation')
   @UseGuards(MemberConversationGuard)
   @UseInterceptors(FileInterceptor('avatar-conversation'))
   update(

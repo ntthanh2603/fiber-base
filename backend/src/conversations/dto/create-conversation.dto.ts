@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 
 export class CreateConversationDto {
   @IsString()
@@ -7,5 +7,6 @@ export class CreateConversationDto {
   conversationName: string;
 
   @IsString()
+  @IsUUID()
   userOther_id: string;
 }

@@ -16,6 +16,7 @@ import { ConversationMembersService } from 'src/conversation-members/conversatio
 import { DeleteConversationDto } from './dto/delete-conversation.dto';
 import { MemberType, RelationshipType } from 'src/helper/helper.enum';
 import { RelationshipsService } from 'src/relationships/relationships.service';
+import * as fs from 'fs';
 
 @Injectable()
 export class ConversationsService {
@@ -103,7 +104,37 @@ export class ConversationsService {
 
   async update(
     user: IUser,
-    updateDto: UpdateConversationDto,
+    dto: UpdateConversationDto,
     file: Express.Multer.File,
-  ) {}
+  ) {
+    const findConversation = await this.findConversionById(dto.conversation_id);
+
+    if (!file) {
+      return await this.conversationsRepository.update(
+        { conversation_id: dto.conversation_id },
+        {
+          ...dto,
+        },
+      );
+    }
+
+    const avatar = findConversation.avatar;
+
+    if (avatar) {
+      try {
+        if (fs.existsSync(avatar)) {
+          fs.unlinkSync(avatar);
+        }
+      } catch (error) {
+        console.error('Error deleting old avatar:', error);
+      }
+    }
+    return await this.conversationsRepository.update(
+      { conversation_id: dto.conversation_id },
+      {
+        ...dto,
+        avatar: file.path,
+      },
+    );
+  }
 }

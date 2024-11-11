@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Body,
+} from '@nestjs/common';
 import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
 
 @Injectable()
@@ -7,10 +12,15 @@ export class MemberConversationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    console.log(request);
+    const user = request.user;
+    const body = request.body;
 
-    // const findMember = await this.conversationMembersService.
+    const checkMember =
+      await this.conversationMembersService.checkUserInConversation(
+        user.user_id,
+        body.conversation_id,
+      );
 
-    return false;
+    return checkMember ? true : false;
   }
 }
