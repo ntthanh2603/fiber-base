@@ -29,12 +29,9 @@ export class ConversationsService {
   ) {}
 
   async findConversionById(conversation_id: string) {
-    console.log('>> check 3');
-
     const conversation = await this.conversationsRepository.findOneBy({
       conversation_id,
     });
-    console.log('>> check 4');
 
     if (conversation) return conversation;
     throw new NotFoundException('Conversation not found');
