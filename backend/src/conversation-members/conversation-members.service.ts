@@ -1,3 +1,4 @@
+import { IUser } from 'src/users/users.interface';
 import { ConversationsService } from './../conversations/conversations.service';
 import {
   BadRequestException,
@@ -82,20 +83,40 @@ export class ConversationMembersService {
     return this.conversationMembersRepository.delete({ conversation_id });
   }
 
-  async checkMember(user_id: string, conversation_id: string) {
+  async checkPermission(
+    user_id: string,
+    conversation_id: string,
+    memberType: MemberType,
+  ) {
     const conversationMember = await this.findMember(user_id, conversation_id);
 
     if (!conversationMember)
       throw new NotFoundException(
         `User ${user_id} isn't conversation member ${conversation_id}`,
       );
-    else if (conversationMember.memberType == MemberType.MEMBER)
+    else if (conversationMember.memberType == memberType)
       return conversationMember;
-    else throw new ForbiddenException(`User is Admin`);
+    else throw new ForbiddenException(`User isn't ${memberType}`);
   }
 
-  async adminDeleteMember(dto: ConversationMemberDto) {
-    await this.checkMember(dto.user_id, dto.conversation_id);
+  async deleteMember(dto: ConversationMemberDto) {
+    await this.checkPermission(
+      dto.user_id,
+      dto.conversation_id,
+      MemberType.MEMBER,
+    );
+    return await this.conversationMembersRepository.delete({
+      user_id: dto.user_id,
+      conversation_id: dto.conversation_id,
+    });
+  }
+
+  async deleteAdmin(dto: ConversationMemberDto) {
+    await this.checkPermission(
+      dto.user_id,
+      dto.conversation_id,
+      MemberType.ADMIN,
+    );
     return await this.conversationMembersRepository.delete({
       user_id: dto.user_id,
       conversation_id: dto.conversation_id,

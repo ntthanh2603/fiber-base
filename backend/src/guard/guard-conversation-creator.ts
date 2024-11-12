@@ -1,14 +1,8 @@
 import { ConversationsService } from './../conversations/conversations.service';
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  Body,
-} from '@nestjs/common';
-import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 
 @Injectable()
-export class MemberConversationGuard implements CanActivate {
+export class CreatorConversationGuard implements CanActivate {
   constructor(private conversationsService: ConversationsService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

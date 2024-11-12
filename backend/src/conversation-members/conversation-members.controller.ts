@@ -6,6 +6,7 @@ import {
   Patch,
   Delete,
   ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { ConversationMembersService } from './conversation-members.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -13,6 +14,9 @@ import { MemberConversationGuard } from 'src/guard/guard-conversation-member';
 import { FriendRelationshipGuard } from 'src/guard/guard-relationship-friend';
 import { AdminConversationGuard } from 'src/guard/guard-conversation-admin';
 import { ConversationMemberDto } from './dto/conversation-member.dto';
+import { CreatorConversationGuard } from 'src/guard/guard-conversation-creator';
+import { IUser } from 'src/users/users.interface';
+import { User } from 'src/decorator/customize';
 
 @ApiTags('Conversation members')
 @Controller('conversation-members')
@@ -28,15 +32,23 @@ export class ConversationMembersController {
     return this.conversationMembersService.addMember(dto);
   }
 
-  @Patch('add-admin')
+  @Patch('update-permission-admin')
   @UseGuards(AdminConversationGuard)
   addAdmin(@Body() dto: ConversationMemberDto) {
     return this.conversationMembersService.updatePermissionAdmin(dto);
   }
 
-  @Delete('admin-delete-member')
+  @Delete('delete-member')
   @UseGuards(AdminConversationGuard)
-  adminDeleteMember(@Body() dto: ConversationMemberDto) {
-    return this.conversationMembersService.adminDeleteMember(dto);
+  deleteMember(@Body() dto: ConversationMemberDto) {
+    return this.conversationMembersService.deleteMember(dto);
+  }
+
+  @Delete('delete-admin')
+  @UseGuards(CreatorConversationGuard)
+  deleteAdmin(@User() user: IUser, @Body() dto: ConversationMemberDto) {
+    if (user.user_id == dto.user_id)
+      throw new BadRequestException('Cannot be delete creator');
+    return this.conversationMembersService.deleteAdmin(dto);
   }
 }
