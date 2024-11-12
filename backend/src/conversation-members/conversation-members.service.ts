@@ -85,31 +85,6 @@ export class ConversationMembersService {
     };
   }
 
-  // async remote(user: IUser, deleteDto: DeleteConversationMemberDto) {
-  //   try {
-  //     const conversation = await this.conversationsService.findConversionById(
-  //       deleteDto.conversation_id,
-  //     );
-
-  //     if (user.user_id == conversation.createdBy) {
-  //       throw new ForbiddenException();
-  //     }
-  //     const check = this.cmRepository.findOne({
-  //       where: {
-  //         user_id: user.user_id,
-  //         conversation_id: deleteDto.conversation_id,
-  //       },
-  //     });
-  //     if (check)
-  //       return await this.cmRepository.delete({
-  //         user_id: user.user_id,
-  //         conversation_id: deleteDto.conversation_id,
-  //       });
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
-
   async remoteAllMember(conversation_id) {
     await this.cmRepository.delete({ conversation_id });
     return;
