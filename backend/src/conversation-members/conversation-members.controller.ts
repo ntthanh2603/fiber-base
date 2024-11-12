@@ -34,8 +34,19 @@ export class ConversationMembersController {
 
   @Patch('update-permission-admin')
   @UseGuards(AdminConversationGuard)
-  addAdmin(@Body() dto: ConversationMemberDto) {
+  updatePermissionAdmin(@Body() dto: ConversationMemberDto) {
     return this.conversationMembersService.updatePermissionAdmin(dto);
+  }
+
+  @Patch('update-permession-user')
+  @UseGuards(CreatorConversationGuard)
+  updatePermissionUser(
+    @User() user: IUser,
+    @Body() dto: ConversationMemberDto,
+  ) {
+    if (user.user_id == dto.user_id)
+      throw new BadRequestException('Cannot be update permission creator');
+    return this.conversationMembersService.updatePermissionUser(dto);
   }
 
   @Delete('delete-member')

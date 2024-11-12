@@ -58,27 +58,6 @@ export class ConversationMembersService {
     });
   }
 
-  async updatePermissionAdmin(dto: ConversationMemberDto) {
-    const member = await this.findMember(dto.user_id, dto.conversation_id);
-    if (!member)
-      throw new BadRequestException(
-        `${dto.user_id} does not exist in ${dto.conversation_id}`,
-      );
-
-    if (member.memberType == MemberType.ADMIN)
-      throw new BadRequestException(
-        `${dto.user_id} was admin in ${dto.conversation_id}`,
-      );
-
-    await this.conversationMembersRepository.update(
-      { conversationMember_id: member.conversationMember_id },
-      { memberType: MemberType.ADMIN },
-    );
-    return {
-      result: `User ${dto.user_id} is the admin of conversation ${dto.conversation_id}`,
-    };
-  }
-
   remoteAllMember(conversation_id: string) {
     return this.conversationMembersRepository.delete({ conversation_id });
   }
@@ -121,5 +100,30 @@ export class ConversationMembersService {
       user_id: dto.user_id,
       conversation_id: dto.conversation_id,
     });
+  }
+
+  async updatePermissionAdmin(dto: ConversationMemberDto) {
+    await this.checkPermission(
+      dto.user_id,
+      dto.conversation_id,
+      MemberType.MEMBER,
+    );
+
+    return await this.conversationMembersRepository.update(
+      { conversation_id: dto.conversation_id, user_id: dto.user_id },
+      { memberType: MemberType.ADMIN },
+    );
+  }
+
+  async updatePermissionUser(dto: ConversationMemberDto) {
+    await this.checkPermission(
+      dto.user_id,
+      dto.conversation_id,
+      MemberType.ADMIN,
+    );
+    return await this.conversationMembersRepository.update(
+      { conversation_id: dto.conversation_id, user_id: dto.user_id },
+      { memberType: MemberType.MEMBER },
+    );
   }
 }

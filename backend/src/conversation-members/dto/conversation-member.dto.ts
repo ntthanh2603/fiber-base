@@ -1,7 +1,7 @@
 import { IsUUID } from 'class-validator';
 
 export class ConversationMemberDto {
-  @IsUUID('4')
+  @IsUUID()
   conversation_id: string;
 
   @IsUUID()
