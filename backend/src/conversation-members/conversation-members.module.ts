@@ -6,12 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConversationMember } from './entities/conversation-member.entity';
 import { ConversationsModule } from 'src/conversations/conversations.module';
 import { UsersModule } from 'src/users/users.module';
+import { RelationshipsModule } from 'src/relationships/relationships.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ConversationMember]),
     DatabaseModule,
-    UsersModule,
+    RelationshipsModule,
     forwardRef(() => ConversationsModule),
   ],
   controllers: [ConversationMembersController],

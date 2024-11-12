@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 import { CreateGroupMemberDto } from './dto/create-group-member.dto';
 import { UpdateGroupMemberDto } from './dto/update-group-member.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('group-members')
 @Controller('group-members')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}
@@ -23,7 +33,10 @@ export class GroupMembersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGroupMemberDto: UpdateGroupMemberDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateGroupMemberDto: UpdateGroupMemberDto,
+  ) {
     return this.groupMembersService.update(+id, updateGroupMemberDto);
   }
 

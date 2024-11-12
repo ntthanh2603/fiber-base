@@ -50,6 +50,6 @@ export enum ReactionPostType {
 }
 
 export enum MemberType {
-  USER = 'user',
+  MEMBER = 'member',
   ADMIN = 'admin',
 }

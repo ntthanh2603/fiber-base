@@ -23,26 +23,14 @@ export class RelationshipsService {
     private usersService: UsersService,
   ) {}
 
-  async findRelationship(user_id1: string, user_id2: string) {
-    return await this.relationshipsRepository.findOne({
+  findRelationship(user_id1: string, user_id2: string) {
+    return this.relationshipsRepository.findOne({
       where: {
         user_id1,
         user_id2,
       },
     });
   }
-
-  // async checkRelationship(user_id1: string, user_id2: string) {
-  //   const relationship1 = await this.findRelationship(user_id1, user_id2);
-  //   const relationship2 = await this.findRelationship(user_id1, user_id2);
-
-  //   if (relationship1 && relationship2) {
-  //     return RelationshipType.FRIEND;
-  //   }
-  //   if (!relationship1 && relationship2) {
-  //     return
-  //   }
-  // }
 
   async follow(dto: CreateRelationshipDto, user: IUser) {
     const { user_id2 } = dto;

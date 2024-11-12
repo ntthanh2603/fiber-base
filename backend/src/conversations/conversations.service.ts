@@ -40,11 +40,11 @@ export class ConversationsService {
   async create(user: IUser, dto: CreateConversationDto) {
     const relationship = await this.relationshipsService.findRelationship(
       user.user_id,
-      dto.userOther_id,
+      dto.user_id,
     );
     if (!relationship)
       throw new BadRequestException(
-        `${user.user_id} and ${dto.userOther_id} not relationship`,
+        `${user.user_id} and ${dto.user_id} not relationship`,
       );
 
     const conversation = await this.conversationsRepository.save({
@@ -55,22 +55,20 @@ export class ConversationsService {
 
     if (relationship.relationship == RelationshipType.FRIEND) {
       // add admin
-      await this.cmService.addMember({
+      await this.cmService.createAdmin({
         conversation_id: conversation.conversation_id,
         user_id: user.user_id,
-        memberType: MemberType.ADMIN,
       });
       // add user
       await this.cmService.addMember({
         conversation_id: conversation.conversation_id,
-        user_id: dto.userOther_id,
-        memberType: MemberType.USER,
+        user_id: dto.user_id,
       });
 
       return conversation;
     } else
       throw new BadRequestException(
-        `${user.user_id} and ${dto.userOther_id} not friend`,
+        `${user.user_id} and ${dto.user_id} not friend`,
       );
   }
 
@@ -89,7 +87,7 @@ export class ConversationsService {
       throw new ForbiddenException(
         `${user.user_id} is not admin conversation ${dto.conversation_id}`,
       );
-    else if (permissionUser.memberType == MemberType.USER) {
+    else if (permissionUser.memberType == MemberType.MEMBER) {
       throw new ForbiddenException(
         `${user.user_id} is not admin conversation ${dto.conversation_id}`,
       );

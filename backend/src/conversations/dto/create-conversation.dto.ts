@@ -8,5 +8,5 @@ export class CreateConversationDto {
 
   @IsString()
   @IsUUID()
-  userOther_id: string;
+  user_id: string;
 }

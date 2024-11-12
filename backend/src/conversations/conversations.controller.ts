@@ -43,7 +43,6 @@ export class ConversationsController {
   @UseGuards(MemberConversationGuard)
   @UseInterceptors(FileInterceptor('avatar-conversation'))
   update(
-    // @User() user: IUser,
     @Body() dto: UpdateConversationDto,
     @UploadedFile(
       new ParseFilePipeBuilder()

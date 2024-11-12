@@ -1,4 +1,3 @@
-import { PrivacyType } from 'src/helper/helper.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -9,7 +8,10 @@ export class Conversation {
   @Column()
   conversationName: string;
 
-  @Column({ default: 'tuanthanh.img.com' })
+  @Column({
+    default:
+      'C:Codeproject-social-spaces/backend/public/images/default/avatar-conversation.jpg',
+  })
   avatar: string;
 
   @Column()
@@ -17,7 +19,4 @@ export class Conversation {
 
   @Column()
   createdAt: Date;
-
-  @Column({ default: PrivacyType.PUBLIC })
-  privacy: PrivacyType;
 }
