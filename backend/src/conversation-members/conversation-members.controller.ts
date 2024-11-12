@@ -5,6 +5,7 @@ import {
   UseGuards,
   Patch,
   Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ConversationMembersService } from './conversation-members.service';
 import { ApiTags } from '@nestjs/swagger';

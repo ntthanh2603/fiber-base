@@ -19,7 +19,11 @@ export class MemberConversationGuard implements CanActivate {
     const user = request.user;
     const body = request.body;
 
+    console.log('>> check 1');
+
     await this.conversationsService.findConversionById(body.conversation_id);
+
+    console.log('>> check 2');
 
     const findMember = await this.conversationMembersService.findMember(
       user.user_id,

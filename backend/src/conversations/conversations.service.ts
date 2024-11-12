@@ -24,15 +24,18 @@ export class ConversationsService {
     @InjectRepository(Conversation)
     private conversationsRepository: Repository<Conversation>,
     @Inject(forwardRef(() => ConversationMembersService))
-    private cmService: ConversationMembersService,
+    private conversationMembersService: ConversationMembersService,
     private relationshipsService: RelationshipsService,
   ) {}
 
-  // find conversation by id
   async findConversionById(conversation_id: string) {
+    console.log('>> check 3');
+
     const conversation = await this.conversationsRepository.findOneBy({
       conversation_id,
     });
+    console.log('>> check 4');
+
     if (conversation) return conversation;
     throw new NotFoundException('Conversation not found');
   }
@@ -55,12 +58,12 @@ export class ConversationsService {
 
     if (relationship.relationship == RelationshipType.FRIEND) {
       // add admin
-      await this.cmService.createAdmin({
+      await this.conversationMembersService.createAdmin({
         conversation_id: conversation.conversation_id,
         user_id: user.user_id,
       });
       // add user
-      await this.cmService.addMember({
+      await this.conversationMembersService.addMember({
         conversation_id: conversation.conversation_id,
         user_id: dto.user_id,
       });
@@ -78,7 +81,7 @@ export class ConversationsService {
     });
     if (!conversation) throw new BadRequestException();
 
-    const permissionUser = await this.cmService.findMember(
+    const permissionUser = await this.conversationMembersService.findMember(
       user.user_id,
       conversation.conversation_id,
     );
@@ -92,7 +95,9 @@ export class ConversationsService {
         `${user.user_id} is not admin conversation ${dto.conversation_id}`,
       );
     } else {
-      await this.cmService.remoteAllMember(dto.conversation_id);
+      await this.conversationMembersService.remoteAllMember(
+        dto.conversation_id,
+      );
 
       return await this.conversationsRepository.delete({
         conversation_id: dto.conversation_id,
