@@ -76,13 +76,13 @@ export class ConversationMembersService {
         `${dto.user_id} was admin in ${dto.conversation_id}`,
       );
 
-    await this.conversationsService.findConversionById(dto.conversation_id);
-
-    return this.cmRepository.save({
-      conversation_id: dto.conversation_id,
-      user_id: dto.user_id,
-      memberType: MemberType.ADMIN,
-    });
+    await this.cmRepository.update(
+      { conversationMember_id: member.conversationMember_id },
+      { memberType: MemberType.ADMIN },
+    );
+    return {
+      result: `User ${dto.user_id} is the admin of conversation ${dto.conversation_id}`,
+    };
   }
 
   // async remote(user: IUser, deleteDto: DeleteConversationMemberDto) {
