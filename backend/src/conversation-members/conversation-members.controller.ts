@@ -1,11 +1,17 @@
-import { Controller, Post, Body, UseGuards, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { ConversationMembersService } from './conversation-members.service';
 import { ApiTags } from '@nestjs/swagger';
-import { AddConversationMember } from './dto/add-conversation-member.dto';
 import { MemberConversationGuard } from 'src/guard/guard-conversation-member';
 import { FriendRelationshipGuard } from 'src/guard/guard-relationship-friend';
 import { AdminConversationGuard } from 'src/guard/guard-conversation-admin';
-import { AddConversationAdmin } from './dto/add-conversation-admin.dto';
+import { ConversationMemberDto } from './dto/conversation-member.dto';
 
 @ApiTags('Conversation members')
 @Controller('conversation-members')
@@ -17,13 +23,19 @@ export class ConversationMembersController {
   @Post('add-member')
   @UseGuards(FriendRelationshipGuard)
   @UseGuards(MemberConversationGuard)
-  addMember(@Body() dto: AddConversationMember) {
+  addMember(@Body() dto: ConversationMemberDto) {
     return this.conversationMembersService.addMember(dto);
   }
 
   @Patch('add-admin')
   @UseGuards(AdminConversationGuard)
-  addAdmin(@Body() dto: AddConversationAdmin) {
+  addAdmin(@Body() dto: ConversationMemberDto) {
     return this.conversationMembersService.updatePermissionAdmin(dto);
+  }
+
+  @Delete('admin-delete-member')
+  @UseGuards(AdminConversationGuard)
+  adminDeleteMember(@Body() dto: ConversationMemberDto) {
+    return this.conversationMembersService.adminDeleteMember(dto);
   }
 }

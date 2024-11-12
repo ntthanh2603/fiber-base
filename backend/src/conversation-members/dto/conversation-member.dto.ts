@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
-export class AddConversationMember {
+export class ConversationMemberDto {
   @IsUUID('4', { message: 'format id is uuid' })
   conversation_id: string;
 

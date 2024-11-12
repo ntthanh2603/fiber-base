@@ -1,7 +1,3 @@
-import { AddConversationMember } from './dto/add-conversation-member.dto';
-import { Conversation } from './../conversations/entities/conversation.entity';
-import { UsersService } from 'src/users/users.service';
-import { IUser } from './../users/users.interface';
 import { ConversationsService } from './../conversations/conversations.service';
 import {
   BadRequestException,
@@ -11,26 +7,23 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-// import { CreateConversationMemberDto } from './dto/create-conversation-member.dto';
-// import { UpdateConversationMemberDto } from './dto/update-conversation-member.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConversationMember } from './entities/conversation-member.entity';
-// import { DeleteConversationMemberDto } from './dto/delete-conversation-member.dto';
 import { MemberType } from 'src/helper/helper.enum';
-import { AddConversationAdmin } from './dto/add-conversation-admin.dto';
+import { ConversationMemberDto } from './dto/conversation-member.dto';
 
 @Injectable()
 export class ConversationMembersService {
   constructor(
     @InjectRepository(ConversationMember)
-    private cmRepository: Repository<ConversationMember>,
+    private conversationMembersRepository: Repository<ConversationMember>,
     @Inject(forwardRef(() => ConversationsService))
     private conversationsService: ConversationsService,
   ) {}
 
   findMember(user_id: string, conversation_id: string) {
-    return this.cmRepository.findOne({
+    return this.conversationMembersRepository.findOne({
       where: {
         user_id: user_id,
         conversation_id: conversation_id,
@@ -38,7 +31,7 @@ export class ConversationMembersService {
     });
   }
 
-  async addMember(dto: AddConversationMember) {
+  async addMember(dto: ConversationMemberDto) {
     const member = await this.findMember(dto.user_id, dto.conversation_id);
     if (member)
       throw new BadRequestException(
@@ -47,24 +40,24 @@ export class ConversationMembersService {
 
     await this.conversationsService.findConversionById(dto.conversation_id);
 
-    return this.cmRepository.save({
+    return this.conversationMembersRepository.save({
       conversation_id: dto.conversation_id,
       user_id: dto.user_id,
       memberType: MemberType.MEMBER,
     });
   }
 
-  async createAdmin(dto: AddConversationAdmin) {
+  async createAdmin(dto: ConversationMemberDto) {
     await this.conversationsService.findConversionById(dto.conversation_id);
 
-    return this.cmRepository.save({
+    return this.conversationMembersRepository.save({
       conversation_id: dto.conversation_id,
       user_id: dto.user_id,
       memberType: MemberType.ADMIN,
     });
   }
 
-  async updatePermissionAdmin(dto: AddConversationAdmin) {
+  async updatePermissionAdmin(dto: ConversationMemberDto) {
     const member = await this.findMember(dto.user_id, dto.conversation_id);
     if (!member)
       throw new BadRequestException(
@@ -76,7 +69,7 @@ export class ConversationMembersService {
         `${dto.user_id} was admin in ${dto.conversation_id}`,
       );
 
-    await this.cmRepository.update(
+    await this.conversationMembersRepository.update(
       { conversationMember_id: member.conversationMember_id },
       { memberType: MemberType.ADMIN },
     );
@@ -85,8 +78,27 @@ export class ConversationMembersService {
     };
   }
 
-  async remoteAllMember(conversation_id) {
-    await this.cmRepository.delete({ conversation_id });
-    return;
+  remoteAllMember(conversation_id: string) {
+    return this.conversationMembersRepository.delete({ conversation_id });
+  }
+
+  async checkMember(user_id: string, conversation_id: string) {
+    const conversationMember = await this.findMember(user_id, conversation_id);
+
+    if (!conversationMember)
+      throw new NotFoundException(
+        `User ${user_id} isn't conversation member ${conversation_id}`,
+      );
+    else if (conversationMember.memberType == MemberType.MEMBER)
+      return conversationMember;
+    else throw new ForbiddenException(`User is Admin`);
+  }
+
+  async adminDeleteMember(dto: ConversationMemberDto) {
+    await this.checkMember(dto.user_id, dto.conversation_id);
+    return await this.conversationMembersRepository.delete({
+      user_id: dto.user_id,
+      conversation_id: dto.conversation_id,
+    });
   }
 }
