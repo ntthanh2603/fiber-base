@@ -1,3 +1,4 @@
+import { isUUID } from 'class-validator';
 import { ConversationsService } from './../conversations/conversations.service';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 
@@ -9,6 +10,10 @@ export class CreatorConversationGuard implements CanActivate {
 
     const user = request.user;
     const body = request.body;
+
+    if (!isUUID(body.conversation_id, '4') || !isUUID(user.user_id, '4')) {
+      return false;
+    }
 
     const creator = await this.conversationsService.findConversionById(
       body.conversation_id,

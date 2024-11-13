@@ -26,7 +26,7 @@ export class ConversationMembersController {
   ) {}
 
   @Post('add-member')
-  @UseGuards(FriendRelationshipGuard)
+  // @UseGuards(FriendRelationshipGuard)
   @UseGuards(MemberConversationGuard)
   addMember(@Body() dto: ConversationMemberDto) {
     return this.conversationMembersService.addMember(dto);

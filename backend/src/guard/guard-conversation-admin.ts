@@ -1,4 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { isUUID } from 'class-validator';
 import { ConversationMembersService } from 'src/conversation-members/conversation-members.service';
 import { MemberType } from 'src/helper/helper.enum';
 
@@ -10,6 +11,10 @@ export class AdminConversationGuard implements CanActivate {
 
     const user = request.user;
     const body = request.body;
+
+    if (!isUUID(body.conversation_id, '4') || !isUUID(user.user_id, '4')) {
+      return false;
+    }
 
     const findMember = await this.conversationMembersService.findMember(
       user.user_id,
