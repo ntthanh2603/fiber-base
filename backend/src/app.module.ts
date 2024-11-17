@@ -1,5 +1,6 @@
-import { MessagesModule } from './messgages/messgages.module';
 import { Module } from '@nestjs/common';
+import { MessagesModule } from './messgages/messgages.module';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -15,7 +16,7 @@ import { GroupMembersModule } from './group-members/group-members.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // Để module config có thể sử dụng ở mọi nơi mà không cần import lại
-      envFilePath: '.env', // Đường dẫn tới file .env
+      envFilePath: '...env', // Đường dẫn tới file .env
     }),
     DatabaseModule,
     ConfigModule.forRoot({
