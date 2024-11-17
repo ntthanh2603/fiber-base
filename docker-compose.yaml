@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
-    # restart: unless-stopped
+    restart: unless-stopped
 
   # Backend
   backend:
@@ -41,7 +41,7 @@ services:
       - /usr/src/app/node_modules
     networks:
       - app-network
-    # restart: unless-stopped
+    restart: unless-stopped
 
   # Frontend
   frontend:
@@ -53,9 +53,9 @@ services:
       - ./frontend:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - "3002:5173"
+      - "3006:5173"
     environment:
-      - VITE_API_URL=http://localhost:3002
+      - VITE_API_URL=http://localhost:3006
     depends_on:
       - backend
     networks:

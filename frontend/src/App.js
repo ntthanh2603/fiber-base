@@ -7,7 +7,7 @@ function Home() {
     <Container>
       <Row>
         <Col>
-          <h1>Trang Home</h1>
+          <h1>Trang Chu Nguyen Tuan Thanh</h1>
           <p>Đây là nội dung trang chủ.</p>
         </Col>
       </Row>
