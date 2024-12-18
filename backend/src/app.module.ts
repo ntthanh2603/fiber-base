@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { MessagesModule } from './messgages/messgages.module';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -8,10 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
 
-import { RelationshipsModule } from './relationships/relationships.module';
-import { ConversationsModule } from './conversations/conversations.module';
-import { ConversationMembersModule } from './conversation-members/conversation-members.module';
-import { GroupMembersModule } from './group-members/group-members.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,11 +18,6 @@ import { GroupMembersModule } from './group-members/group-members.module';
     }),
     UsersModule,
     AuthModule,
-    RelationshipsModule,
-    MessagesModule,
-    ConversationsModule,
-    ConversationMembersModule,
-    GroupMembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
