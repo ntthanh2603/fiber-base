@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="project-social-spaces" uuid="ab9f0890-3e86-4f09-81bd-b9ae7154001a">
+    <data-source source="LOCAL" name="connect" uuid="84bc6d8b-b31d-4565-b2b9-eec4581fb20f">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:3001/database-postgres</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="nest-postgres@localhost" uuid="71f36d2a-cf46-436a-b73f-ffa883939853">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:3001/nest-postgres</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:3001/project-social-spaces</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

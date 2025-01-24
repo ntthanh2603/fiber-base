@@ -1,0 +1,8 @@
+:global(body) {
+    margin: 0;
+    padding: 0;
+    background-color: #c14343;
+  }
+  :global(h1) {
+    color: #111;
+  }

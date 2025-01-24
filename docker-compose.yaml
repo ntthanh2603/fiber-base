@@ -44,23 +44,23 @@ services:
     restart: unless-stopped
 
   # Frontend
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - "3006:5173"
-    environment:
-      - VITE_API_URL=http://localhost:3006
-    depends_on:
-      - backend
-    networks:
-      - app-network
-    restart: unless-stopped
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./frontend:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - "3006:5173"
+  #   environment:
+  #     - VITE_API_URL=http://localhost:3006
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
 
 networks:
   app-network:
