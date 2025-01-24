@@ -2,7 +2,7 @@ import { BellOutlined, CommentOutlined, GithubOutlined, GlobalOutlined, HomeOutl
 import { Menu } from 'antd';
 import { Input } from 'antd';
 import Avatar from 'antd/es/avatar/avatar';
-
+import '../../styles/MenuBar.css'
 
 const MenuBar = () => {
 
@@ -12,19 +12,19 @@ const MenuBar = () => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}> 
-      <div style={{ display: 'flex'}}>
-        <GithubOutlined style={{fontSize: '30px', margin: '0 10px 0 10px '}} />
+      <div style={{ display: 'flex', width: '30%'}}>
+        <GithubOutlined style={{fontSize: '30px', margin: '0 20px 0 20px '}} />
         <Search
-          placeholder="input search text"
+          placeholder="Tìm kiếm trên Social Space"
           allowClear
           onSearch={onSearch}
           style={{
-              width: 200,
+          width: '70%',
           }}
         />
       </div>
  
-      <Menu mode="horizontal" style={{width: '24%'}}>
+      <Menu mode="horizontal" style={{width: '30%' }}>
         <Menu.Item key="home" icon={<HomeOutlined />}>
           <a href='/'>Trang chủ</a>  
         </Menu.Item>
@@ -39,7 +39,7 @@ const MenuBar = () => {
         </Menu.Item>
       </Menu>
 
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" style={{width: '25%' }}>
         <Menu.Item key="messages" icon={<CommentOutlined />}>
           <a href='/chatRooms'>Tin nhắn</a>
         </Menu.Item>
