@@ -1,13 +1,6 @@
-:global(body) {
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-  }
 
-:global(h1) {
-    color: #111;
-}
-
-.custom-icon {
-  font-size: 48px; 
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #EFF2F8;
 }
