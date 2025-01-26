@@ -5,21 +5,30 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  user_id: string;
+  id: string;
 
-  @Column()
-  username: string;
-
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   @MinLength(8)
-  @MaxLength(10)
+  @MaxLength(15)
   password: string;
 
   @Column({ default: null })
   avatar: string;
+
+  @Column()
+  first_name: string;
+
+  @Column()
+  last_name: string;
+
+  @Column({ default: null })
+  bio: string;
+
+  @Column({ default: null })
+  website: string;
 
   @Column({ type: 'int' })
   age: number;
@@ -30,14 +39,14 @@ export class User {
   @Column()
   address: string;
 
-  @Column({ default: null })
-  description: string;
+  @Column({ type: 'enum', enum: PrivacyType, default: PrivacyType.PUBLIC })
+  privacy: PrivacyType;
 
-  @Column({ type: 'enum', enum: StatusType, default: StatusType.OFF })
-  status: StatusType;
+  @Column()
+  follower_count: number;
 
-  @Column({ default: null })
-  refreshToken: string;
+  @Column()
+  followed_count: number;
 
   @Column()
   createdAt: Date;
@@ -45,9 +54,9 @@ export class User {
   @Column({ default: null })
   updatedAt: Date;
 
-  @Column({ default: null })
-  deletedAt: Date;
+  @Column({ type: 'enum', enum: StatusType, default: StatusType.OFF })
+  status: StatusType;
 
-  @Column({ type: 'enum', enum: PrivacyType, default: PrivacyType.PUBLIC })
-  privacy: PrivacyType;
+  @Column({ default: null })
+  refreshToken: string;
 }

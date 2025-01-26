@@ -1,19 +1,27 @@
+import { useEffect, useState } from "react";
 import Header from "./components/layout/Header"
 import { fetchHome } from "./services/api.service";
 
 function  App() {
-  
-  const fetch = async () => {
-    const response = await fetchHome();
-    console.log(response);
-  }
-  fetch();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchHome();
+      setData(response);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
       <Header/>
-      <div style={{ marginTop: '10000px'}}>
-jhjhg
+      <div style={{ marginTop: '100px'}}>
+        {data ? (
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
     </>
   )
