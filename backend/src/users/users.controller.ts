@@ -8,6 +8,8 @@ import {
   ParseFilePipeBuilder,
   HttpStatus,
   UseInterceptors,
+  Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
@@ -15,6 +17,7 @@ import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { isUUID } from 'class-validator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -22,10 +25,19 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Public()
-  @Get(':user_id')
+  @Get(':id')
   @ResponseMessage('User by user_id')
   findUserById(@Param('id') id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException(`Invalid ID format: ${id}`);
+    }
     return this.usersService.findUserById(id);
+  }
+
+  @Delete()
+  @ResponseMessage('Delete User')
+  deleteUser(@User() user: IUser) {
+    return this.usersService.deleteUser(user.id);
   }
 
   @Patch()

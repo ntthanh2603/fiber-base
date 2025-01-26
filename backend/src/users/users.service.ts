@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -81,24 +85,34 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: { id },
       select: [
+        'id',
         'email',
-
-        'age',
         'avatar',
+        'first_name',
+        'last_name',
+        'bio',
+        'website',
+        'age',
         'gender',
         'address',
-
+        'privacy',
+        'follower_count',
+        'followed_count',
         'createdAt',
         'updatedAt',
-
-        'privacy',
+        'status',
       ],
     });
 
-    if (!user) return null;
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
 
-    // if (!user.deletedAt) return user;
-    return null;
+    return user;
+  }
+
+  async deleteUser(id: string) {
+    return await this.usersRepository.delete({ id });
   }
 
   async updateProfile(

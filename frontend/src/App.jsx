@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/layout/Header"
 import { fetchHome } from "./services/api.service";
 
+
 function  App() {
   const [data, setData] = useState(null);
 
@@ -23,6 +24,7 @@ function  App() {
           <p>Loading...</p>
         )}
       </div>
+
     </>
   )
 }
