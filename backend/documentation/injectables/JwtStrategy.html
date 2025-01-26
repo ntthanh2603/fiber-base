@@ -115,7 +115,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/auth/passpost/jwt.strategy.ts</code>
+            <code>src/auth/passport/jwt.strategy.ts</code>
         </p>
 
 
@@ -168,7 +168,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/auth/passpost/jwt.strategy.ts:13</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/auth/passport/jwt.strategy.ts:13</a></div>
                             </td>
                         </tr>
 
@@ -245,8 +245,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="26"
-                                    class="link-to-prism">src/auth/passpost/jwt.strategy.ts:26</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="27"
+                                    class="link-to-prism">src/auth/passport/jwt.strategy.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -298,9 +298,9 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ExtractJwt, Strategy } from &#x27;passport-jwt&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@nestjs/common&#x27;;
 import { PassportStrategy } from &#x27;@nestjs/passport&#x27;;
-import { Injectable } from &#x27;@nestjs/common&#x27;;
+import { ExtractJwt, Strategy } from &#x27;passport-jwt&#x27;;
 import { ConfigService } from &#x27;@nestjs/config&#x27;;
 import { UsersService } from &#x27;src/users/users.service&#x27;;
 import { IUser } from &#x27;src/users/users.interface&#x27;;
@@ -316,20 +316,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private usersService: UsersService,
   ) {
     super({
-      // Cấu hình chiến lược để trích xuất JWT từ headẻ Authorization dưới dạng bearer token
+      // Cấu hình chiến lược để trích xuất JWT từ header Authorization dưới dạng bearer token
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get&lt;string&gt;(&#x27;JWT_ACCESS_TOKEN_SECRET&#x27;),
     });
   }
+
   // Xác thực payload người dùng và trả về thông tin
   async validate(payload: IUser) {
-    const { user_id, username, email } &#x3D; payload;
-    return {
-      user_id,
-      username,
-      email,
-    };
+    // const { id, email, first_name, last_name } &#x3D; payload;
+    return payload;
   }
 }
 </code></pre>

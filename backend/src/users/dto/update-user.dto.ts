@@ -1,22 +1,48 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
+  Min,
   MinLength,
 } from 'class-validator';
 import { GenderType, PrivacyType } from 'src/helper/helper.enum';
 
 export class UpdateUserDto {
-  @IsNotEmpty({ message: 'Tên nguời dùng không được trống' })
+  @MinLength(2)
+  @MaxLength(20)
   @IsString()
-  @ApiProperty({ example: 'Nguyễn Tuấn Thành', description: 'username' })
+  @IsNotEmpty({ message: 'First name not empty' })
+  @ApiProperty({ example: 'Tuấn', description: 'Your first name' })
+  first_name: string;
+
+  @MinLength(2)
+  @MaxLength(20)
+  @IsString()
+  @IsNotEmpty({ message: 'Last name not empty' })
+  @ApiProperty({ example: 'Thành', description: 'Your last name' })
+  last_name: string;
+
+  @ApiProperty({ example: 'Good boy', description: 'bio' })
+  @MinLength(5, { message: 'Bio không được nhỏ hơn 5 ký tự' })
+  @MaxLength(100, { message: 'Bio không được lớn hơn 100 ký tự' })
   @IsOptional()
-  username: string;
+  bio: string;
+
+  @ApiProperty({
+    example: 'https://github.com/ntthanh2603',
+    description: 'website',
+  })
+  @MinLength(5)
+  @MaxLength(100)
+  @IsOptional()
+  website: string;
 
   @ApiProperty({ example: 20, description: 'age' })
+  @Max(100, { message: 'Tuổi không được lớn hơn 100' })
+  @Min(1, { message: 'Tuổi không được nhỏ hơn 1' })
   @IsOptional()
   age: number;
 
@@ -25,14 +51,12 @@ export class UpdateUserDto {
   gender: GenderType;
 
   @ApiProperty({ example: 'Cau Giay, Ha Noi', description: 'address' })
+  @MinLength(5, { message: 'Địa chỉ không được nhỏ hơn 5 ký tự' })
+  @MaxLength(100, { message: 'Địa chỉ không được lớn hơn 100 ký tự' })
   @IsOptional()
   address: string;
 
-  @ApiProperty({ example: 'Good boy', description: 'description' })
+  @ApiProperty({ example: PrivacyType.PUBLIC, description: 'privacy' })
   @IsOptional()
-  description: string;
-
-  @IsOptional()
-  @ApiProperty({ example: PrivacyType.PUBLIC })
   privacy: PrivacyType;
 }

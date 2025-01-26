@@ -24,10 +24,7 @@ export class AuthService {
   // Validate user
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.usersService.findUserByEmail(email);
-    if (
-      !user ||
-      !(await this.usersService.isValidPassword(password, user.password))
-    ) {
+    if (!user || !this.usersService.isValidPassword(password, user.password)) {
       throw new UnauthorizedException('Invalid credentials');
     }
     return user;
@@ -42,20 +39,30 @@ export class AuthService {
     return refresh_token;
   }
 
-  async login(loginUserDto: LoginUserDto, response: Response) {
-    const { email, password } = loginUserDto;
-    const user = await this.validateUser(email, password);
-    const { user_id, username } = user;
+  async login(dto: LoginUserDto, response: Response) {
+    const user = await this.validateUser(dto.email, dto.password);
 
     const payload = {
-      user_id,
-      username,
-      email,
+      id: user.id,
+      email: user.email,
+      avatar: user.avatar,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      bio: user.bio,
+      website: user.website,
+      age: user.age,
+      gender: user.gender,
+      address: user.address,
+      privacy: user.privacy,
+      follower_count: user.follower_count,
+      followed_count: user.followed_count,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
 
     const refresh_token = this.createRefreshToken(payload);
 
-    await this.usersService.updateUserToken(refresh_token, user_id);
+    await this.usersService.updateUserToken(refresh_token, user.id);
 
     response.cookie('refresh_token', refresh_token, {
       httpOnly: true,
@@ -65,9 +72,15 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        user_id,
-        username,
-        email,
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        bio: user.bio,
+        website: user.website,
+        age: user.age,
+        gender: user.gender,
+        addres: user.address,
       },
     };
   }
@@ -77,47 +90,66 @@ export class AuthService {
     const newUser = await this.usersService.register(user, file);
 
     return {
-      user_id: newUser.user_id,
-      username: newUser.username,
-      email: newUser.email,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+        bio: newUser.bio,
+        website: newUser.website,
+        age: newUser.age,
+        gender: newUser.gender,
+        addres: newUser.address,
+      },
     };
   }
 
   async processNewToken(refreshToken: string, response: Response) {
     try {
-      this.jwtService.verify(refreshToken, {
+      const payload = this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       });
 
-      let user = await this.usersService.findUserByToken(refreshToken);
-
-      if (user) {
-        const { username, user_id, email } = user;
-        const payload = {
-          user_id,
-          username,
-          email,
-        };
-
-        return {
-          access_token: this.jwtService.sign(payload),
-          user: {
-            user_id,
-            username,
-            email,
-          },
-        };
-      } else {
-        throw new BadRequestException('Refresh invalid');
+      if (!payload || !payload.sub) {
+        throw new BadRequestException('Invalid refresh token');
       }
-    } catch (error) {
-      throw new BadRequestException('Refresh invalid');
+
+      const user = await this.usersService.findUserByToken(refreshToken);
+
+      if (!user) {
+        throw new BadRequestException('User not found or token invalid');
+      }
+
+      const { id, email } = user;
+      const newAccessToken = this.jwtService.sign(
+        { id, email },
+        { expiresIn: '15m' },
+      );
+
+      response.cookie('access_token', newAccessToken, { httpOnly: true });
+
+      return {
+        access_token: newAccessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          bio: user.bio,
+          website: user.website,
+          age: user.age,
+          gender: user.gender,
+          addres: user.address,
+        },
+      };
+    } catch {
+      throw new BadRequestException('Refresh token invalid or expired');
     }
   }
 
   async logout(response: Response, user: IUser) {
-    await this.usersService.updateUserToken('', user.user_id);
+    await this.usersService.updateUserToken('', user.id);
     response.clearCookie('refresh_token');
-    return 'OK';
+    return user;
   }
 }

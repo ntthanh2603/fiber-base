@@ -4,7 +4,6 @@ import {
   Body,
   Param,
   Patch,
-  Delete,
   UploadedFile,
   ParseFilePipeBuilder,
   HttpStatus,
@@ -25,14 +24,8 @@ export class UsersController {
   @Public()
   @Get(':user_id')
   @ResponseMessage('User by user_id')
-  findUserById(@Param('user_id') user_id: string) {
-    return this.usersService.findUserById(user_id);
-  }
-
-  @Delete()
-  @ResponseMessage('Delete user')
-  deleteUser(@User() user: IUser) {
-    return this.usersService.deleteUser(user);
+  findUserById(@Param('id') id: string) {
+    return this.usersService.findUserById(id);
   }
 
   @Patch()

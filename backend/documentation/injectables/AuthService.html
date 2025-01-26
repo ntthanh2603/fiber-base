@@ -268,8 +268,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="36"
-                                    class="link-to-prism">src/auth/auth.service.ts:36</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="33"
+                                    class="link-to-prism">src/auth/auth.service.ts:33</a></div>
                         </td>
                     </tr>
 
@@ -326,15 +326,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>login(loginUserDto: <a href="../classes/LoginUserDto.html" target="_self">LoginUserDto</a>, response: <a href="../interfaces/Response.html" target="_self">Response</a>)</code>
+                    <code>login(dto: <a href="../classes/LoginUserDto.html" target="_self">LoginUserDto</a>, response: <a href="../interfaces/Response.html" target="_self">Response</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="45"
-                                    class="link-to-prism">src/auth/auth.service.ts:45</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="42"
+                                    class="link-to-prism">src/auth/auth.service.ts:42</a></div>
                         </td>
                     </tr>
 
@@ -355,7 +355,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>loginUserDto</td>
+                                                <td>dto</td>
                                             <td>
                                                             <code><a href="../classes/LoginUserDto.html" target="_self" >LoginUserDto</a></code>
                                             </td>
@@ -414,8 +414,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="118"
-                                    class="link-to-prism">src/auth/auth.service.ts:118</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="150"
+                                    class="link-to-prism">src/auth/auth.service.ts:150</a></div>
                         </td>
                     </tr>
 
@@ -495,8 +495,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="86"
-                                    class="link-to-prism">src/auth/auth.service.ts:86</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="107"
+                                    class="link-to-prism">src/auth/auth.service.ts:107</a></div>
                         </td>
                     </tr>
 
@@ -576,8 +576,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="76"
-                                    class="link-to-prism">src/auth/auth.service.ts:76</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="89"
+                                    class="link-to-prism">src/auth/auth.service.ts:89</a></div>
                         </td>
                     </tr>
 
@@ -748,10 +748,7 @@ export class AuthService {
   // Validate user
   async validateUser(email: string, password: string): Promise&lt;User&gt; {
     const user &#x3D; await this.usersService.findUserByEmail(email);
-    if (
-      !user ||
-      !(await this.usersService.isValidPassword(password, user.password))
-    ) {
+    if (!user || !this.usersService.isValidPassword(password, user.password)) {
       throw new UnauthorizedException(&#x27;Invalid credentials&#x27;);
     }
     return user;
@@ -766,20 +763,30 @@ export class AuthService {
     return refresh_token;
   }
 
-  async login(loginUserDto: LoginUserDto, response: Response) {
-    const { email, password } &#x3D; loginUserDto;
-    const user &#x3D; await this.validateUser(email, password);
-    const { user_id, username } &#x3D; user;
+  async login(dto: LoginUserDto, response: Response) {
+    const user &#x3D; await this.validateUser(dto.email, dto.password);
 
     const payload &#x3D; {
-      user_id,
-      username,
-      email,
+      id: user.id,
+      email: user.email,
+      avatar: user.avatar,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      bio: user.bio,
+      website: user.website,
+      age: user.age,
+      gender: user.gender,
+      address: user.address,
+      privacy: user.privacy,
+      follower_count: user.follower_count,
+      followed_count: user.followed_count,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
 
     const refresh_token &#x3D; this.createRefreshToken(payload);
 
-    await this.usersService.updateUserToken(refresh_token, user_id);
+    await this.usersService.updateUserToken(refresh_token, user.id);
 
     response.cookie(&#x27;refresh_token&#x27;, refresh_token, {
       httpOnly: true,
@@ -789,9 +796,15 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       user: {
-        user_id,
-        username,
-        email,
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        bio: user.bio,
+        website: user.website,
+        age: user.age,
+        gender: user.gender,
+        addres: user.address,
       },
     };
   }
@@ -801,48 +814,67 @@ export class AuthService {
     const newUser &#x3D; await this.usersService.register(user, file);
 
     return {
-      user_id: newUser.user_id,
-      username: newUser.username,
-      email: newUser.email,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+        bio: newUser.bio,
+        website: newUser.website,
+        age: newUser.age,
+        gender: newUser.gender,
+        addres: newUser.address,
+      },
     };
   }
 
   async processNewToken(refreshToken: string, response: Response) {
     try {
-      this.jwtService.verify(refreshToken, {
+      const payload &#x3D; this.jwtService.verify(refreshToken, {
         secret: this.configService.get&lt;string&gt;(&#x27;JWT_REFRESH_TOKEN_SECRET&#x27;),
       });
 
-      let user &#x3D; await this.usersService.findUserByToken(refreshToken);
-
-      if (user) {
-        const { username, user_id, email } &#x3D; user;
-        const payload &#x3D; {
-          user_id,
-          username,
-          email,
-        };
-
-        return {
-          access_token: this.jwtService.sign(payload),
-          user: {
-            user_id,
-            username,
-            email,
-          },
-        };
-      } else {
-        throw new BadRequestException(&#x27;Refresh invalid&#x27;);
+      if (!payload || !payload.sub) {
+        throw new BadRequestException(&#x27;Invalid refresh token&#x27;);
       }
-    } catch (error) {
-      throw new BadRequestException(&#x27;Refresh invalid&#x27;);
+
+      const user &#x3D; await this.usersService.findUserByToken(refreshToken);
+
+      if (!user) {
+        throw new BadRequestException(&#x27;User not found or token invalid&#x27;);
+      }
+
+      const { id, email } &#x3D; user;
+      const newAccessToken &#x3D; this.jwtService.sign(
+        { id, email },
+        { expiresIn: &#x27;15m&#x27; },
+      );
+
+      response.cookie(&#x27;access_token&#x27;, newAccessToken, { httpOnly: true });
+
+      return {
+        access_token: newAccessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          bio: user.bio,
+          website: user.website,
+          age: user.age,
+          gender: user.gender,
+          addres: user.address,
+        },
+      };
+    } catch {
+      throw new BadRequestException(&#x27;Refresh token invalid or expired&#x27;);
     }
   }
 
   async logout(response: Response, user: IUser) {
-    await this.usersService.updateUserToken(&#x27;&#x27;, user.user_id);
+    await this.usersService.updateUserToken(&#x27;&#x27;, user.id);
     response.clearCookie(&#x27;refresh_token&#x27;);
-    return &#x27;OK&#x27;;
+    return user;
   }
 }
 </code></pre>

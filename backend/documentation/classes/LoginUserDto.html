@@ -199,7 +199,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsNotEmpty({message: &#x27;Email không được trống&#x27;})<br />@IsEmail({}, {message: &#x27;Email không đúng định dạng&#x27;})<br />@IsString({message: &#x27;Type email is string&#x27;})<br />@ApiProperty({example: &#x27;user1@gmail.com&#x27;, description: &#x27;email&#x27;})<br />
+                            @IsNotEmpty({message: &#x27;Email không được trống&#x27;})<br />@IsEmail({}, {message: &#x27;Email không đúng định dạng&#x27;})<br />@IsString({message: &#x27;Type email is string&#x27;})<br />@ApiProperty({example: &#x27;user@gmail.com&#x27;, description: &#x27;email&#x27;})<br />
                         </code>
                     </td>
                 </tr>
@@ -277,7 +277,7 @@ export class LoginUserDto {
   @IsNotEmpty({ message: &#x27;Email không được trống&#x27; })
   @IsEmail({}, { message: &#x27;Email không đúng định dạng&#x27; })
   @IsString({ message: &#x27;Type email is string&#x27; })
-  @ApiProperty({ example: &#x27;user1@gmail.com&#x27;, description: &#x27;email&#x27; })
+  @ApiProperty({ example: &#x27;user@gmail.com&#x27;, description: &#x27;email&#x27; })
   email: string;
 
   @IsNotEmpty({ message: &#x27;Mật khẩu không được trống&#x27; })

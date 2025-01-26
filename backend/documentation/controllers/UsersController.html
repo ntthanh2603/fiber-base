@@ -143,11 +143,6 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
-                                <a href="#deleteUser" >deleteUser</a>
-                            </li>
-                            <li>
-                                    <span class="modifier"></span>
-                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                 <a href="#findUserById" >findUserById</a>
                             </li>
@@ -178,83 +173,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="deleteUser"></a>
-                    <span class="name">
-                            <span class="modifier"></span>
-                            <span class="modifier"></span>
-                        <span ><b>deleteUser</b></span>
-                        <a href="#deleteUser"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>deleteUser(user: <a href="../interfaces/IUser.html" target="_self">IUser</a>)</code>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="col-md-4">
-                    <b>Decorators : </b>
-                    <br />
-                    <code>@Delete()<br />@ResponseMessage(&#x27;Delete user&#x27;)<br /></code>
-                </td>
-            </tr>
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="35"
-                                    class="link-to-prism">src/users/users.controller.ts:35</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>user</td>
-                                            <td>
-                                                            <code><a href="../interfaces/IUser.html" target="_self" >IUser</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                        </div>
-                            <div class="io-description">
-                                
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="findUserById"></a>
                     <span class="name">
                             <span class="modifier"></span>
@@ -268,7 +186,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findUserById(user_id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>findUserById(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -282,8 +200,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="29"
-                                    class="link-to-prism">src/users/users.controller.ts:29</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="27"
+                                    class="link-to-prism">src/users/users.controller.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -304,7 +222,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>user_id</td>
+                                                <td>id</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
@@ -360,8 +278,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="42"
-                                    class="link-to-prism">src/users/users.controller.ts:42</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="34"
+                                    class="link-to-prism">src/users/users.controller.ts:34</a></div>
                         </td>
                     </tr>
 
@@ -438,11 +356,9 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
   Patch,
-  Delete,
   UploadedFile,
   ParseFilePipeBuilder,
   HttpStatus,
@@ -463,14 +379,8 @@ export class UsersController {
   @Public()
   @Get(&#x27;:user_id&#x27;)
   @ResponseMessage(&#x27;User by user_id&#x27;)
-  findUserById(@Param(&#x27;user_id&#x27;) user_id: string) {
-    return this.usersService.findUserById(user_id);
-  }
-
-  @Delete()
-  @ResponseMessage(&#x27;Delete user&#x27;)
-  deleteUser(@User() user: IUser) {
-    return this.usersService.deleteUser(user);
+  findUserById(@Param(&#x27;id&#x27;) id: string) {
+    return this.usersService.findUserById(id);
   }
 
   @Patch()

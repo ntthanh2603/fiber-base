@@ -163,13 +163,13 @@
     useFactory: async (configService: ConfigService) &#x3D;&gt; {
       const dataSource &#x3D; new DataSource({
         type: &#x27;postgres&#x27;,
-        host: configService.get(&#x27;POSTGRES_HOST&#x27;),
-        port: configService.get(&#x27;POSTGRES_PORT&#x27;),
-        username: configService.get(&#x27;POSTGRES_USER&#x27;),
-        password: configService.get(&#x27;POSTGRES_PASSWORD&#x27;),
-        database: configService.get(&#x27;POSTGRES_DB&#x27;),
+        host: configService.get(&#x27;DATABASE_HOST&#x27;),
+        port: configService.get(&#x27;DATABASE_PORT&#x27;),
+        username: configService.get(&#x27;DATABASE_USERNAME&#x27;),
+        password: configService.get(&#x27;DATABASE_PASSWORD&#x27;),
+        database: configService.get(&#x27;DATABASE_NAME&#x27;),
         entities: [__dirname + &#x27;/../**/*.entity{.ts,.js}&#x27;],
-        synchronize: configService.get(&#x27;POSTGRES_SYNC&#x27;),
+        synchronize: true,
       });
       return dataSource.initialize();
     },

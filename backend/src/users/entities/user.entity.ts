@@ -42,10 +42,10 @@ export class User {
   @Column({ type: 'enum', enum: PrivacyType, default: PrivacyType.PUBLIC })
   privacy: PrivacyType;
 
-  @Column()
+  @Column({ default: 0 })
   follower_count: number;
 
-  @Column()
+  @Column({ default: 0 })
   followed_count: number;
 
   @Column()

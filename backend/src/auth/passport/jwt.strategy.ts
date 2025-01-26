@@ -1,6 +1,6 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
 import { IUser } from 'src/users/users.interface';
@@ -16,12 +16,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private usersService: UsersService,
   ) {
     super({
-      // Cấu hình chiến lược để trích xuất JWT từ headẻ Authorization dưới dạng bearer token
+      // Cấu hình chiến lược để trích xuất JWT từ header Authorization dưới dạng bearer token
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
     });
   }
+
   // Xác thực payload người dùng và trả về thông tin
   async validate(payload: IUser) {
     // const { id, email, first_name, last_name } = payload;

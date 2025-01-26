@@ -142,9 +142,13 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#address" >address</a>
                             </li>
                             <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                 <a href="#age" >age</a>
@@ -152,7 +156,9 @@
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
-                                <a href="#description" >description</a>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#bio" >bio</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
@@ -160,6 +166,14 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                 <a href="#email" >email</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#first_name" >first_name</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
@@ -172,18 +186,22 @@
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
+                                <a href="#last_name" >last_name</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                 <a href="#password" >password</a>
                             </li>
                             <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
-                                <a href="#privacy" >privacy</a>
-                            </li>
-                            <li>
                                     <span class="modifier"></span>
                                     <span class="modifier"></span>
-                                    <span class="modifier"></span>
-                                <a href="#username" >username</a>
+                                <a href="#website" >website</a>
                             </li>
                         </ul>
                     </td>
@@ -212,6 +230,8 @@
                     <span class="name">
                             <span class="modifier"></span>
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                         <span ><b>address</b></span>
                         <a href="#address"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -228,13 +248,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ApiProperty({example: &#x27;Cau Giay, Ha Noi&#x27;, description: &#x27;address&#x27;})<br />@IsOptional()<br />
+                            @ApiProperty({example: &#x27;Cau Giay, Ha Noi&#x27;, description: &#x27;address&#x27;})<br />@MinLength(5, {message: &#x27;Địa chỉ không được nhỏ hơn 5 ký tự&#x27;})<br />@MaxLength(100, {message: &#x27;Địa chỉ không được lớn hơn 100 ký tự&#x27;})<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/users/dto/create-user.dto.ts:42</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/users/dto/create-user.dto.ts:71</a></div>
                         </td>
                     </tr>
 
@@ -247,6 +267,8 @@
                 <td class="col-md-4">
                     <a name="age"></a>
                     <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                         <span ><b>age</b></span>
@@ -265,13 +287,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ApiProperty({example: 20, description: &#x27;age&#x27;})<br />@IsOptional()<br />
+                            @ApiProperty({example: 20, description: &#x27;age&#x27;})<br />@Max(100, {message: &#x27;Tuổi không được lớn hơn 100&#x27;})<br />@Min(1, {message: &#x27;Tuổi không được nhỏ hơn 1&#x27;})<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/users/dto/create-user.dto.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/users/dto/create-user.dto.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -282,12 +304,14 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="description"></a>
+                    <a name="bio"></a>
                     <span class="name">
                             <span class="modifier"></span>
                             <span class="modifier"></span>
-                        <span ><b>description</b></span>
-                        <a href="#description"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>bio</b></span>
+                        <a href="#bio"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
@@ -302,7 +326,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ApiProperty({example: &#x27;Good boy&#x27;, description: &#x27;description&#x27;})<br />@IsOptional()<br />
+                            @ApiProperty({example: &#x27;Good boy&#x27;, description: &#x27;bio&#x27;})<br />@MinLength(5, {message: &#x27;Bio không được nhỏ hơn 5 ký tự&#x27;})<br />@MaxLength(100, {message: &#x27;Bio không được lớn hơn 100 ký tự&#x27;})<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
@@ -347,7 +371,47 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/users/dto/create-user.dto.ts:23</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/users/dto/create-user.dto.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="first_name"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>first_name</b></span>
+                        <a href="#first_name"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @MinLength(2)<br />@MaxLength(20)<br />@IsString()<br />@IsNotEmpty({message: &#x27;First name not empty&#x27;})<br />@ApiProperty({example: &#x27;Tuấn&#x27;, description: &#x27;Your first name&#x27;})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/users/dto/create-user.dto.ts:33</a></div>
                         </td>
                     </tr>
 
@@ -384,7 +448,47 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/users/dto/create-user.dto.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/users/dto/create-user.dto.ts:65</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="last_name"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>last_name</b></span>
+                        <a href="#last_name"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @MinLength(2)<br />@MaxLength(20)<br />@IsString()<br />@IsNotEmpty({message: &#x27;Last name not empty&#x27;})<br />@ApiProperty({example: &#x27;Thành&#x27;, description: &#x27;Your last name&#x27;})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/users/dto/create-user.dto.ts:40</a></div>
                         </td>
                     </tr>
 
@@ -424,7 +528,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/users/dto/create-user.dto.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/users/dto/create-user.dto.ts:26</a></div>
                         </td>
                     </tr>
 
@@ -435,50 +539,14 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="privacy"></a>
-                    <span class="name">
-                            <span class="modifier"></span>
-                            <span class="modifier"></span>
-                        <span ><b>privacy</b></span>
-                        <a href="#privacy"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#PrivacyType" target="_self" >PrivacyType</a></code>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <b>Decorators : </b>
-                        <br />
-                        <code>
-                            @IsOptional()<br />@ApiProperty({example: undefined})<br />
-                        </code>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/users/dto/create-user.dto.ts:50</a></div>
-                        </td>
-                    </tr>
-
-
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="username"></a>
+                    <a name="website"></a>
                     <span class="name">
                             <span class="modifier"></span>
                             <span class="modifier"></span>
                             <span class="modifier"></span>
-                        <span ><b>username</b></span>
-                        <a href="#username"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier"></span>
+                        <span ><b>website</b></span>
+                        <a href="#website"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
@@ -493,13 +561,13 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsNotEmpty({message: &#x27;Tên nguời dùng không được trống&#x27;})<br />@IsString()<br />@ApiProperty({example: &#x27;Nguyễn Tuấn Thành&#x27;, description: &#x27;username&#x27;})<br />
+                            @ApiProperty({example: &#x27;https://github.com/ntthanh2603&#x27;, description: &#x27;website&#x27;})<br />@MinLength(5)<br />@MaxLength(100)<br />@IsOptional()<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/users/dto/create-user.dto.ts:17</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/users/dto/create-user.dto.ts:55</a></div>
                         </td>
                     </tr>
 
@@ -523,19 +591,15 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
-  IsSemVer,
   IsString,
+  Max,
   MaxLength,
+  Min,
   MinLength,
 } from &#x27;class-validator&#x27;;
-import { GenderType, PrivacyType } from &#x27;src/helper/helper.enum&#x27;;
+import { GenderType } from &#x27;src/helper/helper.enum&#x27;;
 
 export class RegisterUserDto {
-  @IsNotEmpty({ message: &#x27;Tên nguời dùng không được trống&#x27; })
-  @IsString()
-  @ApiProperty({ example: &#x27;Nguyễn Tuấn Thành&#x27;, description: &#x27;username&#x27; })
-  username: string;
-
   @IsEmail()
   @IsString()
   @IsNotEmpty({ message: &#x27;Email không được trống&#x27; })
@@ -549,7 +613,38 @@ export class RegisterUserDto {
   @ApiProperty({ example: &#x27;12345678&#x27;, description: &#x27;password&#x27; })
   password: string;
 
+  @MinLength(2)
+  @MaxLength(20)
+  @IsString()
+  @IsNotEmpty({ message: &#x27;First name not empty&#x27; })
+  @ApiProperty({ example: &#x27;Tuấn&#x27;, description: &#x27;Your first name&#x27; })
+  first_name: string;
+
+  @MinLength(2)
+  @MaxLength(20)
+  @IsString()
+  @IsNotEmpty({ message: &#x27;Last name not empty&#x27; })
+  @ApiProperty({ example: &#x27;Thành&#x27;, description: &#x27;Your last name&#x27; })
+  last_name: string;
+
+  @ApiProperty({ example: &#x27;Good boy&#x27;, description: &#x27;bio&#x27; })
+  @MinLength(5, { message: &#x27;Bio không được nhỏ hơn 5 ký tự&#x27; })
+  @MaxLength(100, { message: &#x27;Bio không được lớn hơn 100 ký tự&#x27; })
+  @IsOptional()
+  bio: string;
+
+  @ApiProperty({
+    example: &#x27;https://github.com/ntthanh2603&#x27;,
+    description: &#x27;website&#x27;,
+  })
+  @MinLength(5)
+  @MaxLength(100)
+  @IsOptional()
+  website: string;
+
   @ApiProperty({ example: 20, description: &#x27;age&#x27; })
+  @Max(100, { message: &#x27;Tuổi không được lớn hơn 100&#x27; })
+  @Min(1, { message: &#x27;Tuổi không được nhỏ hơn 1&#x27; })
   @IsOptional()
   age: number;
 
@@ -558,16 +653,10 @@ export class RegisterUserDto {
   gender: GenderType;
 
   @ApiProperty({ example: &#x27;Cau Giay, Ha Noi&#x27;, description: &#x27;address&#x27; })
+  @MinLength(5, { message: &#x27;Địa chỉ không được nhỏ hơn 5 ký tự&#x27; })
+  @MaxLength(100, { message: &#x27;Địa chỉ không được lớn hơn 100 ký tự&#x27; })
   @IsOptional()
   address: string;
-
-  @ApiProperty({ example: &#x27;Good boy&#x27;, description: &#x27;description&#x27; })
-  @IsOptional()
-  description: string;
-
-  @IsOptional()
-  @ApiProperty({ example: PrivacyType.PUBLIC })
-  privacy: PrivacyType;
 }
 </code></pre>
     </div>

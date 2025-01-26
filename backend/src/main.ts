@@ -16,6 +16,8 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));
 
+  app.use(cookieParser());
+
   app.useGlobalPipes(new ValidationPipe());
 
   // Interceptor
@@ -24,8 +26,6 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public')); // js, css, images
   app.setBaseViewsDir(join(__dirname, '..', 'views')); // view
   app.setViewEngine('ejs');
-
-  app.use(cookieParser());
 
   // Config CORS
   app.enableCors({
@@ -50,6 +50,10 @@ async function bootstrap() {
     .addSecurityRequirements('token')
     .setVersion('1.0')
     .build();
+
+  // Để mở documentation thì dùng lệnh sau npx @compodoc/compodoc -p tsconfig.json -s
+  // Rồi vào cổng http://localhost:8080/ để mở documentation
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory, {
     // Dùng option thứ 4 này để khi reload lại trang swagger thì không mất token

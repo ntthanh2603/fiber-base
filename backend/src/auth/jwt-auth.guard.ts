@@ -50,7 +50,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    *          Otherwise, it will throw an exception.
    */
   /******  0c9ce90c-335a-4c7e-99be-072d02e22adc  *******/
-  handleRequest(err, user, info) {
+  handleRequest(err, user) {
     if (err || !user) {
       throw err || new UnauthorizedException('Token invalid');
     }

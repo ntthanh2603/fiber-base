@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -74,6 +75,10 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const refreshToken = request.cookies['refresh_token'];
+
+    if (!refreshToken) {
+      throw new BadRequestException('Refresh token is missing');
+    }
     return this.authService.processNewToken(refreshToken, response);
   }
 

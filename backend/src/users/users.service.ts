@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -30,8 +26,8 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
-  updateUserToken = (refreshToken: string, user_id: string) => {
-    return this.usersRepository.update({ user_id }, { refreshToken });
+  updateUserToken = (refreshToken: string, id: string) => {
+    return this.usersRepository.update({ id }, { refreshToken });
   };
 
   findUserByToken = async (refreshToken: string) => {
@@ -40,26 +36,20 @@ export class UsersService {
     });
   };
 
-  async findUserByEmail(userEmail: string) {
-    const user = await this.usersRepository.findOne({
-      where: { email: userEmail },
+  async findUserByEmail(email: string) {
+    return await this.usersRepository.findOne({
+      where: { email },
     });
-
-    if (user) if (!user.deletedAt) return user;
-    return null;
   }
 
-  async register(user: RegisterUserDto, file: Express.Multer.File) {
-    const { username, email, password, age, gender, address, description } =
-      user;
-
-    const userDb = await this.usersRepository.findOneBy({ email });
+  async register(dto: RegisterUserDto, file: Express.Multer.File) {
+    const userDb = await this.usersRepository.findOneBy({ email: dto.email });
 
     if (userDb) {
-      throw new BadRequestException(`Email: ${email} already exists`);
+      throw new BadRequestException(`Email: ${dto.email} already exists`);
     }
 
-    const hashPassword = this.getHashPassword(password);
+    const hashPassword = this.getHashPassword(dto.password);
 
     let avatar = '';
 
@@ -67,14 +57,17 @@ export class UsersService {
     else avatar = file.path;
 
     const newUser = {
-      username,
-      email,
+      email: dto.email,
       password: hashPassword,
       avatar,
-      age,
-      gender,
-      address,
-      description,
+      first_name: dto.first_name,
+      last_name: dto.last_name,
+      bio: dto.bio,
+      website: dto.website,
+      age: dto.age,
+      gender: dto.gender,
+      address: dto.address,
+
       createdAt: new Date(),
       privacy: PrivacyType.PUBLIC,
     };
@@ -84,39 +77,28 @@ export class UsersService {
     return newRegister;
   }
 
-  async findUserById(user_id: string) {
+  async findUserById(id: string) {
     const user = await this.usersRepository.findOne({
-      where: { user_id },
+      where: { id },
       select: [
-        'user_id',
         'email',
-        'username',
+
         'age',
         'avatar',
         'gender',
         'address',
-        'description',
+
         'createdAt',
         'updatedAt',
-        'deletedAt',
+
         'privacy',
       ],
     });
 
     if (!user) return null;
 
-    if (!user.deletedAt) return user;
+    // if (!user.deletedAt) return user;
     return null;
-  }
-
-  async deleteUser(user: IUser) {
-    const userDb = await this.findUserById(user.user_id);
-
-    if (userDb)
-      return this.usersRepository.update(
-        { user_id: user.user_id },
-        { deletedAt: new Date() },
-      );
   }
 
   async updateProfile(
@@ -126,13 +108,13 @@ export class UsersService {
   ) {
     if (!file) {
       return await this.usersRepository.update(
-        { user_id: user.user_id },
+        { id: user.id },
         {
           ...dto,
         },
       );
     } else {
-      const findUser = await this.findUserById(user.user_id);
+      const findUser = await this.findUserById(user.id);
       const avatar = findUser.avatar;
 
       if (avatar) {
@@ -145,7 +127,7 @@ export class UsersService {
         }
       }
       return await this.usersRepository.update(
-        { user_id: user.user_id },
+        { id: user.id },
         {
           ...dto,
           avatar: file.path,
