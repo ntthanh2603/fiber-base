@@ -29,9 +29,9 @@ async function bootstrap() {
 
   // Config CORS
   app.enableCors({
-    origin: '*',
-    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
-    preflightContinue: false,
+    origin: 'http://localhost:3002', // Cho phép frontend ở cổng 3002
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Các phương thức HTTP được phép
+    credentials: true, // Nếu bạn sử dụng cookie hoặc thông tin xác thực
   });
 
   // Config swagger
