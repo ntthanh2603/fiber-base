@@ -19,33 +19,38 @@ import {
   UserSwitchOutlined,
 } from '@ant-design/icons';
 import { Menu, Input, Avatar } from 'antd';
-import '../../styles/MenuBar.css';
+import '../../styles/Header.css';
+import type { GetProps } from 'antd';
+import Link from "next/link";
 
-const MenuBar = () => {
+const Header = () => {
+  type SearchProps = GetProps<typeof Input.Search>;
+
   const { Search } = Input;
 
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
+  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+  
 
   const mainMenuItems = [
     {
       key: 'home',
       icon: <HomeOutlined />,
-      label: <a href='/'>Trang chủ</a>,
+      label: <Link href="/">Trang chủ</Link>,
     },
     {
       key: 'groups',
       icon: <EditOutlined />,
-      label: <a href='/groups'>Thêm bài</a>,
+      label: <Link href="/groups">Thêm bài</Link>,
     },
     {
       key: 'follows',
       icon: <UserAddOutlined />,
-      label: <a href='/follows'>Theo dõi</a>,
+      label: <Link href="/follows">Theo dõi</Link>,
     },
     {
       key: 'friends',
       icon: <TeamOutlined />,
-      label: <a href='/friend'>Bạn bè</a>,
+      label: <Link href="/friend">Bạn bè</Link>,
     },
   ];
 
@@ -58,7 +63,7 @@ const MenuBar = () => {
         {
           key: 'home',
           icon: <HomeOutlined />,
-          label: <a href='/'>Trang chủ</a>,
+          label: <Link href="/groups">Thêm bài</Link>,
         },
         {
           key: 'groups',
@@ -68,44 +73,44 @@ const MenuBar = () => {
         {
           key: 'follows',
           icon: <UserAddOutlined />,
-          label: <a href='/follows'>Theo dõi</a>,
+          label: <Link href="/follows">Theo dõi</Link>,
         },
         {
           key: 'friends',
           icon: <TeamOutlined />,
-          label: <a href='/friend'>Bạn bè</a>,
+          label: <Link href="/friend">Bạn bè</Link>,
         },
         {
           key: 'settings',
           icon: <SolutionOutlined />,
-          label: <a href='/settings'>Danh sách bạn bè</a>,
+          label: <Link href="/settings">Danh sách bạn bè</Link>,
         },
         {
           key: 'settings',
           icon: <HistoryOutlined />,
-          label: <a href='/settings'>Hoạt động gần đây</a>,
+          label: <Link href="/recent">Hoạt động gần đây</Link>,
         },
         {
           key: 'logout',
           icon: <BookOutlined />,
-          label: <a href='/logout'>Bài viết đã lưu</a>,
+          label: <Link href="/saved">Bài viết đã lưu</Link>,
         },
         {
           key: 'settings',
           icon: <FieldTimeOutlined />,
-          label: <a href='/settings'>Kỉ niệm</a>,
+          label: <Link href="/memories">Kỉ niệm</Link>,
         },
       ],
     },
     {
       key: 'messages',
       icon: <CommentOutlined />,
-      label: <a href='/chatRooms'>Tin nhắn</a>,
+      label: <Link href="/chatRooms">Tin nhắn</Link>,
     },
     {
       key: 'notifications',
       icon: <BellOutlined />,
-      label: <a href='/notifications'>Thông báo</a>,
+      label: <Link href="/notifications">Thông báo</Link>,
     },
     {
       key: 'other',
@@ -124,39 +129,49 @@ const MenuBar = () => {
         {
           key: 'settings',
           icon: <SettingOutlined />,
-          label: <a href='/settings'>Cài đặt</a>,
+          label: <Link href="/settings">Cài đặt</Link>,
         },
         {
           key: 'logout',
           icon: <SafetyOutlined />,
-          label: <a href='/logout'>Quyền riêng tư</a>,
+          label: <Link href="/privacy">Quyền riêng tư</Link>,
         },
         {
           key: 'logout',
           icon: <QuestionCircleOutlined />,
-          label: <a href='/logout'>Trợ giúp và hỗ trợ</a>,
+          label: <Link href="/help">Trợ giúp và hỗ trợ</Link>,
         },
         {
           key: 'logout',
           icon: <MoonOutlined />,
-          label: <a href='/logout'>Màn hình và trợ năng</a>,
+          label: <Link href="/display">Màn hình và trợ năng</Link>,
         },
         {
           key: 'logout',
           icon: <ExclamationCircleOutlined />,
-          label: <a href='/logout'>Đóng góp ý kiến</a>,
+          label: <Link href="/feedback">Đóng góp ý kiến</Link>,
         },
         {
           key: 'logout',
           icon: <UserSwitchOutlined />,
-          label: <a href='/logout'>Đăng xuất</a>,
+          label: <Link href="/logout">Đăng xuất</Link>,
         },
       ],
     },
   ];
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '98%' }}>
+    <div style={{ display: 'flex', 
+    top: '5px',
+    left: '10px',
+    zIndex: 1000,
+    borderRadius: '12px', 
+    boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#2B92E4', 
+    right: '10px',
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    width: '98%' }}>
       <div style={{ display: 'flex', width: '25%' }}>
         <GithubOutlined style={{ fontSize: '30px', margin: '0 20px 0 20px', color: 'white' }} />
         <Search
@@ -176,4 +191,4 @@ const MenuBar = () => {
   );
 };
 
-export default MenuBar;
+export default Header;
