@@ -6,7 +6,7 @@ import {
   EditOutlined,
   ExclamationCircleOutlined,
   FieldTimeOutlined,
-  GithubOutlined,
+  // GithubOutlined,
   HistoryOutlined,
   HomeOutlined,
   MoonOutlined,
@@ -161,19 +161,19 @@ const Header = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', 
-    top: '5px',
-    left: '10px',
-    zIndex: 1000,
-    borderRadius: '12px', 
-    boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)',
+    <div style={{ 
+    display: 'flex', 
+    zIndex: 1000, 
+    boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.2)',
     backgroundColor: '#2B92E4', 
-    right: '10px',
     alignItems: 'center', 
     justifyContent: 'space-between', 
-    width: '98%' }}>
+    width: '100%' }}>
       <div style={{ display: 'flex', width: '25%' }}>
-        <GithubOutlined style={{ fontSize: '30px', margin: '0 20px 0 20px', color: 'white' }} />
+        {/* <GithubOutlined style={{ fontSize: '30px', margin: '0 20px 0 20px', color: 'white' }} /> */}
+        <Link href="/profile"style={{ fontSize: '20px', padding: '0 20px 0 20px', color: 'white' }}>
+        🇸
+        </Link>
         <Search
           placeholder='Tìm kiếm trên Social Space'
           allowClear
