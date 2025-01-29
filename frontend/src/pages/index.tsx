@@ -1,11 +1,10 @@
-import Header from '../components/layout/Header';
+import Header from "../components/layout/Header";
 
 // src/pages/index.tsx
 export default function Home() {
-    return (
-      <div>
-        <Header />
-      </div>
-    );
-  }
-  
+  return (
+    <div>
+      <Header />
+    </div>
+  );
+}

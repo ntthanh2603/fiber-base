@@ -17,10 +17,10 @@ import {
   TeamOutlined,
   UserAddOutlined,
   UserSwitchOutlined,
-} from '@ant-design/icons';
-import { Menu, Input, Avatar } from 'antd';
-import '../../styles/Header.css';
-import type { GetProps } from 'antd';
+} from "@ant-design/icons";
+import { Menu, Input, Avatar } from "antd";
+import "../../styles/Header.css";
+import type { GetProps } from "antd";
 import Link from "next/link";
 
 const Header = () => {
@@ -28,27 +28,27 @@ const Header = () => {
 
   const { Search } = Input;
 
-  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
-  
+  const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
+    console.log(info?.source, value);
 
   const mainMenuItems = [
     {
-      key: 'home',
+      key: "home",
       icon: <HomeOutlined />,
       label: <Link href="/">Trang chủ</Link>,
     },
     {
-      key: 'groups',
+      key: "groups",
       icon: <EditOutlined />,
       label: <Link href="/groups">Thêm bài</Link>,
     },
     {
-      key: 'follows',
+      key: "follows",
       icon: <UserAddOutlined />,
       label: <Link href="/follows">Theo dõi</Link>,
     },
     {
-      key: 'friends',
+      key: "friends",
       icon: <TeamOutlined />,
       label: <Link href="/friend">Bạn bè</Link>,
     },
@@ -56,103 +56,103 @@ const Header = () => {
 
   const userMenuItems = [
     {
-      key: 'menu',
+      key: "menu",
       icon: <AppstoreOutlined />,
-      label: 'Menu',
+      label: "Menu",
       children: [
         {
-          key: 'home',
+          key: "home",
           icon: <HomeOutlined />,
           label: <Link href="/groups">Thêm bài</Link>,
         },
         {
-          key: 'groups',
+          key: "groups",
           icon: <EditOutlined />,
-          label: <a href='/groups'>Thêm bài</a>,
+          label: <a href="/groups">Thêm bài</a>,
         },
         {
-          key: 'follows',
+          key: "follows",
           icon: <UserAddOutlined />,
           label: <Link href="/follows">Theo dõi</Link>,
         },
         {
-          key: 'friends',
+          key: "friends",
           icon: <TeamOutlined />,
           label: <Link href="/friend">Bạn bè</Link>,
         },
         {
-          key: 'settings',
+          key: "list-friends",
           icon: <SolutionOutlined />,
           label: <Link href="/settings">Danh sách bạn bè</Link>,
         },
         {
-          key: 'settings',
+          key: "activates",
           icon: <HistoryOutlined />,
           label: <Link href="/recent">Hoạt động gần đây</Link>,
         },
         {
-          key: 'logout',
+          key: "posts-saved",
           icon: <BookOutlined />,
           label: <Link href="/saved">Bài viết đã lưu</Link>,
         },
         {
-          key: 'settings',
+          key: "memories",
           icon: <FieldTimeOutlined />,
           label: <Link href="/memories">Kỉ niệm</Link>,
         },
       ],
     },
     {
-      key: 'messages',
+      key: "messages",
       icon: <CommentOutlined />,
       label: <Link href="/chatRooms">Tin nhắn</Link>,
     },
     {
-      key: 'notifications',
+      key: "notifications",
       icon: <BellOutlined />,
       label: <Link href="/notifications">Thông báo</Link>,
     },
     {
-      key: 'other',
+      key: "other",
       icon: (
         <Avatar
           style={{
-            verticalAlign: 'middle',
+            verticalAlign: "middle",
           }}
           size={32}
         >
-          {'T'}
+          {"T"}
         </Avatar>
       ),
-      label: 'Thêm',
+      label: "Thêm",
       children: [
         {
-          key: 'settings',
+          key: "settings",
           icon: <SettingOutlined />,
           label: <Link href="/settings">Cài đặt</Link>,
         },
         {
-          key: 'logout',
+          key: "privacy",
           icon: <SafetyOutlined />,
           label: <Link href="/privacy">Quyền riêng tư</Link>,
         },
         {
-          key: 'logout',
+          key: "suport",
           icon: <QuestionCircleOutlined />,
           label: <Link href="/help">Trợ giúp và hỗ trợ</Link>,
         },
         {
-          key: 'logout',
+          key: "screen",
           icon: <MoonOutlined />,
           label: <Link href="/display">Màn hình và trợ năng</Link>,
         },
         {
-          key: 'logout',
+          key: "contribute-ideas",
           icon: <ExclamationCircleOutlined />,
           label: <Link href="/feedback">Đóng góp ý kiến</Link>,
         },
         {
-          key: 'logout',
+          key: "logout",
           icon: <UserSwitchOutlined />,
           label: <Link href="/logout">Đăng xuất</Link>,
         },
@@ -161,32 +161,38 @@ const Header = () => {
   ];
 
   return (
-    <div style={{ 
-    display: 'flex', 
-    zIndex: 1000, 
-    boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.2)',
-    backgroundColor: '#2B92E4', 
-    alignItems: 'center', 
-    justifyContent: 'space-between', 
-    width: '100%' }}>
-      <div style={{ display: 'flex', width: '25%' }}>
+    <div
+      style={{
+        display: "flex",
+        zIndex: 1000,
+        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.2)",
+        backgroundColor: "#2B92E4",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+      }}
+    >
+      <div style={{ display: "flex", width: "25%" }}>
         {/* <GithubOutlined style={{ fontSize: '30px', margin: '0 20px 0 20px', color: 'white' }} /> */}
-        <Link href="/profile"style={{ fontSize: '20px', padding: '0 20px 0 20px', color: 'white' }}>
-        🇸
+        <Link
+          href="/profile"
+          style={{ fontSize: "20px", padding: "0 20px 0 20px", color: "white" }}
+        >
+          🇸
         </Link>
         <Search
-          placeholder='Tìm kiếm trên Social Space'
+          placeholder="Tìm kiếm trên Social Space"
           allowClear
           onSearch={onSearch}
           style={{
-            width: '70%',
+            width: "70%",
           }}
         />
       </div>
 
-      <Menu mode='horizontal' items={mainMenuItems} className='menu-bar' />
+      <Menu mode="horizontal" items={mainMenuItems} className="menu-bar" />
 
-      <Menu mode='horizontal' items={userMenuItems} className='menu-bar' />
+      <Menu mode="horizontal" items={userMenuItems} className="menu-bar" />
     </div>
   );
 };
