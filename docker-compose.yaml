@@ -1,15 +1,15 @@
-version: '3.8'
+version: "3.8"
 services:
   # Database
   postgres:
     container_name: database
     image: postgres:latest
     environment:
-      POSTGRES_USER: 'tuanthanh'
-      POSTGRES_PASSWORD: '123456'
-      POSTGRES_DB: 'project-social-spaces'
+      POSTGRES_USER: tuanthanh
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: project-social-spaces
     ports:
-      - "3001:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -27,7 +27,7 @@ services:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USERNAME: tuanthanh
-      DATABASE_PASSWORD: '123456'
+      DATABASE_PASSWORD: "123456"
       DATABASE_NAME: project-social-spaces
       # Node environment
       NODE_ENV: development

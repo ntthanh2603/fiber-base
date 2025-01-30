@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export function RegisterForm({
   className,
@@ -64,6 +65,16 @@ export function RegisterForm({
                     </button>
                   </div>
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Tên l</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Nhập email của bạn"
+                    required
+                    style={{ backgroundColor: "#D0E3FF" }}
+                  />
+                </div>
                 <Button
                   type="submit"
                   className="w-full"
@@ -74,9 +85,12 @@ export function RegisterForm({
               </div>
               <div className="text-center text-sm">
                 Bạn đã có tài khoản ?{" "}
-                <a href="/auth/login" className="underline underline-offset-4">
+                <Link
+                  href="/auth/login/"
+                  className="underline underline-offset-4"
+                >
                   Đăng nhập
-                </a>
+                </Link>
               </div>
             </div>
           </form>

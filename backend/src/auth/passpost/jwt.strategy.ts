@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
   // Xác thực payload người dùng và trả về thông tin
   async validate(payload: IUser) {
-    // const { id, email, first_name, last_name } = payload;
+    // const { id, email, , username } = payload;
     return payload;
   }
 }

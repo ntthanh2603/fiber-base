@@ -19,10 +19,7 @@ export class User {
   avatar: string;
 
   @Column()
-  first_name: string;
-
-  @Column()
-  last_name: string;
+  username: string;
 
   @Column({ default: null })
   bio: string;

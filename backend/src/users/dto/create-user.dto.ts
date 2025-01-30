@@ -28,16 +28,9 @@ export class RegisterUserDto {
   @MinLength(2)
   @MaxLength(20)
   @IsString()
-  @IsNotEmpty({ message: 'First name not empty' })
-  @ApiProperty({ example: 'Tuấn', description: 'Your first name' })
-  first_name: string;
-
-  @MinLength(2)
-  @MaxLength(20)
-  @IsString()
-  @IsNotEmpty({ message: 'Last name not empty' })
-  @ApiProperty({ example: 'Thành', description: 'Your last name' })
-  last_name: string;
+  @IsNotEmpty({ message: 'Last username not empty' })
+  @ApiProperty({ example: 'Thành', description: 'Your last username' })
+  username: string;
 
   @ApiProperty({ example: 'Good boy', description: 'bio' })
   @MinLength(5, { message: 'Bio không được nhỏ hơn 5 ký tự' })
