@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export function LoginForm({
   className,
@@ -20,7 +21,7 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card style={{ backgroundColor: "#E7F1FF" }}>
+      <Card className="bg-sky-50">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Chào mừng bạn trở lại</CardTitle>
           <CardDescription>
@@ -31,18 +32,10 @@ export function LoginForm({
           <form>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  style={{ backgroundColor: "#D0E3FF" }}
-                >
+                <Button variant="outline" className="w-full bg-sky-100">
                   Đăng nhập với tài khoản Apple
                 </Button>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  style={{ backgroundColor: "#D0E3FF" }}
-                >
+                <Button variant="outline" className="w-full bg-sky-100">
                   Đăng nhập với tài khoản Google
                 </Button>
               </div>
@@ -59,7 +52,7 @@ export function LoginForm({
                     type="email"
                     placeholder="Nhập email của bạn"
                     required
-                    style={{ backgroundColor: "#D0E3FF" }}
+                    className="bg-sky-100"
                   />
                 </div>
                 <div className="grid gap-2 relative">
@@ -72,7 +65,7 @@ export function LoginForm({
                       type={showPassword ? "text" : "password"}
                       required
                       placeholder="Nhập mật khẩu của bạn"
-                      style={{ backgroundColor: "#D0E3FF" }}
+                      className="bg-sky-100"
                     />
                     <button
                       type="button"
@@ -93,11 +86,7 @@ export function LoginForm({
                     Quên mật khẩu?
                   </a>
                 </div>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  style={{ backgroundColor: "#D0E3FF" }}
-                >
+                <Button type="submit" className="w-full bg-sky-300">
                   Đăng nhập
                 </Button>
               </div>
@@ -113,8 +102,8 @@ export function LoginForm({
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
         Bằng cách nhấn đăng nhập, bạn đồng ý với chúng tôi{" "}
-        <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a>
-        .
+        <Link href="#">Điều khoản dịch vụ</Link> và{" "}
+        <Link href="#">Chính sách bảo mật</Link>
       </div>
     </div>
   );

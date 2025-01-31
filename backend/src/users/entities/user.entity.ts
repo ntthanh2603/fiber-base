@@ -27,10 +27,10 @@ export class User {
   @Column({ default: null })
   website: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', default: null })
   age: number;
 
-  @Column({ type: 'enum', enum: GenderType })
+  @Column({ type: 'enum', enum: GenderType, default: null })
   gender: GenderType;
 
   @Column()
