@@ -6,7 +6,7 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_USER: tuanthanh
-      POSTGRES_PASSWORD: "123456"
+      POSTGRES_PASSWORD: 123456
       POSTGRES_DB: project-social-spaces
     ports:
       - "5432:5432"
@@ -27,7 +27,7 @@ services:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USERNAME: tuanthanh
-      DATABASE_PASSWORD: "123456"
+      DATABASE_PASSWORD: 123456
       DATABASE_NAME: project-social-spaces
       # Node environment
       NODE_ENV: development

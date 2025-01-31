@@ -29,7 +29,10 @@ export class RegisterUserDto {
   @MaxLength(20)
   @IsString()
   @IsNotEmpty({ message: 'Last username not empty' })
-  @ApiProperty({ example: 'Thành', description: 'Your last username' })
+  @ApiProperty({
+    example: 'Nguyễn Tuấn Thành',
+    description: 'Your last username',
+  })
   username: string;
 
   @ApiProperty({ example: 'Good boy', description: 'bio' })
