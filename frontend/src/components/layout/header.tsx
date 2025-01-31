@@ -19,7 +19,7 @@ import {
   UserSwitchOutlined,
 } from "@ant-design/icons";
 import { Menu, Input, Avatar } from "antd";
-import "../../styles/Header.css";
+import "../../styles/header.css";
 import type { GetProps } from "antd";
 import Link from "next/link";
 
@@ -166,19 +166,19 @@ const Header = () => {
         display: "flex",
         zIndex: 1000,
         boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.2)",
-        backgroundColor: "#2B92E4",
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
       }}
+      className="bg-sky-600"
     >
       <div style={{ display: "flex", width: "25%" }}>
         {/* <GithubOutlined style={{ fontSize: '30px', margin: '0 20px 0 20px', color: 'white' }} /> */}
         <Link
           href="/profile"
-          style={{ fontSize: "20px", padding: "0 20px 0 20px", color: "white" }}
+          style={{ fontSize: "22px", margin: "0 20px 0 20px", color: "white" }}
         >
-          🇸
+          SS
         </Link>
         <Search
           placeholder="Tìm kiếm trên Social Space"
@@ -190,9 +190,17 @@ const Header = () => {
         />
       </div>
 
-      <Menu mode="horizontal" items={mainMenuItems} className="menu-bar" />
+      <Menu
+        mode="horizontal"
+        items={mainMenuItems}
+        className="menu-bar bg-sky-600"
+      />
 
-      <Menu mode="horizontal" items={userMenuItems} className="menu-bar" />
+      <Menu
+        mode="horizontal"
+        items={userMenuItems}
+        className="menu-bar bg-sky-600"
+      />
     </div>
   );
 };

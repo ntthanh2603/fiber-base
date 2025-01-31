@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #ffffff;
-}
+/* 
+Màu header là bg-sky-600
+màu backgroud là bg-gray-100
+*/

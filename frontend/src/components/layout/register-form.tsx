@@ -25,6 +25,12 @@ export function RegisterForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-sky-50">
         <CardHeader className="text-center">
+          <a
+            href="#"
+            className="flex items-center gap-2 self-center font-medium text-sky-400 text-2xl "
+          >
+            SNet
+          </a>
           <CardTitle className="text-xl">Chào mừng bạn</CardTitle>
           <CardDescription>Tạo tài khoản Social Space</CardDescription>
         </CardHeader>

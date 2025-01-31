@@ -25,6 +25,12 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-sky-50">
         <CardHeader className="text-center">
+          <a
+            href="#"
+            className="flex items-center gap-2 self-center font-medium text-sky-400 text-2xl "
+          >
+            SNet
+          </a>
           <CardTitle className="text-xl">Chào mừng bạn trở lại</CardTitle>
           <CardDescription>
             Đăng nhập với tài khoản Apple hoặc Google
@@ -81,12 +87,12 @@ export function LoginForm({
                       )}
                     </button>
                   </div>
-                  <a
-                    href="#"
+                  <Link
+                    href="/auth/forgerpassword"
                     className="ml-auto text-sm underline-offset-4 hover:underline"
                   >
                     Quên mật khẩu?
-                  </a>
+                  </Link>
                 </div>
                 <Button type="submit" className="w-full bg-sky-300">
                   Đăng nhập

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Result, Button } from 'antd';
-import Link from 'next/link';
+import React from "react";
+import { Result, Button } from "antd";
+import Link from "next/link";
 
 const PageNotFound = () => {
   return (
