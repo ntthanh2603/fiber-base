@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Max,
@@ -19,7 +20,7 @@ export class RegisterUserDto {
   email: string;
 
   @MinLength(8)
-  @MaxLength(10)
+  @MaxLength(15)
   @IsString()
   @IsNotEmpty({ message: 'Mật khẩu không được trống' })
   @ApiProperty({ example: '12345678', description: 'password' })
@@ -36,8 +37,7 @@ export class RegisterUserDto {
   username: string;
 
   @ApiProperty({ example: 'Good boy', description: 'bio' })
-  @MinLength(5, { message: 'Bio không được nhỏ hơn 5 ký tự' })
-  @MaxLength(100, { message: 'Bio không được lớn hơn 100 ký tự' })
+  @IsString()
   @IsOptional()
   bio: string;
 
@@ -45,14 +45,12 @@ export class RegisterUserDto {
     example: 'https://github.com/ntthanh2603',
     description: 'website',
   })
-  @MinLength(5)
-  @MaxLength(100)
+  @IsString()
   @IsOptional()
   website: string;
 
   @ApiProperty({ example: 20, description: 'age' })
-  @Max(100, { message: 'Tuổi không được lớn hơn 100' })
-  @Min(1, { message: 'Tuổi không được nhỏ hơn 1' })
+  @IsNumber()
   @IsOptional()
   age: number;
 
@@ -61,8 +59,7 @@ export class RegisterUserDto {
   gender: GenderType;
 
   @ApiProperty({ example: 'Cau Giay, Ha Noi', description: 'address' })
-  @MinLength(5, { message: 'Địa chỉ không được nhỏ hơn 5 ký tự' })
-  @MaxLength(100, { message: 'Địa chỉ không được lớn hơn 100 ký tự' })
+  @IsString()
   @IsOptional()
   address: string;
 }

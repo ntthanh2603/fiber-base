@@ -33,7 +33,7 @@ export class User {
   @Column({ type: 'enum', enum: GenderType, default: null })
   gender: GenderType;
 
-  @Column()
+  @Column({ default: null })
   address: string;
 
   @Column({ type: 'enum', enum: PrivacyType, default: PrivacyType.PUBLIC })

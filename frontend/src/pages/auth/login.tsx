@@ -1,7 +1,4 @@
-// import { GalleryVerticalEnd } from "lucide-react"
-
 import { LoginForm } from "@/components/layout/login-form";
-// import { GithubOutlined } from "@ant-design/icons"
 
 export default function LoginPage() {
   return (

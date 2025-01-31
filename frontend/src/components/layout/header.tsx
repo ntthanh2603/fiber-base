@@ -173,15 +173,14 @@ const Header = () => {
       className="bg-sky-600"
     >
       <div style={{ display: "flex", width: "25%" }}>
-        {/* <GithubOutlined style={{ fontSize: '30px', margin: '0 20px 0 20px', color: 'white' }} /> */}
         <Link
           href="/profile"
-          style={{ fontSize: "22px", margin: "0 20px 0 20px", color: "white" }}
+          className="flex items-center gap-2 self-center font-medium text-white text-2xl mr-5 ml-5"
         >
-          SS
+          SNet
         </Link>
         <Search
-          placeholder="Tìm kiếm trên Social Space"
+          placeholder="Tìm kiếm trên SNet"
           allowClear
           onSearch={onSearch}
           style={{
