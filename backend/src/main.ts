@@ -29,7 +29,7 @@ async function bootstrap() {
 
   // Config CORS
   app.enableCors({
-    origin: 'http://localhost:3002', // Cho phép frontend ở cổng 3002
+    origin: 'http://localhost:3001', // Cho phép frontend ở cổng 3001
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Các phương thức HTTP được phép
     credentials: true, // Nếu bạn sử dụng cookie hoặc thông tin xác thực
   });
