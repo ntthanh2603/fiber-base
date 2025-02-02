@@ -1,3 +1,5 @@
+"use client";
+
 // import { cn } from "@/lib/utils";
 // import { Button } from "@/components/ui/button";
 // import {
@@ -170,8 +172,6 @@
 //   );
 // }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -185,12 +185,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { registerUser } from "@/services/auth";
 import { GenderType } from "@/lib/enum";
 import { useRouter } from "next/router";
-import { notification } from "antd";
 
 export function RegisterForm({
   className,
@@ -226,24 +225,15 @@ export function RegisterForm({
 
     try {
       const response = await registerUser(formData);
-      console.log(response);
+      console.log("response1", response.data);
+      // const { statusCode, message } = response;
+      console.log("response2", response.statusCode);
 
-      const { statusCode } = response.data;
-      console.log("response", response);
-
-      if (statusCode == 201) {
+      if (response.statusCode == 201) {
         setSuccess("Đăng ký thành công! Đang chuyển hướng...");
         setTimeout(() => router.push("/auth/login"), 1000);
       } else {
-        // setError(message);
-        // useEffect(() => {
-        //   notification.info({
-        //     message: "Thông báo",
-        //     description: "Đây là thông báo thử nghiệm!",
-        //     placement: "topRight",
-        //   });
-        // }, []);
-        // console.log(error, message);
+        setError(response.message);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -252,10 +242,6 @@ export function RegisterForm({
       setLoading(false);
     }
   };
-
-  // const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //   console.log(e, "I was closed.");
-  // };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -267,6 +253,7 @@ export function RegisterForm({
           >
             SNet
           </a>
+
           <CardTitle className="text-xl">Chào mừng bạn</CardTitle>
           <CardDescription>Tạo tài khoản</CardDescription>
         </CardHeader>
@@ -376,22 +363,8 @@ export function RegisterForm({
                   <Label htmlFor="agreeToTerms">Đồng ý tạo tài khoản mới</Label>
                 </div>
 
-                {/* {error && <p className="text-red-500 text-sm">{error}</p>}
-                {success && <p className="text-green-500 text-sm">{success}</p>} */}
-                {/* {success && (
-                  <p className="text-green-500 text-sm">
-                    <Alert
-                      message="Error Text"
-                      description=""
-                      type="error"
-                      closable={{
-                        "aria-label": "close",
-                        closeIcon: <CloseSquareFilled />,
-                      }}
-                      onClose={onClose}
-                    />
-                  </p>
-                )} */}
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {success && <p className="text-green-500 text-sm">{success}</p>}
 
                 <Button
                   type="submit"
