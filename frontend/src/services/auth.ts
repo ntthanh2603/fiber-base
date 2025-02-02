@@ -1,5 +1,14 @@
 import { GenderType } from "@/lib/enum";
 import instance from "./axios.customize";
+import { AxiosResponse } from "axios";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface APIResponse {
+  data: any;
+  statusCode: number;
+  message: string;
+  error: string;
+}
 
 export const registerUser = async (formData: {
   email: string;
@@ -12,7 +21,8 @@ export const registerUser = async (formData: {
   address: string;
 }) => {
   try {
-    const response = await instance.post("/auth/register", formData);
+    const response: AxiosResponse<APIResponse> =
+      await instance.post<APIResponse>("/auth/register", formData);
     // console.log(response.data);
 
     return response;

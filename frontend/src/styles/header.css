@@ -34,13 +34,6 @@
   color: black !important; /* Giữ màu đen trong children */
 }
 
-/* Hiệu ứng hover cho menu chính */
-.menu-bar .ant-menu-item:hover {
-  background-color: white !important; /* Nền đổi sang trắng */
-  color: black !important; /* Chữ và icon đổi sang đen */
-  border-radius: 10px; /* Bo góc */
-}
-
 /* Hiệu ứng hover trong children */
 .menu-bar .ant-menu-submenu .ant-menu-item:hover {
   background-color: white !important; /* Nền trắng */
@@ -51,11 +44,4 @@
 /* Menu cha (submenu title) */
 .menu-bar .ant-menu-submenu-title {
   color: white !important; /* Chữ và icon trắng */
-}
-
-/* Hover trên menu cha (submenu title) */
-.menu-bar .ant-menu-submenu-title:hover {
-  background-color: white !important; /* Nền trắng khi hover */
-  color: black !important; /* Chữ đen khi hover */
-  border-radius: 10px; /* Bo góc */
 }

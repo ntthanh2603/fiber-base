@@ -170,6 +170,8 @@
 //   );
 // }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -188,9 +190,7 @@ import Link from "next/link";
 import { registerUser } from "@/services/auth";
 import { GenderType } from "@/lib/enum";
 import { useRouter } from "next/router";
-import { Alert, notification } from "antd";
-import { CloseSquareFilled } from "@ant-design/icons";
-import { log } from "console";
+import { notification } from "antd";
 
 export function RegisterForm({
   className,
@@ -228,21 +228,22 @@ export function RegisterForm({
       const response = await registerUser(formData);
       console.log(response);
 
-      const { statusCode, message, error } = response;
+      const { statusCode } = response.data;
+      console.log("response", response);
 
       if (statusCode == 201) {
         setSuccess("Đăng ký thành công! Đang chuyển hướng...");
         setTimeout(() => router.push("/auth/login"), 1000);
       } else {
         // setError(message);
-        useEffect(() => {
-          notification.info({
-            message: "Thông báo",
-            description: "Đây là thông báo thử nghiệm!",
-            placement: "topRight",
-          });
-        }, []);
-        console.log(error, message);
+        // useEffect(() => {
+        //   notification.info({
+        //     message: "Thông báo",
+        //     description: "Đây là thông báo thử nghiệm!",
+        //     placement: "topRight",
+        //   });
+        // }, []);
+        // console.log(error, message);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -267,7 +268,7 @@ export function RegisterForm({
             SNet
           </a>
           <CardTitle className="text-xl">Chào mừng bạn</CardTitle>
-          <CardDescription>Tạo tài khoản SNet</CardDescription>
+          <CardDescription>Tạo tài khoản</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -413,6 +414,11 @@ export function RegisterForm({
           </form>
         </CardContent>
       </Card>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
+        Bằng cách nhấn đăng nhập, bạn đồng ý với chúng tôi{" "}
+        <Link href="#">Điều khoản dịch vụ</Link> và{" "}
+        <Link href="#">Chính sách bảo mật</Link>
+      </div>
     </div>
   );
 }
