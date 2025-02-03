@@ -19,7 +19,7 @@ import {
   UserSwitchOutlined,
 } from "@ant-design/icons";
 import { Menu, Input, Avatar } from "antd";
-import "../../styles/header.css";
+import "../../styles/header.module.css";
 import type { GetProps } from "antd";
 import Link from "next/link";
 
