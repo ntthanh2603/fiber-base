@@ -1,17 +1,28 @@
 version: "3.8"
+
 services:
   # Database
   postgres:
-    container_name: database
+    container_name: postgres
     image: postgres:latest
     environment:
       POSTGRES_USER: tuanthanh
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: project-social-spaces
     ports:
-      - "5432:5432"
+      - "5432:5432" # Changed to standard PostgreSQL port
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Redis
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379" # Changed to standard Redis port
     networks:
       - app-network
     restart: unless-stopped
@@ -23,13 +34,11 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      # Database connection
-      DATABASE_HOST: postgres
-      DATABASE_PORT: 5432
+      DATABASE_HOST: postgres # Use service name instead of IP
+      DATABASE_PORT: 5432 # Standard PostgreSQL port
       DATABASE_USERNAME: tuanthanh
       DATABASE_PASSWORD: 123456
       DATABASE_NAME: project-social-spaces
-      # Node environment
       NODE_ENV: development
       PORT: 3000
     ports:
@@ -42,25 +51,6 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-
-  # Frontend
-  # frontend:
-  #   container_name: frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./frontend:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     - "3006:5173"
-  #   environment:
-  #     - VITE_API_URL=http://localhost:3006
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - app-network
-  #   restart: unless-stopped
 
 networks:
   app-network:
