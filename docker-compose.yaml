@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: project-social-spaces
     ports:
-      - "5432:5432" # Changed to standard PostgreSQL port
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -22,7 +22,7 @@ services:
     container_name: redis
     image: redis:latest
     ports:
-      - "6379:6379" # Changed to standard Redis port
+      - "6379:6379"
     networks:
       - app-network
     restart: unless-stopped
@@ -34,8 +34,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      DATABASE_HOST: postgres # Use service name instead of IP
-      DATABASE_PORT: 5432 # Standard PostgreSQL port
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
       DATABASE_USERNAME: tuanthanh
       DATABASE_PASSWORD: 123456
       DATABASE_NAME: project-social-spaces
