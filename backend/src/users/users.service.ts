@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,12 +13,18 @@ import { IUser } from './users.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrivacyType } from 'src/helper/helper.enum';
 import * as fs from 'fs';
+import { LoginUserDto } from './dto/login-user.dto';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private configService: ConfigService,
+    private jwtService: JwtService,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -50,7 +57,7 @@ export class UsersService {
     const userDb = await this.usersRepository.findOneBy({ email: dto.email });
 
     if (userDb) {
-      throw new BadRequestException(`Email: ${dto.email} already exists`);
+      throw new BadRequestException(`Email ${dto.email} đã tồn tại.`);
     }
 
     const hashPassword = this.getHashPassword(dto.password);
@@ -74,9 +81,9 @@ export class UsersService {
       privacy: PrivacyType.PUBLIC,
     };
 
-    const newRegister = await this.usersRepository.save(newUser);
+    await this.usersRepository.save(newUser);
 
-    return newRegister;
+    return { message: 'Đăng kí tài khoản thành công' };
   }
 
   async findUserById(id: string) {
@@ -145,5 +152,94 @@ export class UsersService {
         },
       );
     }
+  }
+
+  async login(dto: LoginUserDto, response: Response) {
+    const user = await this.validateUser(dto.email, dto.password);
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    };
+
+    const refresh_token = this.createRefreshToken(payload);
+
+    await this.updateUserToken(refresh_token, user.id);
+
+    response.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      maxAge: +this.configService.get<string>('JWT_REFRESH_EXPIRE'),
+    });
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      },
+    };
+  }
+
+  async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user || !this.isValidPassword(password, user.password)) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    return user;
+  }
+
+  createRefreshToken(payload: object) {
+    const refresh_token = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRE'),
+    });
+
+    return refresh_token;
+  }
+
+  async processNewToken(refreshToken: string, response: Response) {
+    try {
+      const payload = this.jwtService.verify(refreshToken, {
+        secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      });
+
+      if (!payload || !payload.sub) {
+        throw new BadRequestException('Invalid refresh token');
+      }
+
+      const user = await this.findUserByToken(refreshToken);
+
+      if (!user) {
+        throw new BadRequestException('User not found or token invalid');
+      }
+
+      const { id, email } = user;
+      const newAccessToken = this.jwtService.sign(
+        { id, email },
+        { expiresIn: '15m' },
+      );
+
+      response.cookie('access_token', newAccessToken, { httpOnly: true });
+
+      return {
+        access_token: newAccessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+        },
+      };
+    } catch {
+      throw new BadRequestException('Refresh token invalid or expired');
+    }
+  }
+
+  async logout(response: Response, user: IUser) {
+    await this.updateUserToken('', user.id);
+    response.clearCookie('refresh_token');
+    return user;
   }
 }

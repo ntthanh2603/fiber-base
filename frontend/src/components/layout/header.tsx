@@ -170,7 +170,7 @@ const Header = () => {
         justifyContent: "space-between",
         width: "100%",
       }}
-      className="bg-sky-600"
+      className="bg-sky-600 header"
     >
       <div style={{ display: "flex", width: "25%" }}>
         <Link

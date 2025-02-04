@@ -4,12 +4,23 @@ import { UsersController } from './users.controller';
 import { DatabaseModule } from 'src/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-
 import { MulterConfigService } from 'src/core/multer.config';
 import { MulterModule } from '@nestjs/platform-express';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_ACCESS_EXPIRE'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forFeature([User]),
     DatabaseModule,
     MulterModule.registerAsync({
