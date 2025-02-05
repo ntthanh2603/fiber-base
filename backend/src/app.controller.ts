@@ -8,7 +8,7 @@ export class AppController {
 
   @Get()
   @Public()
-  home(): string {
+  home() {
     return this.appService.home();
   }
 }

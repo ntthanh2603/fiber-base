@@ -1,8 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Get, Injectable } from '@nestjs/common';
+import { RedisService } from './redis/redis.service';
 
 @Injectable()
 export class AppService {
-  home(): string {
-    return 'Home page!';
+  constructor(private readonly redisService: RedisService) {}
+  @Get()
+  async home() {
+    await this.redisService.set('key', 'value', 3600);
+    const value = await this.redisService.get('key');
+    return { data: `${value}` };
   }
 }
