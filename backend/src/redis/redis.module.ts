@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { RedisService } from './redis.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
+import { RedisController } from './redis.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
@@ -11,12 +12,14 @@ import { redisStore } from 'cache-manager-redis-store';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         store: redisStore,
-        host: configService.get('REDIS_HOST') || 'localhost',
-        port: configService.get('REDIS_PORT') || 6379,
+        host: configService.get('REDIS_HOST'),
+        port: configService.get('REDIS_PORT'),
+        ttl: 3600,
       }),
     }),
   ],
+  controllers: [RedisController],
   providers: [RedisService],
-  exports: [RedisService],
+  exports: [RedisService, CacheModule],
 })
 export class RedisModule {}

@@ -5,9 +5,5 @@ import { RedisService } from './redis/redis.service';
 export class AppService {
   constructor(private readonly redisService: RedisService) {}
   @Get()
-  async home() {
-    await this.redisService.set('key', 'value', 3600);
-    const value = await this.redisService.get('key');
-    return { data: `${value}` };
-  }
+  async home() {}
 }
