@@ -95,9 +95,12 @@ services:
       - "6379:6379"
     networks:
       - app-network
+    environment:
+      - REDIS_PASSWORD=123456
+      - REDIS_DB=0
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes
+    command: redis-server --requirepass 123456
     restart: unless-stopped
 
   # Backend
