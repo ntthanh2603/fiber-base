@@ -30,7 +30,7 @@ services:
       - REDIS_DB=0
     volumes:
       - redis_data:/data
-    command: redis-server --requirepass 123456
+    command: redis-server --requirepass 123456 --maxmemory 200mb --maxmemory-policy allkeys-lru
     restart: unless-stopped
 
   # Backend
