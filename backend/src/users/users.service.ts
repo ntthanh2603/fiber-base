@@ -103,7 +103,6 @@ export class UsersService {
         'follower_count',
         'followed_count',
         'createdAt',
-        'updatedAt',
         'status',
       ],
     });

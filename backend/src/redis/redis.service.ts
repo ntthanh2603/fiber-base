@@ -6,7 +6,7 @@ export class RedisService {
   constructor(@Inject('REDIS_CLIENT') private readonly redis: Redis) {}
 
   // Lưu dữ liệu vào cache với TTL (mặc định 60 giây)
-  async setCache(key: string, value: any, ttl = 86400): Promise<void> {
+  async setCache(key: string, value: any, ttl = 3600): Promise<void> {
     await this.redis.set(key, JSON.stringify(value), 'EX', ttl);
   }
 
