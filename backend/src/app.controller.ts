@@ -8,7 +8,7 @@ export class AppController {
 
   @Get()
   @Public()
-  async home() {
-    return await this.appService.home();
+  home() {
+    return this.appService.home();
   }
 }

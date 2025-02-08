@@ -10,7 +10,7 @@ import {
 import { RelationShipsService } from './relation-ships.service';
 import { ApiTags } from '@nestjs/swagger';
 import { RelationShipDto } from './dto/relation-ship.dto';
-import { Public, User } from 'src/decorator/customize';
+import { Public, User, ResponseMessage } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 import { isUUID } from 'class-validator';
 
@@ -38,12 +38,13 @@ export class RelationShipsController {
   }
 
   @Post('follow')
+  @ResponseMessage('Follow')
   follow(@User() user: IUser, @Body() dto: RelationShipDto) {
     return this.relationShipsService.follow(user, dto);
   }
 
   @Delete('unfollow')
-  unfollow(@Body() dto: RelationShipDto) {
-    return this.relationShipsService.unfollow(dto);
+  unfollow(@User() user: IUser, @Body() dto: RelationShipDto) {
+    return this.relationShipsService.unfollow(user, dto);
   }
 }
