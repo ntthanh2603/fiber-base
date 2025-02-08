@@ -17,6 +17,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class UsersService {
@@ -25,6 +26,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
     private configService: ConfigService,
     private jwtService: JwtService,
+    private redisService: RedisService,
   ) {}
 
   getHashPassword = (password: string) => {
@@ -86,32 +88,50 @@ export class UsersService {
     return { message: 'Đăng kí tài khoản thành công' };
   }
 
-  async findUserById(id: string) {
-    const user = await this.usersRepository.findOne({
-      where: { id },
-      select: [
-        'id',
-        'email',
-        'avatar',
-        'username',
-        'bio',
-        'website',
-        'age',
-        'gender',
-        'address',
-        'privacy',
-        'follower_count',
-        'followed_count',
-        'createdAt',
-        'status',
-      ],
-    });
+  async findUserById(id: string): Promise<User> {
+    try {
+      const cacheKey = `user:${id}`;
 
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      const cachedUser = await this.redisService.getCache<User>(cacheKey);
+      if (cachedUser) {
+        return cachedUser;
+      }
+
+      const user = await this.usersRepository.findOne({
+        where: { id },
+        select: [
+          'id',
+          'email',
+          'avatar',
+          'username',
+          'bio',
+          'website',
+          'age',
+          'gender',
+          'address',
+          'privacy',
+          'follower_count',
+          'followed_count',
+          'createdAt',
+          'updatedAt',
+          'status',
+        ],
+      });
+
+      if (!user) {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+
+      await this.redisService.setCache(cacheKey, user, 300);
+
+      return user;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error('Error in findUserById:', error);
+      throw new Error('Failed to fetch user data');
     }
-
-    return user;
   }
 
   async deleteUser(id: string) {
@@ -131,7 +151,9 @@ export class UsersService {
         },
       );
     } else {
-      const findUser = await this.findUserById(user.id);
+      const findUser = await this.usersRepository.findOne({
+        where: { id: user.id },
+      });
       const avatar = findUser.avatar;
 
       if (avatar) {

@@ -8,6 +8,7 @@ import { MulterConfigService } from 'src/core/multer.config';
 import { MulterModule } from '@nestjs/platform-express';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+    RedisModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

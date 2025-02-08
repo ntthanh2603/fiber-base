@@ -30,6 +30,27 @@ import { LoginUserDto } from './dto/login-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('/account')
+  @ResponseMessage('Get user information')
+  handleGetAccount(@User() user: IUser) {
+    return user;
+  }
+
+  @Public()
+  @ResponseMessage('Get user by refresh token')
+  @Get('/refresh')
+  handleRefreshToken(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const refreshToken = request.cookies['refresh_token'];
+
+    if (!refreshToken) {
+      throw new BadRequestException('Refresh token is missing');
+    }
+    return this.usersService.processNewToken(refreshToken, response);
+  }
+
   @Public()
   @Get(':id')
   @ResponseMessage('User by user_id')
@@ -38,12 +59,6 @@ export class UsersController {
       throw new BadRequestException(`Invalid ID format: ${id}`);
     }
     return this.usersService.findUserById(id);
-  }
-
-  @Delete()
-  @ResponseMessage('Delete User')
-  deleteUser(@User() user: IUser) {
-    return this.usersService.deleteUser(user.id);
   }
 
   @Patch()
@@ -106,27 +121,6 @@ export class UsersController {
     return this.usersService.login(dto, response);
   }
 
-  @Get('/account')
-  @ResponseMessage('Get user information')
-  handleGetAccount(@User() user: IUser) {
-    return user;
-  }
-
-  @Public()
-  @ResponseMessage('Get user by refresh token')
-  @Get('/refresh')
-  handleRefreshToken(
-    @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const refreshToken = request.cookies['refresh_token'];
-
-    if (!refreshToken) {
-      throw new BadRequestException('Refresh token is missing');
-    }
-    return this.usersService.processNewToken(refreshToken, response);
-  }
-
   @Post('/logout')
   @ResponseMessage('Logout user')
   hendleLogout(
@@ -134,5 +128,11 @@ export class UsersController {
     @User() user: IUser,
   ) {
     return this.usersService.logout(response, user);
+  }
+
+  @Delete()
+  @ResponseMessage('Delete User')
+  deleteUser(@User() user: IUser) {
+    return this.usersService.deleteUser(user.id);
   }
 }

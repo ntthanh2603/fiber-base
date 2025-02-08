@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './redis/redis.module';
+import { RelationShipsModule } from './relation-ships/relation-ships.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RedisModule } from './redis/redis.module';
     UsersModule,
     AuthModule,
     RedisModule,
+    RelationShipsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
