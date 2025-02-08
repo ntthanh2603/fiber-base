@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { RelationShipsModule } from './../relation-ships/relation-ships.module';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { DatabaseModule } from 'src/database/database.module';
@@ -28,6 +29,7 @@ import { RedisModule } from 'src/redis/redis.module';
       useClass: MulterConfigService,
     }),
     RedisModule,
+    forwardRef(() => RelationShipsModule),
   ],
   controllers: [UsersController],
   providers: [UsersService],

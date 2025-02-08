@@ -1,47 +1,40 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
   Delete,
+  Param,
+  Get,
+  BadRequestException,
 } from '@nestjs/common';
 import { RelationShipsService } from './relation-ships.service';
-import { CreateRelationShipDto } from './dto/create-relation-ship.dto';
-import { UpdateRelationShipDto } from './dto/update-relation-ship.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { RelationShipDto } from './dto/relation-ship.dto';
+import { Public, User } from 'src/decorator/customize';
+import { IUser } from 'src/users/users.interface';
+import { isUUID } from 'class-validator';
 
 @ApiTags('RelationShips')
 @Controller('relation-ships')
 export class RelationShipsController {
   constructor(private readonly relationShipsService: RelationShipsService) {}
 
-  @Post()
-  create(@Body() createRelationShipDto: CreateRelationShipDto) {
-    return this.relationShipsService.create(createRelationShipDto);
+  @Post('follow')
+  follow(@User() user: IUser, @Body() dto: RelationShipDto) {
+    return this.relationShipsService.follow(user, dto);
   }
 
-  @Get()
-  findAll() {
-    return this.relationShipsService.findAll();
+  @Delete('unfollow')
+  unfollow(@Body() dto: RelationShipDto) {
+    return this.relationShipsService.unfollow(dto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.relationShipsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateRelationShipDto: UpdateRelationShipDto,
-  ) {
-    return this.relationShipsService.update(+id, updateRelationShipDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.relationShipsService.remove(+id);
+  @Public()
+  @Get('list_follower/:id')
+  listFollower(@Param('id') id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException(`Invalid ID format: ${id}`);
+    }
+    return this.relationShipsService.listFollower(id);
   }
 }

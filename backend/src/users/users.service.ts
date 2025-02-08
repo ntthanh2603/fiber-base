@@ -90,9 +90,9 @@ export class UsersService {
 
   async findUserById(id: string): Promise<User> {
     try {
-      const cacheKey = `user:${id}`;
+      const cacheKey = `user:id:${id}`;
 
-      const cachedUser = await this.redisService.getCache<User>(cacheKey);
+      const cachedUser = await this.redisService.get<User>(cacheKey);
       if (cachedUser) {
         return cachedUser;
       }
@@ -122,7 +122,7 @@ export class UsersService {
         throw new NotFoundException(`User with ID ${id} not found`);
       }
 
-      await this.redisService.setCache(cacheKey, user, 300);
+      await this.redisService.set(cacheKey, user, 300);
 
       return user;
     } catch (error) {

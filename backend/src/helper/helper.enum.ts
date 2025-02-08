@@ -1,8 +1,3 @@
-export enum RelationshipType {
-  FRIEND = 'friend',
-  FOLLOW = 'follow',
-  FOLLOWER = 'follower',
-}
 export enum GenderType {
   MALE = 'male',
   FEMALE = 'female',
@@ -20,11 +15,6 @@ export enum PrivacyType {
   PROTECTED = 'protected',
 }
 
-export enum MediaType {
-  IMAGE = 'image',
-  VIDEO = 'video',
-}
-
 export enum ReactionType {
   LIKE = 'like',
   LOVE = 'love',
@@ -32,24 +22,4 @@ export enum ReactionType {
   WOW = 'wow',
   SAD = 'sad',
   ANGRY = 'angry',
-}
-
-export enum RoleType {
-  ADMIN = 'admin',
-  USER = 'user',
-}
-
-export enum PostType {
-  USER = 'user',
-  GROUP = 'group',
-}
-
-export enum ReactionPostType {
-  COMMENT = 'comment',
-  POST = 'post',
-}
-
-export enum MemberType {
-  MEMBER = 'member',
-  ADMIN = 'admin',
 }

@@ -5,9 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  Max,
   MaxLength,
-  Min,
   MinLength,
 } from 'class-validator';
 import { GenderType } from 'src/helper/helper.enum';
