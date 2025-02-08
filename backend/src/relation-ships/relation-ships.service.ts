@@ -77,5 +77,23 @@ export class RelationShipsService {
     return 'Theo dõi thành công';
   }
 
-  async unfollow(user: IUser, dto: RelationShipDto) {}
+  async unfollow(user: IUser, dto: RelationShipDto) {
+    const user_id1: string = user.id;
+    const user_id2: string = dto.user_id_other;
+
+    const relation = await this.relationShipRepository.findOne({
+      where: { user_id1, user_id2 },
+    });
+    if (!relation)
+      throw new BadRequestException(
+        `Người dùng có id là ${user_id1} chưa follow người dùng có id là ${user_id2}`,
+      );
+
+    await this.relationShipRepository.delete({ user_id1, user_id2 });
+
+    await this.redisService.del(`list_followed:${user_id1}`);
+    await this.redisService.del(`list_follower:${user_id2}`);
+
+    return 'Hủy theo dõi thành công';
+  }
 }

@@ -20,6 +20,7 @@ export class RelationShipsController {
   constructor(private readonly relationShipsService: RelationShipsService) {}
 
   @Public()
+  @ResponseMessage('list follower')
   @Get('list_follower/:id')
   listFollower(@Param('id') id: string) {
     if (!isUUID(id)) {
@@ -29,6 +30,7 @@ export class RelationShipsController {
   }
 
   @Public()
+  @ResponseMessage('list followed')
   @Get('list_followed/:id')
   listFollowed(@Param('id') id: string) {
     if (!isUUID(id)) {
@@ -43,6 +45,7 @@ export class RelationShipsController {
     return this.relationShipsService.follow(user, dto);
   }
 
+  @ResponseMessage('Unfollow')
   @Delete('unfollow')
   unfollow(@User() user: IUser, @Body() dto: RelationShipDto) {
     return this.relationShipsService.unfollow(user, dto);
