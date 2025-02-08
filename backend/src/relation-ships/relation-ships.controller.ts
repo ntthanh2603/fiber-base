@@ -19,6 +19,24 @@ import { isUUID } from 'class-validator';
 export class RelationShipsController {
   constructor(private readonly relationShipsService: RelationShipsService) {}
 
+  @Public()
+  @Get('list_follower/:id')
+  listFollower(@Param('id') id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException(`Invalid ID format: ${id}`);
+    }
+    return this.relationShipsService.listFollower(id);
+  }
+
+  @Public()
+  @Get('list_followed/:id')
+  listFollowed(@Param('id') id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException(`Invalid ID format: ${id}`);
+    }
+    return this.relationShipsService.listFollowed(id);
+  }
+
   @Post('follow')
   follow(@User() user: IUser, @Body() dto: RelationShipDto) {
     return this.relationShipsService.follow(user, dto);
@@ -27,14 +45,5 @@ export class RelationShipsController {
   @Delete('unfollow')
   unfollow(@Body() dto: RelationShipDto) {
     return this.relationShipsService.unfollow(dto);
-  }
-
-  @Public()
-  @Get('list_follower/:id')
-  listFollower(@Param('id') id: string) {
-    if (!isUUID(id)) {
-      throw new BadRequestException(`Invalid ID format: ${id}`);
-    }
-    return this.relationShipsService.listFollower(id);
   }
 }

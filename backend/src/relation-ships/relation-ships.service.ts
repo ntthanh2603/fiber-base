@@ -13,26 +13,6 @@ export class RelationShipsService {
     private relationShipRepository: Repository<RelationShip>,
     private redisService: RedisService,
   ) {}
-  async follow(user: IUser, dto: RelationShipDto) {
-    try {
-      const user_id: string = user.id;
-      const user_id_other: string = dto.user_id_other;
-
-      // const list_followed_user = await this.redisService.get(
-      //   `list_followed:${user_id}`,
-      // );
-
-      const newRelationShip = {
-        user_id1: user_id,
-        user_id2: user_id_other,
-      };
-      await this.relationShipRepository.insert(newRelationShip);
-    } catch (error) {
-      console.error('Error when follow: ', error);
-    }
-  }
-
-  async unfollow(dto: RelationShipDto) {}
 
   async listFollower(id: string) {
     try {
@@ -55,4 +35,42 @@ export class RelationShipsService {
       console.error('Error in function listFollower', error);
     }
   }
+
+  async listFollowed(id: string) {
+    try {
+      const list_followed_cache = await this.redisService.get(
+        `list_followed:${id}`,
+      );
+      if (list_followed_cache) {
+        return { cache: list_followed_cache };
+      }
+
+      const temp = await this.relationShipRepository.find({
+        where: { user_id1: id },
+      });
+
+      const list_followed_db = temp.map((relation) => relation.user_id2);
+
+      await this.redisService.set(`list_followed:${id}`, list_followed_db, 600);
+      return list_followed_db;
+    } catch (error) {
+      console.error('Error in function listFollowed', error);
+    }
+  }
+  async follow(user: IUser, dto: RelationShipDto) {
+    try {
+      const user_id: string = user.id;
+      const user_id_other: string = dto.user_id_other;
+
+      const newRelationShip = {
+        user_id1: user_id,
+        user_id2: user_id_other,
+      };
+      await this.relationShipRepository.insert(newRelationShip);
+    } catch (error) {
+      console.error('Error when follow: ', error);
+    }
+  }
+
+  async unfollow(dto: RelationShipDto) {}
 }
