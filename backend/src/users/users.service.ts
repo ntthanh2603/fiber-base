@@ -135,6 +135,7 @@ export class UsersService {
   }
 
   async deleteUser(id: string) {
+    await this.redisService.del(`user:${id}`);
     return await this.usersRepository.delete({ id });
   }
 
