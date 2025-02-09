@@ -24,7 +24,7 @@
 
 ## Description
 
-Project social space
+Project on NestJs, JWT, Postgres, Redis base
 
 #### 🗂 Project Structure:
 
@@ -37,13 +37,6 @@ Project social space
 └── .gitignore              # Block files when push github
 ```
 
-## Database
-
-Database project shopping online [URL](https://drive.google.com/file/d/1ZPQa1NhCKHPOJKAGEMPWNWbutVYLUWsU/view?usp=sharing)
-
-## Documents
-
-Document project shopping online [URL](https://docs.google.com/document/d/1FctO0UJOVMcA9f7MAPf4JgvJb-VuicX57OSeHIVeKyk/edit?usp=sharing). This document describes the project's functionality and how we designed the project.
 
 ## Compile and run the project
 
@@ -68,14 +61,17 @@ For Frontend
 ```bash
 # setup project
 $ npm install
+
+# run frontend
+$ npm run start
 ```
 ## Compile and run the project using Docker
 ```bash
 # create and run
-docker-compose up
+docker-compose up --build
 
 # delete
-docker-compose down
+docker-compose down -v
 ```
 
 ## Support
