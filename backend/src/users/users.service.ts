@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -56,36 +57,41 @@ export class UsersService {
   }
 
   async register(dto: RegisterUserDto, file: Express.Multer.File) {
-    const userDb = await this.usersRepository.findOneBy({ email: dto.email });
+    try {
+      const userDb = await this.usersRepository.findOneBy({ email: dto.email });
 
-    if (userDb) {
-      throw new BadRequestException(`Email ${dto.email} đã tồn tại.`);
+      if (userDb) {
+        throw new BadRequestException(`Email ${dto.email} đã tồn tại.`);
+      }
+
+      const hashPassword = this.getHashPassword(dto.password);
+
+      let avatar = '';
+
+      if (!file) avatar = null;
+      else avatar = file.path;
+
+      const newUser = {
+        email: dto.email,
+        password: hashPassword,
+        avatar,
+        username: dto.username,
+        bio: dto.bio,
+        website: dto.website,
+        age: dto.age,
+        gender: dto.gender,
+        address: dto.address,
+        createdAt: new Date(),
+        privacy: PrivacyType.PUBLIC,
+      };
+
+      await this.usersRepository.save(newUser);
+
+      return { message: 'Đăng kí tài khoản thành công' };
+    } catch (error) {
+      if (error instanceof BadRequestException) throw error;
+      throw new InternalServerErrorException('Lỗi khi đăng kí tài khoản');
     }
-
-    const hashPassword = this.getHashPassword(dto.password);
-
-    let avatar = '';
-
-    if (!file) avatar = null;
-    else avatar = file.path;
-
-    const newUser = {
-      email: dto.email,
-      password: hashPassword,
-      avatar,
-      username: dto.username,
-      bio: dto.bio,
-      website: dto.website,
-      age: dto.age,
-      gender: dto.gender,
-      address: dto.address,
-      createdAt: new Date(),
-      privacy: PrivacyType.PUBLIC,
-    };
-
-    await this.usersRepository.save(newUser);
-
-    return { message: 'Đăng kí tài khoản thành công' };
   }
 
   async findUserById(id: string): Promise<User> {
