@@ -135,7 +135,6 @@ export class UsersService {
   }
 
   async deleteUser(id: string) {
-    await this.redisService.del(`user:${id}`);
     return await this.usersRepository.delete({ id });
   }
 
@@ -166,9 +165,6 @@ export class UsersService {
           console.error('Error deleting old avatar:', error);
         }
       }
-
-      await this.redisService.del(`user:${user.id}`);
-
       return await this.usersRepository.update(
         { id: user.id },
         {
