@@ -1,6 +1,6 @@
 # ⚡ MyProject
 
-![Logo-fiber](docs\assets\logo-fiber.svg)
+![Logo-fiber](./docs/assets/logo-fiber.svg)
 
 **MyProject** là một thư viện/framework hiệu suất cao được viết bằng [Go](https://go.dev/). Được thiết kế để đơn giản hóa việc phát triển với hiệu suất tối ưu và [zero memory allocation](https://docs.myproject.com/#zero-allocation).
 
