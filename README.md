@@ -1,10 +1,6 @@
 # ⚡ MyProject
 
-[![GitHub release](https://img.shields.io/github/release/yourusername/myproject.svg)](https://github.com/yourusername/myproject/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/yourusername/myproject)](https://goreportcard.com/report/github.com/yourusername/myproject)
-[![Coverage Status](https://coveralls.io/repos/github/yourusername/myproject/badge.svg?branch=master)](https://coveralls.io/github/yourusername/myproject?branch=master)
-[![Go Doc](https://godoc.org/github.com/yourusername/myproject?status.svg)](https://godoc.org/github.com/yourusername/myproject)
-[![License](https://img.shields.io/github/license/yourusername/myproject.svg)](https://github.com/yourusername/myproject/blob/master/LICENSE)
+![Logo-fiber](docs\assets\logo-fiber.svg)
 
 **MyProject** là một thư viện/framework hiệu suất cao được viết bằng [Go](https://go.dev/). Được thiết kế để đơn giản hóa việc phát triển với hiệu suất tối ưu và [zero memory allocation](https://docs.myproject.com/#zero-allocation).
 
