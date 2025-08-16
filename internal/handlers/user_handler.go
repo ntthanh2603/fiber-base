@@ -18,6 +18,18 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+// CreateUser godoc
+// @Summary Create a new user
+// @Description Create a new user with the provided information
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body dto.CreateUserRequest true "User creation data"
+// @Success 201 {object} utils.SuccessResponseModel{data=dto.UserResponse} "User created successfully"
+// @Failure 400 {object} utils.ErrorResponseModel "Invalid request body or validation error"
+// @Failure 409 {object} utils.ErrorResponseModel "Email or username already exists"
+// @Failure 500 {object} utils.ErrorResponseModel "Internal server error"
+// @Router /users [post]
 func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 	var req dto.CreateUserRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -39,6 +51,18 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 	return utils.SuccessResponse(c, fiber.StatusCreated, "User created successfully", user)
 }
 
+// GetUser godoc
+// @Summary Get user by ID
+// @Description Get a specific user by their ID
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID" format(uuid)
+// @Success 200 {object} utils.SuccessResponseModel{data=dto.UserResponse} "User retrieved successfully"
+// @Failure 400 {object} utils.ErrorResponseModel "Invalid user ID"
+// @Failure 404 {object} utils.ErrorResponseModel "User not found"
+// @Failure 500 {object} utils.ErrorResponseModel "Internal server error"
+// @Router /users/{id} [get]
 func (h *UserHandler) GetUser(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)

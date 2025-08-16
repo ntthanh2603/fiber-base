@@ -1,4 +1,4 @@
-.PHONY: run build test test-unit test-integration migrate seed lint fmt docker-up docker-down clean tidy
+.PHONY: run build test test-unit test-integration migrate seed lint fmt docker-up docker-down clean tidy swagger-docs
 
 run:
 	go run ./cmd/server/main.go
@@ -52,6 +52,35 @@ docker-down:
 docker-logs:
 	docker-compose logs -f
 
+docker-dev:
+	docker-compose -f docker-compose.dev.yml up -d
+
+docker-dev-down:
+	docker-compose -f docker-compose.dev.yml down
+
+docker-prod:
+	docker-compose -f docker-compose.prod.yml up -d
+
+docker-prod-down:
+	docker-compose -f docker-compose.prod.yml down
+
+docker-build:
+	docker build -t fiber-base:latest .
+
+docker-build-prod:
+	docker build -f Dockerfile.prod -t fiber-base:prod .
+
+docker-clean:
+	docker-compose down -v
+	docker system prune -f
+	docker volume prune -f
+
+docker-restart: docker-down docker-up
+
+docker-restart-dev: docker-dev-down docker-dev
+
+docker-restart-prod: docker-prod-down docker-prod
+
 # Development helpers
 dev-setup:
 	go mod download
@@ -60,3 +89,7 @@ dev-setup:
 
 dev-db:
 	docker run --name fiber-base-postgres -e POSTGRES_USER=fiber-base -e POSTGRES_PASSWORD=123456 -e POSTGRES_DB=fiber-base -p 5432:5432 -d postgres:15-alpine
+
+# Swagger documentation
+swagger-docs:
+	swag init -g cmd/server/main.go --output ./docs
